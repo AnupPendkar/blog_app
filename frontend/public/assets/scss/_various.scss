@@ -1,0 +1,5 @@
+@import "./mixins.scss";
+$ceilCount: 800;
+
+@include attr-x("font-size", "fs-", 40, 1, "px");
+@include resp-font("font-size", "fsr-");
