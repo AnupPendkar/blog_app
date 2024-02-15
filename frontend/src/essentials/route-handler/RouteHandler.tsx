@@ -5,8 +5,8 @@ import StorageHandler from '@shared/storageHandler';
 import { isPropEmpty } from '@shared/utilfunctions';
 import React, { useEffect } from 'react';
 import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
-import Comp1 from '../../Comp1';
 import Login from '@components/login/Login';
+import Homepage from '@pages/Homepage';
 
 const RouteHandler = () => {
   const theme = useTheme();
@@ -27,9 +27,8 @@ const RouteHandler = () => {
         <Route path={AppRoutesEnum.LOGIN} element={<Login />} />
         <Route path={AppRoutesEnum.CONFIG} element={<BaseUrlConfigurator />} />
         <Route element={<AuthGuard />}>
-
           <Route path="/" element={<Navigate to={AppRoutesEnum.DATA_CAPTURE} />} />
-          <Route path={AppRoutesEnum.DATA_CAPTURE} element={<Comp1 />} />
+          <Route path={AppRoutesEnum.DATA_CAPTURE} element={<Homepage />} />
 
           {/* <Route path={AppRoutesEnum.RAIL_TRANSACTIONS} element={<RailTransactionHistory />} />
           <Route path={AppRoutesEnum.UPLOAD} element={<VIew1 />} />
