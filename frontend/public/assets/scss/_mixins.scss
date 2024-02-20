@@ -21,7 +21,7 @@
   }
 }
 
-@mixin resp-font($attr, $classname, $start: 10, $end: 40, $step: 2) {
+@mixin resp-font($attr, $classname, $start: 10, $end: 60, $step: 2) {
   $size-list: null;
   @for $i from $start through $end {
     $size: $i;
