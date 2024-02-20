@@ -120,15 +120,35 @@ export async function createPost(req: Request, res: Response, next: NextFunction
       })
       .returning({ id: posts?.id });
 
-    const newPostCategories = (categories as Array<number>).map(async (category) => {
-      const addCatToNewPost = await db.insert(postsToCategories).values({
-        catId: category,
-        postId: newPost?.id,
+    if (categories !== undefined) {
+      // console.log(categories);
+      const newPostCategories = (categories as Array<number>)?.map(async (category) => {
+        const addCatToNewPost = await db.insert(postsToCategories).values({
+          catId: category,
+          postId: newPost?.id,
+        });
       });
-    });
 
-    await Promise.all(newPostCategories);
+      await Promise.all(newPostCategories);
+    }
     res.json({ message: 'New post has been added' });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function getPostById(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { username, id } = req.query;
+    const user = await checkUsernameExits(username);
+    if (isPropEmpty(user)) {
+      res.status(422).json({ message: 'Username not present!' });
+      return;
+    }
+
+    const post = await db.query.posts.findFirst({ with: { categories: true, author: true }, where: (posts, { eq }) => eq(posts?.id, +id) });
+
+    res.json({ post });
   } catch (err) {
     next(err);
   }
