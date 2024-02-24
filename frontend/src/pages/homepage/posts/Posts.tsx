@@ -1,6 +1,6 @@
 import React from 'react';
 import Post from './Post';
-import design from '@assets/design1.png';
+import design from '@assets/design2.png';
 import { PostViewEnum } from '@models/homepage';
 
 export interface IPostDetails {

@@ -1,12 +1,16 @@
 import React from 'react';
 import { IPostDetails } from './Posts';
 import { PostViewEnum } from '@models/homepage';
+import { useNavigate } from 'react-router-dom';
+import { AppRoutesEnum } from '@shared/appRotues';
 
 const Post = ({ postDetails, postView }: { postDetails: IPostDetails; postView: PostViewEnum }) => {
   function constructDateTime(timestamp: number) {
     const date = new Date(timestamp);
     return `${date?.getFullYear()}-${date?.getMonth()}-${date?.getDay()}`;
   }
+
+  const navigate = useNavigate();
 
   return (
     <>
@@ -31,7 +35,11 @@ const Post = ({ postDetails, postView }: { postDetails: IPostDetails; postView: 
             </span>
 
             <div>
-              <span className="fsr-14 inter underline decoration-2 underline-offset-4 cursor-pointer" style={{ textDecorationColor: '#652034' }}>
+              <span
+                onClick={() => navigate(AppRoutesEnum.SINGLE_POST)}
+                className="fsr-14 inter underline decoration-2 underline-offset-4 cursor-pointer"
+                style={{ textDecorationColor: '#652034' }}
+              >
                 Read More
               </span>
             </div>
@@ -46,7 +54,9 @@ const Post = ({ postDetails, postView }: { postDetails: IPostDetails; postView: 
                 {postDetails?.catName}
               </span>
             </div>
-            <span className="fsr-16 font-montm mt-2 mb-1 cursor-pointer">{postDetails?.title}</span>
+            <span onClick={() => navigate(`${AppRoutesEnum.SINGLE_POST}/1`)} className="fsr-16 font-montm mt-2 mb-1 cursor-pointer">
+              {postDetails?.title}
+            </span>
             <div className="mb-6">
               <span className="fsr-12 mr-3 font-rm">Joseph Oven</span>
               <span className="fsr-12 font-rm" style={{ color: '#494E59' }}>

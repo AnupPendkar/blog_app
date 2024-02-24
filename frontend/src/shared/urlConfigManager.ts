@@ -8,8 +8,8 @@ export default class UrlConfigManager extends StorageHandler {
   setParsedTokenData() {
     const parsedTokenData = this.parseJwt(this.jwtAccesToken as string);
     this.parsedUserInfo = {
-      id: parsedTokenData?.identity?.groups?.[0]?.id,
-      username: parsedTokenData?.identity?.username,
+      id: parsedTokenData?.userId,
+      username: parsedTokenData?.username,
       role: parsedTokenData?.identity?.groups?.[0]?.name,
       token: this.jwtAccesToken as string,
       description: parsedTokenData?.identity?.groups?.[0]?.description,

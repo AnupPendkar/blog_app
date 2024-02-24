@@ -22,7 +22,7 @@ const Comment = (props: ICommentDetails) => {
           <span className="fsr-14 inter mb-1" style={{ color: '#767882' }}>
             {props.username}
           </span>
-          <span className="fsr-14 inter" style={{ color: '#767882' }}>
+          <span className="fsr-12 inter" style={{ color: '#767882' }}>
             {constructDateTime(props.timestamp)}
           </span>
         </div>

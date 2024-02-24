@@ -19,7 +19,7 @@ const useHttp = () => {
    * @param body
    * @returns
    */
-  function request(method: string, url: string, params?: any, body = {}): Promise<HttpResponse> {
+  function request(method: string, url: string, params?: any, body = {}, headers?: any): Promise<HttpResponse> {
     abortController = new AbortController();
     const signal = abortController.signal;
 

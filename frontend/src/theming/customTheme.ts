@@ -32,7 +32,7 @@ export const darkTheme = createTheme({
     mode: 'dark',
     primary: palette.augmentColor({
       color: {
-        main: '#131b23',
+        main: '#111623',
         contrastText: '#F9F9F9',
       },
     }),
@@ -48,7 +48,7 @@ export const darkTheme = createTheme({
       secondary: '#F9F9F9',
     },
     background: {
-      default: '#131B23',
+      default: '#111623',
       paper: '#19222c',
     },
 

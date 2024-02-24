@@ -4,8 +4,20 @@ import Categories from './categories/Categories';
 import Posts from './posts/Posts';
 import { PostViewEnum } from '@models/homepage';
 import Comments from './comments/Comments';
+import postService from '@services/postService';
 
 const Homepage = () => {
+  const { getAllPosts } = postService();
+
+  async function getAllUserPosts() {
+    const res = await getAllPosts();
+    console.log(res);
+  }
+
+  React.useEffect(() => {
+    getAllUserPosts();
+  }, []);
+
   return (
     <div className="homepage flex items-center justify-center">
       <div className="mt-20 w-4/5">
@@ -33,7 +45,7 @@ const Homepage = () => {
 
         <Categories img_n_name={true} />
 
-        <div className="flex">
+        <div className="flex gap-10">
           <div className="section basis-3/4">
             <Posts postView={PostViewEnum.PARTIAL} />
             <Comments />

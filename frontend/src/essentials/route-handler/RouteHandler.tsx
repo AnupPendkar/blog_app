@@ -1,15 +1,18 @@
-import BaseUrlConfigurator from '@components/base-url-config/BaseUrlConfigurator';
+import React from 'react';
 import { useTheme } from '@mui/material';
 import { AppRoutesEnum } from '@shared/appRotues';
-import StorageHandler from '@shared/storageHandler';
 import { isPropEmpty } from '@shared/utilfunctions';
-import React, { useEffect } from 'react';
-import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
+import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom';
+import BaseUrlConfigurator from '@components/base-url-config/BaseUrlConfigurator';
+import StorageHandler from '@shared/storageHandler';
 import Login from '@components/login/Login';
-import Homepage from '@pages/Homepage';
+import Homepage from '@pages/homepage/Homepage';
+import Write from '@pages/write/Write';
+import SinglePost from '@pages/single-post/SinglePost';
 
 const RouteHandler = () => {
   const theme = useTheme();
+  const location = useLocation();
   const storageHandler = new StorageHandler();
 
   /**
@@ -18,6 +21,10 @@ const RouteHandler = () => {
    * @returns (access || login) route
    */
   function AuthGuard() {
+    if (isPropEmpty(storageHandler.jwtAccesToken) && location?.pathname === AppRoutesEnum.LOGIN) {
+      return;
+    }
+
     return !isPropEmpty(storageHandler.jwtAccesToken) ? <Outlet /> : <Navigate to="/login" />;
   }
 
@@ -27,14 +34,12 @@ const RouteHandler = () => {
         <Route path={AppRoutesEnum.LOGIN} element={<Login />} />
         <Route path={AppRoutesEnum.CONFIG} element={<BaseUrlConfigurator />} />
         <Route element={<AuthGuard />}>
-          <Route path="/" element={<Navigate to={AppRoutesEnum.DATA_CAPTURE} />} />
-          <Route path={AppRoutesEnum.DATA_CAPTURE} element={<Homepage />} />
+          <Route path="/" element={<Navigate to={AppRoutesEnum.HOMEPAGE} />} />
+          <Route path={AppRoutesEnum.HOMEPAGE} element={<Homepage />} />
+          <Route path="/write" element={<Write />} />
+          <Route path="/single-post/:id" element={<SinglePost />} />
 
-          {/* <Route path={AppRoutesEnum.RAIL_TRANSACTIONS} element={<RailTransactionHistory />} />
-          <Route path={AppRoutesEnum.UPLOAD} element={<VIew1 />} />
-          <Route path="/app" element={<VIew1 />} /> */}
-
-          <Route path="*" element={<Navigate to={AppRoutesEnum.DATA_CAPTURE} />} />
+          <Route path="*" element={<Navigate to={AppRoutesEnum.HOMEPAGE} />} />
         </Route>
       </Routes>
     </div>

@@ -6,14 +6,20 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import useThemeSwitcher from '@hooks/useThemeSwitcher';
 import useAuthMethods from '@hooks/useAuthMethods';
+import facebook from '@assets/facebook.png';
+import instagram from '@assets/instagram.png';
+import twitter from '@assets/twitter.png';
+import linkedin from '@assets/linkedin.png';
+import { useNavigate } from 'react-router-dom';
+import { AppRoutesEnum } from '@shared/appRotues';
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const { isSocketConnected } = useAppSelector((state) => state.user);
   const { toggleAppTheme } = useThemeSwitcher();
   const theme = useTheme();
   const { logout } = useAuthMethods();
   const { loading } = useAppSelector((state) => state.http);
+  const navigate = useNavigate();
 
   function handleMenu(event: React.MouseEvent<HTMLElement>) {
     setAnchorEl(event.currentTarget);
@@ -23,36 +29,40 @@ const Header = () => {
     setAnchorEl(null);
   }
 
+  function navigateToWriteRoute() {
+    navigate('/write');
+  }
+
   return (
     <div className="app-header">
       <AppBar position="static" color="primary">
-        <Toolbar className="flex items-center justify-between">
-          {/* <img className="h-14 w-14" src={logo} alt="ATCO logo" /> */}
-          <span>logo</span>
+        <div className="flex justify-center">
+          <Toolbar className="flex items-center justify-between w-4/5" style={{ paddingLeft: '0', paddingRight: '0' }}>
+            <div className="logos flex items-center select-none">
+              <img className="w-5 mr-3 cursor-pointer" src={facebook} alt="" />
+              <img className="w-5 mr-3 cursor-pointer" src={instagram} alt="" />
+              <img className="w-5 mr-3 cursor-pointer" src={twitter} alt="" />
+              <img className="w-5 mr-3 cursor-pointer" src={linkedin} alt="" />
+            </div>
 
-          <span className="fsr-18 font-im ml-7">Dashboard</span>
+            <span className="fsr-18 font-im ml-7">Dashboard</span>
 
-          <div className="flex items-center">
-            <IconButton onClick={toggleAppTheme} color="inherit" disabled={loading}>
-              {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-            </IconButton>
+            <div className="flex items-center">
+              <IconButton onClick={toggleAppTheme} color="inherit" disabled={loading}>
+                {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+              </IconButton>
 
-            {/* <img className="w-4 h-4 mr-4 ml-2" src={isSocketConnected ? connected : disconnected} /> */}
-
-            <IconButton size="large" aria-label="account of current user" aria-controls="menu-appbar" aria-haspopup="true" onClick={handleMenu} color="inherit">
-              <AccountCircle />
-            </IconButton>
-
-            <Menu id="menu-appbar" anchorEl={anchorEl} color="success" MenuListProps={{ sx: { backgroundColor: 'none' } }} open={Boolean(anchorEl)} onClose={handleClose}>
-              {/* <MenuItem onClick={handleClose}>
-                <span className="fsr-14 font-isb">Manage account</span>
-              </MenuItem> */}
-              <MenuItem onClick={logout}>
-                <span className="fsr-14 font-isb">Logout</span>
-              </MenuItem>
-            </Menu>
-          </div>
-        </Toolbar>
+              <span className="fsr-16 inter ml-10 mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.HOMEPAGE)}>
+                Homepage
+              </span>
+              <span className="fsr-16 inter mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.WRITE)}>
+                Write
+              </span>
+              <span className="fsr-16 inter mr-5 cursor-pointer">Discover</span>
+              <span className="fsr-16 inter cursor-pointer">Logout</span>
+            </div>
+          </Toolbar>
+        </div>
       </AppBar>
     </div>
   );

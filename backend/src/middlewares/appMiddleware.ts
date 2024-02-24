@@ -17,7 +17,7 @@ function appMiddleware(req: Request, res: Response, next: NextFunction) {
 
   jwt.verify(bearerToken, process.env.SECRET_KEY, (err, decoded) => {
     if (err) {
-      return res.status(403).json({ message: 'Token verification failed' });
+      return res.status(401).json({ message: 'Token verification failed' });
     }
 
     (req as any).user = decoded;

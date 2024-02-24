@@ -1,14 +1,35 @@
-import { useState } from 'react';
+import React from 'react';
 import './App.scss';
-import Comp1 from './Comp1';
+import Loader from '@components/loader/Loader';
+import { HashRouter } from 'react-router-dom';
+import { useAppSelector } from '@redux/store';
+import Header from '@components/header/Header';
+import Footer from '@components/footer/Footer';
+import RouteHandler from './essentials/route-handler/RouteHandler';
+import ErrorDialog from '@components/error-dialog/ErrorDialog';
+import MessageDialog from '@components/message-dialog/MessageDialog';
+import useAppEffects from '@hooks/useAppEffects';
 
 function App() {
-  const [count, setCount] = useState(0);
+  useAppEffects();
+  const { userLoggedIn } = useAppSelector((state) => state.user);
 
   return (
-    <>
-      <Comp1 />
-    </>
+    <div className="App">
+      <Loader />
+      <HashRouter>
+        {userLoggedIn && (
+          <>
+            <Header />
+            <Footer />
+          </>
+        )}
+        <RouteHandler />
+      </HashRouter>
+
+      <ErrorDialog />
+      <MessageDialog />
+    </div>
   );
 }
 

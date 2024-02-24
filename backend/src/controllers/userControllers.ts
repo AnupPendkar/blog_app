@@ -2,7 +2,7 @@ import { eq } from 'drizzle-orm';
 import { db } from '../config';
 import { Request, Response, NextFunction } from 'express';
 import { isPropEmpty } from '../utils/utils';
-import { users } from '../schema/userSchema';
+import { followers, followersToAuthors, users } from '../schema/userSchema';
 import jwt from 'jsonwebtoken';
 import 'dotenv/config';
 
@@ -12,18 +12,18 @@ export async function userLogin(req: Request, res: Response, next: NextFunction)
     const [foundUsr, ...rest] = await db.select().from(users).where(eq(users.username, username));
 
     if (!foundUsr) {
-      res.status(404).json({ message: 'Invalid users credentials' });
+      res.status(403).json({ message: 'Invalid users credentials' });
       return;
     }
 
     const isPasswordValid = password === foundUsr.password;
 
     if (isPasswordValid) {
-      const access = jwt.sign({ username: foundUsr.username }, process.env.SECRET_KEY, {
-        expiresIn: '1h',
+      const access = jwt.sign({ username: foundUsr.username, userId: foundUsr.id }, process.env.SECRET_KEY, {
+        expiresIn: '2d',
       });
 
-      const refresh = jwt.sign({ username: foundUsr.username }, process.env.SECRET_KEY, {
+      const refresh = jwt.sign({ username: foundUsr.username, userId: foundUsr.id }, process.env.SECRET_KEY, {
         expiresIn: '2d',
       });
 
@@ -36,7 +36,16 @@ export async function userLogin(req: Request, res: Response, next: NextFunction)
   }
 }
 
-export async function checkUsernameExits(username) {
+export async function checkUserExists(userId) {
+  return await db.select({ username: users.username, id: users.id }).from(users).where(eq(userId, users.id));
+}
+
+export async function getUserDetailsByName(username) {
+  const [user, ...rest] = await db.select().from(users).where(eq(username, users?.username));
+  return user;
+}
+
+export async function checkUsernameExists(username) {
   return await db.select({ username: users.username, id: users.id }).from(users).where(eq(username, users.username));
 }
 
@@ -48,7 +57,7 @@ export async function userRegister(req: Request, res: Response, next: NextFuncti
   try {
     const { username, password, name, email, phone } = req.body;
 
-    if (!isPropEmpty(await checkUsernameExits(username))) {
+    if (!isPropEmpty(await checkUsernameExists(username))) {
       res.status(422).json({ message: 'Username already taken!' });
       return;
     }
@@ -74,13 +83,13 @@ export async function userRegister(req: Request, res: Response, next: NextFuncti
 export async function updateUsername(req: Request, res: Response, next: NextFunction) {
   try {
     const { curr_username, updated_username } = req.body;
-    const [curr_user, ...rest] = await checkUsernameExits(curr_username);
+    const [curr_user, ...rest] = await checkUsernameExists(curr_username);
     if (isPropEmpty(curr_user)) {
       res.status(422).json({ message: 'Requested username not found' });
       return;
     }
 
-    const [updated_user, ...restt] = await checkUsernameExits(updated_username);
+    const [updated_user, ...restt] = await checkUsernameExists(updated_username);
     if (!isPropEmpty(updated_user)) {
       res.status(422).json({ message: 'Username already taken!!' });
       return;
@@ -99,18 +108,42 @@ export async function updateUsername(req: Request, res: Response, next: NextFunc
 
 export async function deleteUser(req: Request, res: Response, next: NextFunction) {
   try {
-    const { username } = req.body;
-    const [deletedUsr, ...rest] = await checkUsernameExits(username);
+    const { userId } = req.body;
+    const [deletedUsr, ...rest] = await checkUserExists(userId);
     if (isPropEmpty(deletedUsr)) {
       res.status(422).json({ message: 'Requested username not found' });
       return;
     }
 
-    const deletedUser = await db.delete(users).where(eq(username, users));
+    const deletedUser = await db.delete(users).where(eq(userId, users?.id));
     if (deletedUser) {
       res.json('User Deleted succesfully!!!');
     } else {
       next();
+    }
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function onAuthorFollow(req, res: Response, next: NextFunction) {
+  try {
+    const { authorId, add } = req.body;
+    const userId = req.user.userId;
+
+    if (add) {
+      const [newFollower, ...rest] = await db.insert(followers).values({ userId }).returning({ id: followers?.id });
+      console.log(newFollower);
+      await db.insert(followersToAuthors).values({ followId: newFollower?.id, followingId: authorId });
+
+      res.status(200).json('Followed successfully');
+    } else {
+      // await db.delete(followers).where(eq(followers?., authorId));
+      const [follower, ...restFollower] = await db.select().from(followers).where(eq(followers?.userId, userId));
+
+      await db.delete(followersToAuthors).where(eq(followersToAuthors?.followingId, authorId) && eq((follower as any)?.id, (followersToAuthors as any)?.followId));
+
+      res.status(200).json('Unfollowed successfully');
     }
   } catch (err) {
     next(err);

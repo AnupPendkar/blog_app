@@ -14,6 +14,7 @@ export default defineConfig({
       "@hooks": path.resolve(__dirname, "./src/hooks"),
       "@interceptors": path.resolve(__dirname, "./src/interceptors"),
       "@models": path.resolve(__dirname, "./src/models"),
+      "@pages": path.resolve(__dirname, "./src/pages"),
       "@redux": path.resolve(__dirname, "./src/redux"),
       "@services": path.resolve(__dirname, "./src/services"),
       "@shared": path.resolve(__dirname, "./src/shared"),
