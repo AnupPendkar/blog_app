@@ -1,6 +1,6 @@
 import useHttp from '@hooks/useHttp';
 import useSharedEssentials from '@hooks/useSharedEssentials';
-import { IComment, IFollower, ILike, IPublishPost } from '@models/post_model';
+import { IComment, IFollower, ILike, IPostDetails, IPublishPost } from '@models/post_model';
 import React from 'react';
 
 const postService = () => {
@@ -40,9 +40,21 @@ const postService = () => {
     });
   }
 
-  function getAllPosts(): Promise<any> {
+  function getUserPosts(): Promise<IPostDetails[]> {
     return new Promise(async (resolve) => {
       const res = await http.request('get', '/get-posts');
+
+      if (res?.status === 200) {
+        resolve(res?.data);
+      } else {
+        handleErr(res);
+      }
+    });
+  }
+
+  function getAllPosts(): Promise<any> {
+    return new Promise(async (resolve) => {
+      const res = await http.request('get', '/get-all-posts');
 
       if (res?.status === 200) {
         resolve(res?.data);
@@ -111,7 +123,7 @@ const postService = () => {
     });
   }
 
-  return { publishPost, getAllPosts, getPostById, postLike, onPostComment, fetchLikesNCommentsByPostId, onAuthorFollow };
+  return { publishPost, getUserPosts, getAllPosts, getPostById, postLike, onPostComment, fetchLikesNCommentsByPostId, onAuthorFollow };
 };
 
 export default postService;

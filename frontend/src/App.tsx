@@ -18,7 +18,7 @@ function App() {
     <div className="App">
       <Loader />
       <HashRouter>
-        {userLoggedIn && (
+        {true && (
           <>
             <Header />
             <Footer />

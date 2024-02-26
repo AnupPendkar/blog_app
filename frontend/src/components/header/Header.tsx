@@ -14,24 +14,12 @@ import { useNavigate } from 'react-router-dom';
 import { AppRoutesEnum } from '@shared/appRotues';
 
 const Header = () => {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const { toggleAppTheme } = useThemeSwitcher();
   const theme = useTheme();
   const { logout } = useAuthMethods();
   const { loading } = useAppSelector((state) => state.http);
+  const { userLoggedIn } = useAppSelector((state) => state.user);
   const navigate = useNavigate();
-
-  function handleMenu(event: React.MouseEvent<HTMLElement>) {
-    setAnchorEl(event.currentTarget);
-  }
-
-  function handleClose() {
-    setAnchorEl(null);
-  }
-
-  function navigateToWriteRoute() {
-    navigate('/write');
-  }
 
   return (
     <div className="app-header">
@@ -52,14 +40,30 @@ const Header = () => {
                 {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
               </IconButton>
 
-              <span className="fsr-16 inter ml-10 mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.HOMEPAGE)}>
-                Homepage
-              </span>
+              {userLoggedIn && (
+                <>
+                  <span className="fsr-16 inter ml-10 mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.PROFILE)}>
+                    Profile
+                  </span>
+                  <span className="fsr-16 inter mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.POSTS)}>
+                    Posts
+                  </span>
+                </>
+              )}
               <span className="fsr-16 inter mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.WRITE)}>
                 Write
               </span>
-              <span className="fsr-16 inter mr-5 cursor-pointer">Discover</span>
-              <span className="fsr-16 inter cursor-pointer">Logout</span>
+              <span className="fsr-16 inter mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.DISCOVER)}>
+                Discover
+              </span>
+
+              {userLoggedIn ? (
+                <span onClick={logout} className="fsr-16 inter cursor-pointer">
+                  Logout
+                </span>
+              ) : (
+                <span className="fsr-16 inter cursor-pointer">Login</span>
+              )}
             </div>
           </Toolbar>
         </div>

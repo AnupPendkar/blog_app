@@ -14,7 +14,7 @@ export const users = pgTable('users', {
 });
 
 export const userRelations = relations(users, ({ many }) => ({
-  followers: many(followers),
+  followers: many(followersToAuthors),
   posts: many(posts),
   likes: many(likes),
   comments: many(comments),
@@ -24,15 +24,11 @@ export const userRelations = relations(users, ({ many }) => ({
 // <-----------------------------------Follower Model-------------------------------------->
 export const followers = pgTable('followers', {
   id: serial('id').primaryKey(),
-  userId: integer('user_id').references(() => users?.id, { onDelete: 'cascade' }), // One
+  userId: integer('user_id'),
 });
 
-export const followerRelations = relations(followers, ({ one, many }) => ({
+export const followerRelations = relations(followers, ({ many }) => ({
   following: many(followersToAuthors),
-  user: one(users, {
-    fields: [followers?.userId],
-    references: [users?.id],
-  }),
 }));
 // <--------------------------------------------------------------------------------------->
 
@@ -40,11 +36,11 @@ export const followerRelations = relations(followers, ({ one, many }) => ({
 export const followersToAuthors = pgTable(
   'followers_to_authors',
   {
-    followId: integer('follower_id').references(() => followers?.id, { onDelete: 'cascade' }),
-    followingId: integer('author_id').references(() => users?.id, { onDelete: 'cascade' }),
+    authorId: integer('author_id').references(() => users?.id, { onDelete: 'cascade' }),
+    followId: integer('follow_id').references(() => followers?.id, { onDelete: 'cascade' }),
   },
   (t) => ({
-    pk: primaryKey(t.followId, t.followingId),
+    pk: primaryKey(t.authorId, t.followId),
   })
 );
 
@@ -54,8 +50,8 @@ export const followerToAuthorRelations = relations(followersToAuthors, ({ one })
     references: [followers?.id],
   }),
 
-  following: one(users, {
-    fields: [followersToAuthors?.followingId],
+  user: one(users, {
+    fields: [followersToAuthors?.authorId],
     references: [users?.id],
   }),
 }));

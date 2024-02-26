@@ -1,10 +1,9 @@
 export enum AppRoutesEnum {
   LOGIN = '/login',
   CONFIG = '/config',
-  DATA_CAPTURE = '/data-capture',
-  HOMEPAGE = '/homepage',
+  PROFILE = '/profile',
+  POSTS = '/posts',
+  DISCOVER = '/discover',
   WRITE = '/write',
   SINGLE_POST = '/single-post',
-  RAIL_TRANSACTIONS = '/rail-transactions',
-  UPLOAD = '/upload',
 }

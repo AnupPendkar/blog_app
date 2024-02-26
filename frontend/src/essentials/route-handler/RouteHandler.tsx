@@ -9,6 +9,8 @@ import Login from '@components/login/Login';
 import Homepage from '@pages/homepage/Homepage';
 import Write from '@pages/write/Write';
 import SinglePost from '@pages/single-post/SinglePost';
+import AllPosts from '@pages/all-posts/AllPosts';
+import Discover from '@pages/discover/Discover';
 
 const RouteHandler = () => {
   const theme = useTheme();
@@ -25,21 +27,24 @@ const RouteHandler = () => {
       return;
     }
 
+    return <Outlet />;
     return !isPropEmpty(storageHandler.jwtAccesToken) ? <Outlet /> : <Navigate to="/login" />;
   }
 
   return (
     <div className="app-main" style={{ background: theme.palette.primary.main }}>
       <Routes>
-        <Route path={AppRoutesEnum.LOGIN} element={<Login />} />
+        {/* <Route path={AppRoutesEnum.LOGIN} element={<Login />} /> */}
         <Route path={AppRoutesEnum.CONFIG} element={<BaseUrlConfigurator />} />
         <Route element={<AuthGuard />}>
-          <Route path="/" element={<Navigate to={AppRoutesEnum.HOMEPAGE} />} />
-          <Route path={AppRoutesEnum.HOMEPAGE} element={<Homepage />} />
+          <Route path="/" element={<Navigate to={AppRoutesEnum.DISCOVER} />} />
+          <Route path={AppRoutesEnum.PROFILE} element={<Homepage />} />
+          <Route path={AppRoutesEnum.POSTS} element={<AllPosts />} />
+          <Route path={AppRoutesEnum.DISCOVER} element={<Discover />} />
           <Route path="/write" element={<Write />} />
           <Route path="/single-post/:id" element={<SinglePost />} />
 
-          <Route path="*" element={<Navigate to={AppRoutesEnum.HOMEPAGE} />} />
+          <Route path="*" element={<Navigate to={AppRoutesEnum.DISCOVER} />} />
         </Route>
       </Routes>
     </div>

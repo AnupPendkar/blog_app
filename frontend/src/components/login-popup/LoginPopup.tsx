@@ -1,21 +1,16 @@
 import './login.scss';
-import React, { useEffect, useState } from 'react';
-import { getHashedString } from '@shared/utilfunctions';
-import { useNavigate } from 'react-router-dom';
-import { useAppSelector } from '@redux/store';
+import React, { useState } from 'react';
 import useAuthMethods from '@hooks/useAuthMethods';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { IconButton, TextField } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, TextField } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import UserService from '@services/userService';
-import { AppRoutesEnum } from '@shared/appRotues';
+import CloseIcon from '@mui/icons-material/Close';
 
-const Login = () => {
-  const navigate = useNavigate();
-  const user = useAppSelector((state) => state.user);
+const LoginPopup = ({ open, setOpen }) => {
   const { setUserLoginData } = useAuthMethods();
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
   const userService = UserService();
@@ -43,25 +38,22 @@ const Login = () => {
     });
 
     setUserLoginData(res?.access, res?.refresh);
-    navigate(AppRoutesEnum.DISCOVER);
+    setOpen(false);
   }
 
-  useEffect(() => {
-    if (user.userLoggedIn) {
-      navigate(AppRoutesEnum.DISCOVER);
-    }
-  }, []);
-
   return (
-    <div className="login">
-      <div className="login-container">
-        <form className="login-form" onSubmit={handleSubmit(onLoginClick)}>
-          {/* <img className="w-20 self-center" src={logo} alt="CTMS logo" /> */}
-          <span style={{ alignSelf: 'center' }}>Please enter your credentials</span>
-          <div className="field">
+    <Dialog open={open} color="primary">
+      <DialogContent color="secondary">
+        <form className="login-form min-w-[350px]" onSubmit={handleSubmit(onLoginClick)}>
+          <span className="fsr-18 font-im" style={{ alignSelf: 'center' }}>
+            Please enter your credentials
+          </span>
+
+          <div className="field mt-5 mb-4 flex justify-between items-center">
             <label className="field-label" htmlFor="username">
               Username:
             </label>
+
             <TextField
               {...register('username')}
               id="username"
@@ -78,7 +70,7 @@ const Login = () => {
             ></TextField>
           </div>
 
-          <div className="field relative">
+          <div className="field mb-1 relative flex justify-between items-center">
             <label className="field-label" htmlFor="password">
               Password:
             </label>
@@ -99,13 +91,33 @@ const Login = () => {
               {isPasswordVisible ? <VisibilityIcon /> : <VisibilityOffIcon />}
             </IconButton>
           </div>
-          <button disabled={!(isDirty && isValid)} className="login-submit-btn" type="submit">
-            Submit
-          </button>
+
+          <DialogActions>
+            <div className="flex flex-col justify-end gap-3 mb-5">
+              <span className="fsr-14 inter float-end">
+                <a href="" className="ml-2" style={{ color: '#266FDC' }}>
+                  Forgot password
+                </a>
+              </span>
+              <Button disabled={!(isDirty && isValid)} color="success" type="submit" variant="contained">
+                Submit
+              </Button>
+            </div>
+          </DialogActions>
         </form>
-      </div>
-    </div>
+        <div onClick={() => setOpen(false)} className="w-4 h-4 absolute top-5 right-8 cursor-pointer">
+          <CloseIcon />
+        </div>
+
+        <span className="fsr-14 inter float-end">
+          New to blog?
+          <a href="" className="ml-2" style={{ color: '#266FDC' }}>
+            Create an account
+          </a>
+        </span>
+      </DialogContent>
+    </Dialog>
   );
 };
 
-export default Login;
+export default LoginPopup;

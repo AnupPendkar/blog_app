@@ -12,17 +12,22 @@ import { isPropEmpty } from '@shared/utilfunctions';
 import { AppRoutesEnum } from '@shared/appRotues';
 import { useAppSelector } from '@redux/store';
 import { IComment, IFollower, ILike, ISinglePost } from '@models/post_model';
+import Comments from '@pages/homepage/comments/Comments';
+import LoginPopup from '@components/login-popup/LoginPopup';
 
 const SinglePost = () => {
   const [post, setPost] = React.useState<ISinglePost>(null);
+  const [openLogin, setOpenLogin] = React.useState(false);
+  const [commentVis, setCommentVis] = React.useState(false);
   const { fetchLikesNCommentsByPostId, getPostById, postLike, onPostComment, onAuthorFollow } = postService();
   const { id } = useParams();
   const { parsedUserInfo } = useAppSelector((state) => state?.user);
+  const { userLoggedIn } = useAppSelector((state) => state.user);
   const navigate = useNavigate();
 
   async function getCurrentPostById() {
     if (isPropEmpty(id) || isNaN(+id)) {
-      navigate(AppRoutesEnum.HOMEPAGE);
+      navigate(AppRoutesEnum.DISCOVER);
       return;
     }
 
@@ -47,6 +52,11 @@ const SinglePost = () => {
   }
 
   async function onFollowClick() {
+    if (!userLoggedIn) {
+      setOpenLogin(true);
+      return;
+    }
+
     await onAuthorFollow(post?.authorId, !isUserAlreadyFollowing());
     const res = await getPostLikesNComments(post?.id);
     setPost({
@@ -59,6 +69,11 @@ const SinglePost = () => {
   }
 
   async function onPostLike() {
+    if (!userLoggedIn) {
+      setOpenLogin(true);
+      return;
+    }
+
     await postLike(post?.id, !isUserAlreadyLiked());
     const res = await getPostLikesNComments(post?.id);
     setPost({ ...post, likes: res?.likes });
@@ -72,13 +87,17 @@ const SinglePost = () => {
     return post?.likes?.some((like) => like?.userId === parsedUserInfo?.id);
   }
 
-  console.log(post?.author);
   function isUserAlreadyFollowing() {
-    return post?.author?.followers?.some((follower) => follower?.userId === parsedUserInfo?.id);
+    return post?.author?.followers?.some((follower) => follower?.follower === parsedUserInfo?.id);
   }
 
-  async function onSubmitComment() {
-    await onPostComment(post?.id, 'sdlfksdfj');
+  async function onSubmitComment(comment: string) {
+    if (!userLoggedIn) {
+      setOpenLogin(true);
+      return;
+    }
+
+    await onPostComment(post?.id, comment);
 
     const res = await getPostLikesNComments(post?.id);
     setPost({ ...post, comments: res?.comments });
@@ -115,7 +134,7 @@ const SinglePost = () => {
                   </span>
                 )}
 
-                <span onClick={onFollowClick} className="fsr-16 ml-3" style={{ color: '#6B6B6B' }}>
+                <span className="fsr-16 ml-3" style={{ color: '#6B6B6B' }}>
                   {post?.author?.followers?.length}
                 </span>
               </div>
@@ -133,7 +152,7 @@ const SinglePost = () => {
               <span className="fsr-14 mr-6 ml-2">{post?.likes?.length}</span>
             </div>
 
-            <div onClick={onSubmitComment} className="cursor-pointer">
+            <div onClick={() => setCommentVis(true)} className="cursor-pointer">
               <MessageOutlinedIcon style={{ width: 25 }} />
               <span className="fsr-14 ml-2">{post?.comments?.length}</span>
             </div>
@@ -150,6 +169,12 @@ const SinglePost = () => {
           <ReactQuill className="quill_input" style={{ width: '100%' }} value={post?.content} readOnly={true} />
         </div>
       </div>
+
+      <div className="absolute">
+        <Comments data={post?.comments} open={commentVis} onSubmit={onSubmitComment} setOpen={setCommentVis} />
+      </div>
+
+      <LoginPopup open={openLogin} setOpen={setOpenLogin} />
     </div>
   );
 };

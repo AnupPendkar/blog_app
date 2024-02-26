@@ -7,24 +7,55 @@ import { checkUserExists, checkUsernameExists, getUserDetailsByName } from './us
 import { categories, comments, likes, posts, postsToCategories } from '../schema/postSchema';
 
 export async function allPosts(req: Request, res: Response, next: NextFunction) {
+  // try {
+  //   const allPosts = await db.query.users.findMany({
+  //     columns: {
+  //       fullName: true,
+  //       phoneNo: true,
+  //     },
+  //     with: {
+  //       posts: {
+  //         columns: {
+  //           id: true,
+  //           // categories: true,
+  //           title: true,
+  //           content: true,
+  //         },
+  //       },
+  //     },
+  //   });
+  //   res.send(allPosts);
+  // } catch (err) {
+  //   next(err);
+  // }
   try {
-    const allPosts = await db.query.users.findMany({
+    const posts = await db.query.posts.findMany({
       columns: {
-        fullName: true,
-        phoneNo: true,
+        id: true,
+        title: true,
+        content: true,
+        thumbnailImg: true,
+        createdAt: true,
+        authorId: true,
+        desc: true,
       },
+
       with: {
-        posts: {
-          columns: {
-            id: true,
-            // categories: true,
-            title: true,
-            content: true,
+        categories: {
+          columns: {},
+
+          with: {
+            category: true,
           },
         },
       },
     });
-    res.send(allPosts);
+
+    posts?.forEach((post) => {
+      (post as any).categories = post?.categories?.map((cat) => cat?.category);
+    });
+
+    res.json(posts);
   } catch (err) {
     next(err);
   }
@@ -41,6 +72,10 @@ export async function userPosts(req, res: Response, next: NextFunction) {
             id: true,
             title: true,
             content: true,
+            thumbnailImg: true,
+            createdAt: true,
+            authorId: true,
+            desc: true,
           },
 
           with: {
@@ -97,15 +132,24 @@ export async function totalLikesNComment(req, res: Response, next: NextFunction)
           where: (posts, { eq }) => eq(posts?.id, postId),
           with: {
             likes: true,
-            comments: true,
+            comments: {
+              with: {
+                user: {
+                  columns: {
+                    profileImg: true,
+                    username: true,
+                    email: true,
+                  },
+                },
+              },
+            },
           },
         },
         followers: {
           with: {
-            following: {
-              with: {
-                follower: true,
-                following: true,
+            follower: {
+              columns: {
+                userId: true,
               },
             },
           },
@@ -113,10 +157,26 @@ export async function totalLikesNComment(req, res: Response, next: NextFunction)
       },
     });
 
+    likesNCommentNFollwers?.followers?.forEach((foll) => {
+      Object.assign(foll, {
+        follower: foll?.follower?.userId,
+      });
+    });
 
-    res
-      .status(200)
-      .json({ likes: likesNCommentNFollwers?.posts?.[0]?.likes, comments: likesNCommentNFollwers?.posts?.[0]?.comments, followers: likesNCommentNFollwers?.followers, likesNCommentNFollwers });
+    likesNCommentNFollwers?.posts?.[0]?.comments?.forEach((comm) => {
+      Object.assign(comm, {
+        profileImg: comm?.user?.profileImg,
+        username: comm?.user?.username,
+        email: comm?.user?.email,
+      });
+    });
+
+    res.status(200).json({
+      likes: likesNCommentNFollwers?.posts?.[0]?.likes,
+      comments: likesNCommentNFollwers?.posts?.[0]?.comments,
+      followers: likesNCommentNFollwers?.followers,
+      likesNCommentNFollwers,
+    });
   } catch (err) {
     next(err);
   }
@@ -126,8 +186,6 @@ export async function onPostComment(req, res: Response, next: NextFunction) {
   try {
     const { postId, comment } = req.body;
     const userId = req.user.userId;
-
-    console.log(postId, userId, comment);
 
     await db.insert(comments).values({
       postId,
@@ -178,11 +236,54 @@ export async function getPostById(req, res: Response, next: NextFunction) {
     const { postId } = req.query;
 
     const post = await db.query.posts.findFirst({
-      with: { categories: true, comments: true, likes: true, author: { with: { followers: true } } },
+      with: {
+        categories: true,
+        comments: {
+          with: {
+            user: {
+              columns: {
+                username: true,
+                email: true,
+                profileImg: true,
+              },
+            },
+          },
+        },
+        likes: true,
+        author: {
+          with: {
+            followers: {
+              with: {
+                follower: {
+                  columns: {
+                    userId: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
       where: (posts, { eq }) => eq(posts?.id, +postId),
     });
 
-    res.json({ post });
+    const resData = post;
+    resData?.author?.followers?.forEach((foll) =>
+      Object.assign(foll, {
+        follower: foll?.follower?.userId,
+      })
+    );
+
+    resData?.comments?.forEach((comm) => {
+      Object.assign(comm, {
+        profileImg: comm?.user?.profileImg,
+        username: comm?.user?.username,
+        email: comm?.user?.email,
+        user: undefined,
+      });
+    });
+
+    res.json({ post: resData });
   } catch (err) {
     next(err);
   }

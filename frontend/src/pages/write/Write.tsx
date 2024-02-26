@@ -8,15 +8,19 @@ import FormatQuoteRoundedIcon from '@mui/icons-material/FormatQuoteRounded';
 import postService from '@services/postService';
 import UserService from '@services/userService';
 import PublishDialog from './PublishDialog';
+import { useAppSelector } from '@redux/store';
+import LoginPopup from '@components/login-popup/LoginPopup';
 
 const Write = () => {
   const [title, setTitle] = useState('');
   const [value, setValue] = useState('');
+  const [openLogin, setOpenLogin] = React.useState(false);
   const [publishDialogVis, setPublishDialogVis] = useState(false);
   const [top, setTop] = useState(12);
   const [btnVisiblity, setBtnVisibility] = useState(true);
   const [isBtnClicked, setIsBtnClicked] = useState(false);
   const editorRef = useRef(null);
+  const { userLoggedIn } = useAppSelector((state) => state.user);
   const { publishPost } = postService();
 
   const modules = {
@@ -105,6 +109,11 @@ const Write = () => {
   }
 
   async function onPublishClk() {
+    if (!userLoggedIn) {
+      setOpenLogin(true);
+      return;
+    }
+
     setPublishDialogVis(true);
   }
 
@@ -167,6 +176,8 @@ const Write = () => {
       </button>
 
       {publishDialogVis && <PublishDialog title={title} content={value} />}
+
+      <LoginPopup open={openLogin} setOpen={setOpenLogin} />
     </div>
   );
 };

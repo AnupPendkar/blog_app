@@ -50,6 +50,10 @@ export const likesRelations = relations(likes, ({ one }) => ({
 // <-------------------------Comment Model------------------------------>
 export const comments = pgTable('comments', {
   id: serial('id').primaryKey(),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at')
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
   comment: varchar('comment'),
   postId: integer('post_id').references(() => posts.id, { onDelete: 'cascade' }),
   userId: integer('user_id').references(() => users.id, { onDelete: 'cascade' }),
@@ -61,7 +65,7 @@ export const commentsRelations = relations(comments, ({ one }) => ({
     references: [posts?.id],
   }),
   user: one(users, {
-    fields: [comments?.postId],
+    fields: [comments?.userId],
     references: [users?.id],
   }),
 }));

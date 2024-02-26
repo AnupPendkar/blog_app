@@ -4,6 +4,16 @@ export interface IPublishPost {
   categories?: Array<number>;
 }
 
+export interface IPostDetails {
+  id: number;
+  createdAt: number;
+  thumbnailImg: string;
+  categories: Array<any>;
+  title: string;
+  desc: string;
+  content: string;
+}
+
 export interface IPostAuthor {
   id: number;
   fullName: string;
@@ -29,12 +39,16 @@ export interface ISinglePost {
 }
 
 export interface IFollower {
-  id: number;
-  userId: number;
+  authorId: number;
+  follower: number;
 }
 
 export interface IComment {
   id: number;
+  createdAt: string;
+  email: string;
+  profileImg: string;
+  username: string;
   comment: string;
   postId: number;
   userId: number;

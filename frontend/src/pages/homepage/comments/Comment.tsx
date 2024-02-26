@@ -3,12 +3,12 @@ import React from 'react';
 export interface ICommentDetails {
   userImg: string;
   username: string;
-  timestamp: number;
+  timestamp: string;
   comment: string;
 }
 
 const Comment = (props: ICommentDetails) => {
-  function constructDateTime(timestamp: number) {
+  function constructDateTime(timestamp: string) {
     const date = new Date(timestamp);
     return `${date?.getFullYear()}-${date?.getMonth()}-${date?.getDay()}`;
   }

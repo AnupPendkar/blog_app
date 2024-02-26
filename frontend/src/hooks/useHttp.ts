@@ -34,8 +34,8 @@ const useHttp = () => {
 
       appDispatch(makeRequest(requestPayload)).then((res) => {
         if ((res?.payload as HttpResponse)?.status === 401) {
-          logout();
-          navigate('/');
+          // logout();
+          // navigate('/');
           return;
         }
 

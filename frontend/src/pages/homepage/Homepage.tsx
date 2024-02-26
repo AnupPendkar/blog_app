@@ -1,17 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import linkedin from '@assets/linkedin.png';
 import Categories from './categories/Categories';
-import Posts from './posts/Posts';
 import { PostViewEnum } from '@models/homepage';
-import Comments from './comments/Comments';
 import postService from '@services/postService';
+import Posts from '@pages/posts/Posts';
+import { IPostDetails } from '@models/post_model';
 
 const Homepage = () => {
-  const { getAllPosts } = postService();
+  const [editorPick, setEditorPick] = useState<IPostDetails[]>([]);
+  const [recentPosts, setRecentPosts] = useState<IPostDetails[]>([]);
+  const [popular, setPopular] = useState<IPostDetails[]>([]);
+  const { getUserPosts } = postService();
 
   async function getAllUserPosts() {
-    const res = await getAllPosts();
-    console.log(res);
+    let postsData = [];
+    postsData = await getUserPosts();
+
+    if (postsData?.length > 3) {
+      postsData = postsData.slice(0, 3);
+    }
+
+    setRecentPosts(postsData);
+    setEditorPick(postsData);
+    setPopular(postsData);
   }
 
   React.useEffect(() => {
@@ -47,13 +58,12 @@ const Homepage = () => {
 
         <div className="flex gap-10">
           <div className="section basis-3/4">
-            <Posts postView={PostViewEnum.PARTIAL} />
-            <Comments />
+            <Posts data={recentPosts} viewMethod={PostViewEnum.PARTIAL} />
           </div>
           <div className="section basis-1/4">
-            <Posts postView={PostViewEnum.TITLE_ONLY} />
+            <Posts data={popular} viewMethod={PostViewEnum.TITLE_ONLY} />
             <Categories img_n_name={false} />
-            <Posts postView={PostViewEnum.TITLE_WITH_IMG} />
+            <Posts data={editorPick} viewMethod={PostViewEnum.TITLE_WITH_IMG} />
           </div>
         </div>
       </div>

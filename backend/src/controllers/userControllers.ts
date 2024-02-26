@@ -133,15 +133,13 @@ export async function onAuthorFollow(req, res: Response, next: NextFunction) {
 
     if (add) {
       const [newFollower, ...rest] = await db.insert(followers).values({ userId }).returning({ id: followers?.id });
-      console.log(newFollower);
-      await db.insert(followersToAuthors).values({ followId: newFollower?.id, followingId: authorId });
+      await db.insert(followersToAuthors).values({ followId: newFollower?.id, authorId: authorId });
 
       res.status(200).json('Followed successfully');
     } else {
-      // await db.delete(followers).where(eq(followers?., authorId));
       const [follower, ...restFollower] = await db.select().from(followers).where(eq(followers?.userId, userId));
 
-      await db.delete(followersToAuthors).where(eq(followersToAuthors?.followingId, authorId) && eq((follower as any)?.id, (followersToAuthors as any)?.followId));
+      await db.delete(followersToAuthors).where(eq(followersToAuthors?.followId, userId) && eq(followersToAuthors?.authorId, authorId));
 
       res.status(200).json('Unfollowed successfully');
     }
