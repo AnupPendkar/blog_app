@@ -1,5 +1,5 @@
 import { AccountCircle } from '@mui/icons-material';
-import { AppBar, IconButton, Menu, MenuItem, Toolbar, useTheme } from '@mui/material';
+import { AppBar, IconButton, Toolbar, useTheme } from '@mui/material';
 import React from 'react';
 import { useAppSelector } from '@redux/store';
 import Brightness4Icon from '@mui/icons-material/Brightness4';

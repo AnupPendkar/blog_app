@@ -21,7 +21,6 @@ const Write = () => {
   const [isBtnClicked, setIsBtnClicked] = useState(false);
   const editorRef = useRef(null);
   const { userLoggedIn } = useAppSelector((state) => state.user);
-  const { publishPost } = postService();
 
   const modules = {
     toolbar: [

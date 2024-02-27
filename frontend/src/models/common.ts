@@ -84,7 +84,6 @@ export interface IAppSolutionRegistry {
   jwtUserRolesList: Array<JwtUserRoleEnum>;
   webSocketNamespace: AppWebSocketNSPEnum;
   websocketEvents: Array<WSEventNameEnum>;
-  landingPageRouteOnInit: (userRole: JwtUserRoleEnum) => AppRoutesEnum;
 }
 
 export interface ISocketClient {

@@ -2,7 +2,7 @@ import React from 'react';
 import { useTheme } from '@mui/material';
 import { AppRoutesEnum } from '@shared/appRotues';
 import { isPropEmpty } from '@shared/utilfunctions';
-import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom';
+import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import BaseUrlConfigurator from '@components/base-url-config/BaseUrlConfigurator';
 import StorageHandler from '@shared/storageHandler';
 import Homepage from '@pages/homepage/Homepage';
@@ -13,7 +13,6 @@ import Discover from '@pages/discover/Discover';
 
 const RouteHandler = () => {
   const theme = useTheme();
-  const location = useLocation();
   const storageHandler = new StorageHandler();
 
   /**

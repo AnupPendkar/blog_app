@@ -74,7 +74,7 @@ export default class UrlConfigManager extends StorageHandler {
 
   logConnectionDetails() {
     console.log(
-      `==================\nCONNECTION DETAILS\n==================\n${'REACT_INFRA'} ` +
+      `==================\nCONNECTION DETAILS\n==================\n${'BLOG_APP'} ` +
         '\nServer: ' +
         this.serverAddress +
         '\nPort: ' +
