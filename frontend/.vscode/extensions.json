@@ -3,10 +3,6 @@
   // Extension identifier format: ${publisher}.${name}. Example: vscode.csharp
   // List of extensions which should be recommended for users of this workspace.
   "recommendations": [
-    "dsznajder.es7-react-js-snippets",
-    "timothymclane.react-redux-es6-snippets",
-    "bradlc.vscode-tailwindcss",
-    "EQuimper.react-native-react-redux",
     "bierner.color-info",
     "wix.vscode-import-cost",
     "stevencl.adddoccomments",
@@ -24,6 +20,5 @@
     // Git extensions
     "donjayamanne.githistory",
     "codezombiech.gitignore",
-    "eamodio.gitlens",
   ],
 }
