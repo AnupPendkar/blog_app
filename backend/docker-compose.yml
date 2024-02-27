@@ -1,0 +1,15 @@
+version: '3'
+services:
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      - DATABASE_PASSWORD=postgres_password
+
+  api:
+    build: .
+    volumes:
+      - /app/node_modules
+    environment:
+      - DATABASE_USER=postgres
+      - DATABASE_HOST=postgres
+      - DATABASE_PASSWORD=postgres_password
