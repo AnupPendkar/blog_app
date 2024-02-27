@@ -50,6 +50,7 @@ export interface IComment {
   profileImg: string;
   username: string;
   comment: string;
+  replies: Exclude<IComment, 'replies'>[];
   postId: number;
   userId: number;
 }

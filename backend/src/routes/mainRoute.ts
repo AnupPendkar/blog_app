@@ -1,7 +1,7 @@
 import express from 'express';
 import { db } from '../config';
 import { userLogin, onAuthorFollow, userRegister, updateUsername, deleteUser } from '../controllers/userControllers';
-import { allPosts, userPosts, createPost, updatePost, deletePost, getPostById, onPostLike, onPostComment, totalLikesNComment } from '../controllers/postController';
+import { allPosts, userPosts, createPost, updatePost, deletePost, getPostById, onPostLike, onPostComment, onPostCommentReply, totalLikesNComment } from '../controllers/postController';
 import { uploadFile } from '../controllers/fileController';
 import multer from 'multer';
 
@@ -49,5 +49,6 @@ router.get('/get-post-likes-comments', totalLikesNComment);
 router.post('/post-like', onPostLike);
 router.post('/follow-author', onAuthorFollow);
 router.post('/post-comment', onPostComment);
+router.post('/post-reply', onPostCommentReply);
 
 export default router;

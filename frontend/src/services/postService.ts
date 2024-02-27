@@ -123,7 +123,24 @@ const postService = () => {
     });
   }
 
-  return { publishPost, getUserPosts, getAllPosts, getPostById, postLike, onPostComment, fetchLikesNCommentsByPostId, onAuthorFollow };
+  function onPostCommentReply(parentCommentId: number, comment: string): Promise<any> {
+    const body = {
+      parentCommentId,
+      comment,
+    };
+
+    return new Promise(async (resolve) => {
+      const res = await http.noLoader().request('post', '/post-reply', '', body);
+
+      if ([200, 201, 204]?.includes(res?.status)) {
+        resolve(res?.data);
+      } else {
+        handleErr(res);
+      }
+    });
+  }
+
+  return { publishPost, getUserPosts, getAllPosts, getPostById, postLike, onPostComment, onPostCommentReply, fetchLikesNCommentsByPostId, onAuthorFollow };
 };
 
 export default postService;

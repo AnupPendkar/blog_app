@@ -19,7 +19,7 @@ const SinglePost = () => {
   const [post, setPost] = React.useState<ISinglePost>(null);
   const [openLogin, setOpenLogin] = React.useState(false);
   const [commentVis, setCommentVis] = React.useState(false);
-  const { fetchLikesNCommentsByPostId, getPostById, postLike, onPostComment, onAuthorFollow } = postService();
+  const { fetchLikesNCommentsByPostId, getPostById, postLike, onPostComment, onPostCommentReply, onAuthorFollow } = postService();
   const { id } = useParams();
   const { parsedUserInfo } = useAppSelector((state) => state?.user);
   const { userLoggedIn } = useAppSelector((state) => state.user);
@@ -91,13 +91,17 @@ const SinglePost = () => {
     return post?.author?.followers?.some((follower) => follower?.follower === parsedUserInfo?.id);
   }
 
-  async function onSubmitComment(comment: string) {
+  async function onSubmitComment(comment: string, parentCommentId?: number) {
     if (!userLoggedIn) {
       setOpenLogin(true);
       return;
     }
 
-    await onPostComment(post?.id, comment);
+    if (isPropEmpty(parentCommentId)) {
+      await onPostComment(post?.id, comment);
+    } else {
+      await onPostCommentReply(parentCommentId, comment);
+    }
 
     const res = await getPostLikesNComments(post?.id);
     setPost({ ...post, comments: res?.comments });

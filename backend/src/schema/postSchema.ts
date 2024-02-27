@@ -47,6 +47,24 @@ export const likesRelations = relations(likes, ({ one }) => ({
 
 // ----------------------------------------------------------------------
 
+export const commentLikes = pgTable('comment_likes', {
+  id: serial('id').primaryKey(),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  commentId: integer('comment_id').references(() => comments?.id, { onDelete: 'cascade' }),
+  userId: integer('user_id').references(() => users?.id, { onDelete: 'cascade' }),
+});
+
+export const commentLikesRelations = relations(commentLikes, ({ one }) => ({
+  comment: one(comments, {
+    fields: [commentLikes?.commentId],
+    references: [comments?.id],
+  }),
+  user: one(users, {
+    fields: [commentLikes?.userId],
+    references: [users?.id],
+  }),
+}));
+
 // <-------------------------Comment Model------------------------------>
 export const comments = pgTable('comments', {
   id: serial('id').primaryKey(),
@@ -59,7 +77,7 @@ export const comments = pgTable('comments', {
   userId: integer('user_id').references(() => users.id, { onDelete: 'cascade' }),
 });
 
-export const commentsRelations = relations(comments, ({ one }) => ({
+export const commentsRelations = relations(comments, ({ one, many }) => ({
   post: one(posts, {
     fields: [comments?.postId],
     references: [posts?.id],
@@ -68,8 +86,36 @@ export const commentsRelations = relations(comments, ({ one }) => ({
     fields: [comments?.userId],
     references: [users?.id],
   }),
+  likes: many(commentLikes),
+  replies: many(replies),
 }));
-// ----------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+
+// <----------------------------Reply Model------------------------------------>
+export const replies = pgTable('replies', {
+  id: serial('id').primaryKey(),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at')
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+
+  comment: varchar('comment'),
+  parentCommentId: integer('parent_comment_id').references(() => comments?.id, { onDelete: 'cascade' }),
+  likes: integer('likes').references(() => likes?.id, { onDelete: 'cascade' }),
+  userId: integer('user_id').references(() => users?.id, { onDelete: 'cascade' }),
+});
+
+export const repliesRelations = relations(replies, ({ one }) => ({
+  comment: one(comments, {
+    fields: [replies?.parentCommentId],
+    references: [comments?.id],
+  }),
+  user: one(users, {
+    fields: [replies?.userId],
+    references: [users?.id],
+  }),
+}));
+// <--------------------------------------------------------------------------->
 
 // <----------------------Category Model-------------------------->
 export const categories = pgTable('categories', {

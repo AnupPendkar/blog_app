@@ -4,7 +4,7 @@ import { Request, Response, NextFunction } from 'express';
 import { isPropEmpty } from '../utils/utils';
 import { users } from '../schema/userSchema';
 import { checkUserExists, checkUsernameExists, getUserDetailsByName } from './userControllers';
-import { categories, comments, likes, posts, postsToCategories } from '../schema/postSchema';
+import { categories, comments, likes, posts, postsToCategories, replies } from '../schema/postSchema';
 
 export async function allPosts(req: Request, res: Response, next: NextFunction) {
   // try {
@@ -136,9 +136,22 @@ export async function totalLikesNComment(req, res: Response, next: NextFunction)
               with: {
                 user: {
                   columns: {
+                    id: true,
                     profileImg: true,
                     username: true,
                     email: true,
+                  },
+                },
+                replies: {
+                  with: {
+                    user: {
+                      columns: {
+                        id: true,
+                        profileImg: true,
+                        username: true,
+                        email: true,
+                      },
+                    },
                   },
                 },
               },
@@ -168,6 +181,16 @@ export async function totalLikesNComment(req, res: Response, next: NextFunction)
         profileImg: comm?.user?.profileImg,
         username: comm?.user?.username,
         email: comm?.user?.email,
+        user: undefined,
+      });
+
+      comm?.replies?.forEach((rep) => {
+        Object.assign(rep, {
+          profileImg: rep?.user?.profileImg,
+          username: rep?.user?.username,
+          email: rep?.user?.email,
+          user: undefined,
+        });
       });
     });
 
@@ -191,6 +214,23 @@ export async function onPostComment(req, res: Response, next: NextFunction) {
       postId,
       userId,
       comment,
+    });
+
+    res.status(200).json('Commented successfully');
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function onPostCommentReply(req, res: Response, next: NextFunction) {
+  try {
+    const { comment, parentCommentId } = req.body;
+    const userId = req.user.userId;
+
+    await db.insert(replies).values({
+      parentCommentId,
+      comment,
+      userId,
     });
 
     res.status(200).json('Commented successfully');
@@ -247,6 +287,18 @@ export async function getPostById(req, res: Response, next: NextFunction) {
                 profileImg: true,
               },
             },
+            replies: {
+              with: {
+                user: {
+                  columns: {
+                    id: true,
+                    profileImg: true,
+                    username: true,
+                    email: true,
+                  },
+                },
+              },
+            },
           },
         },
         likes: true,
@@ -280,6 +332,15 @@ export async function getPostById(req, res: Response, next: NextFunction) {
         username: comm?.user?.username,
         email: comm?.user?.email,
         user: undefined,
+      });
+
+      comm?.replies?.forEach((rep) => {
+        Object.assign(rep, {
+          profileImg: rep?.user?.profileImg,
+          username: rep?.user?.username,
+          email: rep?.user?.email,
+          user: undefined,
+        });
       });
     });
 

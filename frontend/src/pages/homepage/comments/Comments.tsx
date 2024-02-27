@@ -1,16 +1,19 @@
 import React from 'react';
 import Comment from './Comment';
-import design from '@assets/design1.png';
 import { Button, Drawer } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import postService from '@services/postService';
 import { IComment } from '@models/post_model';
 
-const Comments = ({ data, open, onSubmit, setOpen }: { data: IComment[]; open: boolean; onSubmit: (comment: string) => void; setOpen: (value: boolean) => void }) => {
+const Comments = ({ data, open, onSubmit, setOpen }: { data: IComment[]; open: boolean; onSubmit: (comment: string, id?: number) => void; setOpen: (value: boolean) => void }) => {
   const [comment, setComment] = React.useState('');
 
-  async function onCommentSubmit() {
-    onSubmit(comment);
+  async function onCommentSubmit(reply?: string, id?: number) {
+    if (id) {
+      onSubmit(reply, id);
+    } else {
+      setComment('');
+      onSubmit(comment, id);
+    }
   }
 
   return (
@@ -18,11 +21,11 @@ const Comments = ({ data, open, onSubmit, setOpen }: { data: IComment[]; open: b
       <Drawer
         variant="persistent"
         sx={{
-          width: '30%',
+          width: '500px',
           flexShrink: 0,
           background: '#191919',
           '& .MuiDrawer-paper': {
-            width: '30%',
+            width: '500px',
             mt: '64px',
             boxSizing: 'border-box',
           },
@@ -42,7 +45,14 @@ const Comments = ({ data, open, onSubmit, setOpen }: { data: IComment[]; open: b
           </div>
           <div className="mt-3 overflow-auto h-full">
             {data?.map((rec) => (
-              <Comment userImg={rec?.profileImg} username={rec?.username} timestamp={rec?.createdAt} comment={rec?.comment} />
+              <div key={rec?.id + 'comment'}>
+                <Comment userImg={rec?.profileImg} username={rec?.username} timestamp={rec?.createdAt} comment={rec?.comment} setComment={onCommentSubmit} commentId={rec?.id} />
+                <div className="lg:pl-8 md:pl-6 sm:pl-4" style={{ borderLeft: '2px solid grey' }}>
+                  {rec?.replies?.map((rep) => (
+                    <Comment key={rep?.id + 'reply'} userImg={rep?.profileImg} username={rep?.username} timestamp={rep?.createdAt} comment={rep?.comment} />
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
 
@@ -57,7 +67,7 @@ const Comments = ({ data, open, onSubmit, setOpen }: { data: IComment[]; open: b
               <Button onClick={() => setComment('')} color="cancel" variant="contained">
                 Clear
               </Button>
-              <Button onClick={onCommentSubmit} color="success" variant="contained">
+              <Button onClick={() => onCommentSubmit()} color="success" variant="contained">
                 Submit
               </Button>
             </div>
