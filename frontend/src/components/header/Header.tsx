@@ -40,22 +40,23 @@ const Header = () => {
                 {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
               </IconButton>
 
-              {userLoggedIn && (
-                <>
-                  <span className="fsr-16 inter ml-10 mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.PROFILE)}>
-                    Profile
-                  </span>
-                  <span className="fsr-16 inter mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.POSTS)}>
-                    Posts
-                  </span>
-                </>
-              )}
+              <span className="fsr-16 inter ml-10 mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.DISCOVER)}>
+                Discover
+              </span>
               <span className="fsr-16 inter mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.WRITE)}>
                 Write
               </span>
-              <span className="fsr-16 inter mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.DISCOVER)}>
-                Discover
-              </span>
+
+              {userLoggedIn && (
+                <>
+                  <span className="fsr-16 inter mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.POSTS)}>
+                    Posts
+                  </span>
+                  <span className="fsr-16 inter mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.PROFILE)}>
+                    Profile
+                  </span>
+                </>
+              )}
 
               {userLoggedIn ? (
                 <span onClick={logout} className="fsr-16 inter cursor-pointer">

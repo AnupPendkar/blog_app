@@ -1,0 +1,7 @@
+version: '3'
+services:
+  web:
+    image: blog_app
+    build: .
+    container_name: blog_app_container
+    working_dir: /app

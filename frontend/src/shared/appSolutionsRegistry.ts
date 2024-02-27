@@ -11,23 +11,7 @@ const websocketEvents: Array<WSEventNameEnum> = [
   WSEventNameEnum.JOB_STOP,
 ];
 
-const sidebarItems: Array<ISideBarItem> = [
-  {
-    id: 1,
-    text: 'Data capture',
-    icon: '',
-    route: AppRoutesEnum.DATA_CAPTURE,
-    isActive: true,
-  },
-  {
-    id: 2,
-    text: 'Upload',
-    icon: '',
-    route: AppRoutesEnum.UPLOAD,
-    isActive: false,
-    disabled: true,
-  },
-];
+const sidebarItems: Array<ISideBarItem> = [];
 
 const supportedUsersList: Array<UserRoleDisplayStringEnum> = [UserRoleDisplayStringEnum.DASHBOARD_WAREHOUSE_MANAGER];
 
@@ -48,7 +32,7 @@ export const AppSolutionRegistry: IAppSolutionRegistry = {
   landingPageRouteOnInit: (userRole: JwtUserRoleEnum) => {
     switch (userRole) {
       case JwtUserRoleEnum.DASHBOARD_WAREHOUSE_MANAGER:
-        return AppRoutesEnum.DATA_CAPTURE;
+        return AppRoutesEnum.DISCOVER;
     }
   },
 };

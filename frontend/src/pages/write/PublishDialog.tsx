@@ -59,7 +59,7 @@ const PublishDialog = ({ title, content }) => {
       <DialogContent color="secondary">
         <div className="flex items-center mb-6">
           <span className="fsr-16 font-im mr-4">Blog Desc: </span>
-          <textarea className="py-1 px-3" onChange={(e) => setValue('postDesc', e.target.value)} name="" id="" cols="30" rows="3"></textarea>
+          <textarea className="py-1 px-3" onChange={(e) => setValue('postDesc', e.target.value)} name="" id="" cols={30} rows={3}></textarea>
         </div>
 
         <div className="flex items-center mb-6">
