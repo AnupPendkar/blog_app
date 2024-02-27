@@ -12,12 +12,14 @@ import twitter from '@assets/twitter.png';
 import linkedin from '@assets/linkedin.png';
 import { useNavigate } from 'react-router-dom';
 import { AppRoutesEnum } from '@shared/appRotues';
+import LoginPopup from '@components/login-popup/LoginPopup';
 
 const Header = () => {
   const { toggleAppTheme } = useThemeSwitcher();
   const theme = useTheme();
   const { logout } = useAuthMethods();
   const { loading } = useAppSelector((state) => state.http);
+  const [openLogin, setOpenLogin] = React.useState(false);
   const { userLoggedIn } = useAppSelector((state) => state.user);
   const navigate = useNavigate();
 
@@ -33,42 +35,45 @@ const Header = () => {
               <img className="w-5 mr-3 cursor-pointer" src={linkedin} alt="" />
             </div>
 
-            <span className="fsr-18 font-im ml-7">Dashboard</span>
+            <span className="fsr-18 font-im ml-7">StoryHaven</span>
 
             <div className="flex items-center">
               <IconButton onClick={toggleAppTheme} color="inherit" disabled={loading}>
                 {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
               </IconButton>
 
-              <span className="fsr-16 inter ml-10 mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.DISCOVER)}>
+              <span className="fsr-16 inter ml-10 mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.PROFILE)}>
+                Homepage
+              </span>
+              {userLoggedIn && (
+                <>
+                  <span className="fsr-16 inter mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.POSTS)}>
+                    Posts
+                  </span>
+                </>
+              )}
+
+              <span className="fsr-16 inter mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.DISCOVER)}>
                 Discover
               </span>
               <span className="fsr-16 inter mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.WRITE)}>
                 Write
               </span>
 
-              {userLoggedIn && (
-                <>
-                  <span className="fsr-16 inter mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.POSTS)}>
-                    Posts
-                  </span>
-                  <span className="fsr-16 inter mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.PROFILE)}>
-                    Profile
-                  </span>
-                </>
-              )}
-
               {userLoggedIn ? (
                 <span onClick={logout} className="fsr-16 inter cursor-pointer">
                   Logout
                 </span>
               ) : (
-                <span className="fsr-16 inter cursor-pointer">Login</span>
+                <span onClick={() => setOpenLogin(true)} className="fsr-16 inter cursor-pointer">
+                  Login
+                </span>
               )}
             </div>
           </Toolbar>
         </div>
       </AppBar>
+      <LoginPopup open={openLogin} setOpen={setOpenLogin} />
     </div>
   );
 };
