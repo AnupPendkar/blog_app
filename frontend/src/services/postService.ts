@@ -1,6 +1,6 @@
 import useHttp from '@hooks/useHttp';
 import useSharedEssentials from '@hooks/useSharedEssentials';
-import { IComment, IFollower, ILike, IPostDetails, IPublishPost } from '@models/post_model';
+import { IComment, IFollower, ILike, IPostDetails, IPublishPost, PostMethodEnum } from '@models/post_model';
 import React from 'react';
 
 const postService = () => {
@@ -78,20 +78,6 @@ const postService = () => {
     });
   }
 
-  function postLike(postId: number, add = true): Promise<void> {
-    const body = { postId: postId, add };
-
-    return new Promise(async (resolve) => {
-      const res = await http.noLoader().request('post', '/post-like', '', body);
-
-      if ([200, 201, 204]?.includes(res?.status)) {
-        resolve();
-      } else {
-        handleErr(res);
-      }
-    });
-  }
-
   function onAuthorFollow(authorId: number, add = true): Promise<void> {
     const body = { authorId: authorId, add };
 
@@ -106,14 +92,14 @@ const postService = () => {
     });
   }
 
-  function onPostComment(postId: number, comment: string): Promise<any> {
-    const body = {
-      postId,
-      comment,
-    };
-
+  function onPostAction(data, method: PostMethodEnum, reqMethod: string) {
     return new Promise(async (resolve) => {
-      const res = await http.noLoader().request('post', '/post-comment', '', body);
+      const body = {
+        data,
+        method,
+      };
+
+      const res = await http.noLoader().request(reqMethod, '/on-post-action', '', body);
 
       if ([200, 201, 204]?.includes(res?.status)) {
         resolve(res?.data);
@@ -123,24 +109,7 @@ const postService = () => {
     });
   }
 
-  function onPostCommentReply(parentCommentId: number, comment: string): Promise<any> {
-    const body = {
-      parentCommentId,
-      comment,
-    };
-
-    return new Promise(async (resolve) => {
-      const res = await http.noLoader().request('post', '/post-reply', '', body);
-
-      if ([200, 201, 204]?.includes(res?.status)) {
-        resolve(res?.data);
-      } else {
-        handleErr(res);
-      }
-    });
-  }
-
-  return { publishPost, getUserPosts, getAllPosts, getPostById, postLike, onPostComment, onPostCommentReply, fetchLikesNCommentsByPostId, onAuthorFollow };
+  return { publishPost, getUserPosts, getAllPosts, getPostById, onPostAction, fetchLikesNCommentsByPostId, onAuthorFollow };
 };
 
 export default postService;

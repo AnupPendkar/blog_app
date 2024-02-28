@@ -11,7 +11,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { isPropEmpty } from '@shared/utilfunctions';
 import { AppRoutesEnum } from '@shared/appRotues';
 import { useAppSelector } from '@redux/store';
-import { IComment, IFollower, ILike, ISinglePost } from '@models/post_model';
+import { IComment, IFollower, ILike, ISinglePost, PostMethodEnum } from '@models/post_model';
 import Comments from '@pages/homepage/comments/Comments';
 import LoginPopup from '@components/login-popup/LoginPopup';
 
@@ -19,7 +19,7 @@ const SinglePost = () => {
   const [post, setPost] = React.useState<ISinglePost>(null);
   const [openLogin, setOpenLogin] = React.useState(false);
   const [commentVis, setCommentVis] = React.useState(false);
-  const { fetchLikesNCommentsByPostId, getPostById, postLike, onPostComment, onPostCommentReply, onAuthorFollow } = postService();
+  const { onPostAction, fetchLikesNCommentsByPostId, getPostById, onAuthorFollow } = postService();
   const { id } = useParams();
   const { parsedUserInfo } = useAppSelector((state) => state?.user);
   const { userLoggedIn } = useAppSelector((state) => state.user);
@@ -74,7 +74,8 @@ const SinglePost = () => {
       return;
     }
 
-    await postLike(post?.id, !isUserAlreadyLiked());
+    await onPostAction({ postId: post?.id }, PostMethodEnum.POST_LIKE, isUserAlreadyLiked() ? 'put' : 'post');
+
     const res = await getPostLikesNComments(post?.id);
     setPost({ ...post, likes: res?.likes });
   }
@@ -98,9 +99,9 @@ const SinglePost = () => {
     }
 
     if (isPropEmpty(parentCommentId)) {
-      await onPostComment(post?.id, comment);
+      await onPostAction({ postId: post?.id, comment }, PostMethodEnum.COMMENT, 'post');
     } else {
-      await onPostCommentReply(parentCommentId, comment);
+      await onPostAction({ parentCommentId, comment }, PostMethodEnum.REPLY, 'post');
     }
 
     const res = await getPostLikesNComments(post?.id);

@@ -1,23 +1,20 @@
 import express from 'express';
 import { db } from '../config';
 import { userLogin, onAuthorFollow, userRegister, updateUsername, deleteUser } from '../controllers/userControllers';
-import { allPosts, userPosts, createPost, updatePost, deletePost, getPostById, onPostLike, onPostComment, onPostCommentReply, totalLikesNComment } from '../controllers/postController';
+import {
+  allPosts,
+  userPosts,
+  createPost,
+  updatePost,
+  deletePost,
+  getPostById,
+  totalLikesNComment,
+  onPostAction,
+} from '../controllers/postController';
 import { uploadFile } from '../controllers/fileController';
 import multer from 'multer';
 
 const router = express.Router();
-
-router.get('/', async (req, res) => {
-  const userData = await db.query.users.findMany({
-    with: {
-      posts: true,
-    },
-  });
-
-  const data = userData?.filter((usr) => usr?.posts?.length > 0);
-
-  res.send(data);
-});
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -46,9 +43,10 @@ router.put('/update-post', updatePost);
 router.delete('/delete-post', deletePost);
 
 router.get('/get-post-likes-comments', totalLikesNComment);
-router.post('/post-like', onPostLike);
 router.post('/follow-author', onAuthorFollow);
-router.post('/post-comment', onPostComment);
-router.post('/post-reply', onPostCommentReply);
+
+router.post('/on-post-action', onPostAction);
+router.put('/on-post-action', onPostAction);
+router.delete('/on-post-action', onPostAction);
 
 export default router;

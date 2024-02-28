@@ -4,30 +4,10 @@ import { Request, Response, NextFunction } from 'express';
 import { isPropEmpty } from '../utils/utils';
 import { users } from '../schema/userSchema';
 import { checkUserExists, checkUsernameExists, getUserDetailsByName } from './userControllers';
-import { categories, comments, likes, posts, postsToCategories, replies } from '../schema/postSchema';
+import { categories, commentLikes, comments, likes, posts, postsToCategories, replies, replyLikes } from '../schema/postSchema';
+import { PostMethodEnum } from '../models/common';
 
 export async function allPosts(req: Request, res: Response, next: NextFunction) {
-  // try {
-  //   const allPosts = await db.query.users.findMany({
-  //     columns: {
-  //       fullName: true,
-  //       phoneNo: true,
-  //     },
-  //     with: {
-  //       posts: {
-  //         columns: {
-  //           id: true,
-  //           // categories: true,
-  //           title: true,
-  //           content: true,
-  //         },
-  //       },
-  //     },
-  //   });
-  //   res.send(allPosts);
-  // } catch (err) {
-  //   next(err);
-  // }
   try {
     const posts = await db.query.posts.findMany({
       columns: {
@@ -96,26 +76,6 @@ export async function userPosts(req, res: Response, next: NextFunction) {
     });
 
     res.json(postData?.posts);
-  } catch (err) {
-    next(err);
-  }
-}
-
-export async function onPostLike(req, res: Response, next: NextFunction) {
-  try {
-    const { postId, add } = req.body;
-    const userId = req.user.userId;
-
-    if (add) {
-      await db.insert(likes).values({
-        postId,
-        userId,
-      });
-      res.status(200).json('Post liked successfully');
-    } else {
-      await db.delete(likes).where(eq(likes?.userId, userId));
-      res.status(200).json('Post liked removed successfully');
-    }
   } catch (err) {
     next(err);
   }
@@ -205,35 +165,77 @@ export async function totalLikesNComment(req, res: Response, next: NextFunction)
   }
 }
 
-export async function onPostComment(req, res: Response, next: NextFunction) {
+export async function onPostAction(req, res: Response, next: NextFunction) {
   try {
-    const { postId, comment } = req.body;
+    const { data, method } = req.body;
     const userId = req.user.userId;
 
-    await db.insert(comments).values({
-      postId,
-      userId,
-      comment,
-    });
+    switch (method) {
+      case PostMethodEnum.POST_LIKE:
+        if (req.method === 'POST') {
+          await db.insert(likes).values({
+            postId: data?.postId,
+            userId,
+          });
+        } else if (req.method === 'PUT') {
+          await db.delete(likes).where(eq(likes?.userId, userId));
+        }
+        break;
 
-    res.status(200).json('Commented successfully');
-  } catch (err) {
-    next(err);
-  }
-}
+      case PostMethodEnum.COMMENT:
+        if (req.method === 'POST') {
+          await db.insert(comments).values({
+            postId: data?.postId,
+            comment: data?.comment,
+            userId,
+          });
+        } else if (req.method === 'PUT') {
+          await db.update(comments).set({ comment: data?.comment }).where(eq(comments?.id, data?.commentId));
+        } else {
+          await db.delete(comments).where(eq(comments?.id, data?.commentId));
+        }
+        break;
 
-export async function onPostCommentReply(req, res: Response, next: NextFunction) {
-  try {
-    const { comment, parentCommentId } = req.body;
-    const userId = req.user.userId;
+      case PostMethodEnum.COMMENT_LIKE:
+        if (req.method === 'POST') {
+          await db.insert(commentLikes).values({
+            commentId: data?.commentId,
+            userId,
+          });
+        } else if (req.method === 'PUT') {
+          await db.delete(commentLikes).where(eq(commentLikes?.id, data?.commentId));
+        }
+        break;
 
-    await db.insert(replies).values({
-      parentCommentId,
-      comment,
-      userId,
-    });
+      case PostMethodEnum.REPLY:
+        if (req.method === 'POST') {
+          await db.insert(replies).values({
+            parentCommentId: data?.parentCommentId,
+            comment: data?.comment,
+            userId,
+          });
+        } else if (req.method === 'PUT') {
+          await db.update(replies).set({ comment: data?.reply }).where(eq(replies?.id, data?.replyId));
+        } else {
+          await db.delete(replies).where(eq(replies?.id, data?.replyId));
+        }
 
-    res.status(200).json('Commented successfully');
+        break;
+
+      case PostMethodEnum.REPLY_LIKE:
+        if (req.method === 'POST') {
+          await db.insert(replyLikes).values({
+            replyId: data?.replyId,
+            userId,
+          });
+        } else if (req.method === 'PUT') {
+          await db.delete(replyLikes).where(eq(replyLikes?.id, data?.commentId));
+        }
+
+        break;
+    }
+
+    res.status(200).json('successfull');
   } catch (err) {
     next(err);
   }

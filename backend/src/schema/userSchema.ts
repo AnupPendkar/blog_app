@@ -1,5 +1,5 @@
 import { integer, pgTable, primaryKey, serial, text, varchar } from 'drizzle-orm/pg-core';
-import { comments, likes, posts, replies } from './postSchema';
+import { commentLikes, comments, likes, posts, replies, replyLikes } from './postSchema';
 import { relations } from 'drizzle-orm';
 
 // <-----------------------------------User Model--------------------------------------->
@@ -18,6 +18,8 @@ export const userRelations = relations(users, ({ many }) => ({
   replies: many(replies),
   posts: many(posts),
   likes: many(likes),
+  replylikes: many(replyLikes),
+  commentLikes: many(commentLikes),
   comments: many(comments),
 }));
 // <--------------------------------------------------------------------------------------->

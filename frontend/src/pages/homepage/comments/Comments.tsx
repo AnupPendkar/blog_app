@@ -24,6 +24,7 @@ const Comments = ({ data, open, onSubmit, setOpen }: { data: IComment[]; open: b
           width: '500px',
           flexShrink: 0,
           background: '#191919',
+          opacity: '0.9',
           '& .MuiDrawer-paper': {
             width: '500px',
             mt: '64px',

@@ -18,7 +18,20 @@ const CustomThemeProvider = (props: MyThemeProviderProps) => {
    * Maintains the global style for MUI components.
    * @returns
    */
-  const GlobalStyle = () => <GlobalStyles styles={(theme) => ({})} />;
+  const GlobalStyle = () => (
+    <GlobalStyles
+      styles={(theme) => ({
+        // Menu
+        '.MuiMenu-list': {
+          paddingBottom: '0 !important',
+          paddingTop: '0 !important',
+        },
+        '.MuiMenu-paper': {
+          boxShadow: '0px 2px 9px -2px #282828 !important;',
+        },
+      })}
+    />
+  );
 
   useEffect(() => {
     setDefaultAppTheme();
