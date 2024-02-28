@@ -55,7 +55,7 @@ export async function checkEmailExits(email) {
 
 export async function userRegister(req: Request, res: Response, next: NextFunction) {
   try {
-    const { username, password, name, email, phone } = req.body;
+    const { username, password, name, email, mobileNo, profileImg } = req.body;
 
     if (!isPropEmpty(await checkUsernameExists(username))) {
       res.status(422).json({ message: 'Username already taken!' });
@@ -67,7 +67,7 @@ export async function userRegister(req: Request, res: Response, next: NextFuncti
       return;
     }
 
-    const [newUser, ...rest] = await db.insert(users).values({ username, password, fullName: name, email, phoneNo: phone }).returning({
+    const [newUser, ...rest] = await db.insert(users).values({ username, password, fullName: name, email, phoneNo: mobileNo, profileImg }).returning({
       userId: users?.id,
       name: users?.fullName,
       email: users?.email,

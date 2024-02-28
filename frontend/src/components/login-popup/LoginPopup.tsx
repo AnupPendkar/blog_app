@@ -1,4 +1,3 @@
-import './login.scss';
 import React, { useState } from 'react';
 import useAuthMethods from '@hooks/useAuthMethods';
 import { useForm } from 'react-hook-form';

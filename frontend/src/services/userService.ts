@@ -24,6 +24,18 @@ const UserService = () => {
     });
   }
 
+  function registerUser(params) {
+    return new Promise(async (resolve) => {
+      const res = await http.request('post', '/register', '', params);
+
+      if (res?.status === 200) {
+        resolve(res?.data);
+      } else {
+        handleErr(res);
+      }
+    });
+  }
+
   function uploadImg(file): Promise<{ path: string }> {
     return new Promise(async (resolve) => {
       const formData = new FormData();
@@ -40,7 +52,7 @@ const UserService = () => {
     });
   }
 
-  return { submitLoginDetails, uploadImg };
+  return { submitLoginDetails, uploadImg, registerUser };
 };
 
 export default UserService;
