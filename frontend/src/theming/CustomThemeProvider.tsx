@@ -29,6 +29,34 @@ const CustomThemeProvider = (props: MyThemeProviderProps) => {
         '.MuiMenu-paper': {
           boxShadow: '0px 2px 9px -2px #282828 !important;',
         },
+
+        // Snackbar
+        '.MuiAlert-root': {
+          background: '#82C41E !important',
+          color: '#191919 !important',
+          fontFamily: 'Inter SemiBold !important',
+        },
+
+        '.MuiAlert-icon': {
+          color: '#191919 !important',
+        },
+
+        '.MuiModal-backdrop': {
+          backdropFilter: 'blur(10px) !important',
+          background: '#6E7174 !important',
+          opacity: '0.5 !important',
+        },
+
+        '.MuiBackdrop-invisible': {
+          backdropFilter: 'blur(0px) !important',
+          background: 'none !important',
+          opacity: '1 !important',
+        },
+
+        // Tooltip
+        '.MuiTooltip-tooltip': {
+          fontSize: '14px !important',
+        },
       })}
     />
   );

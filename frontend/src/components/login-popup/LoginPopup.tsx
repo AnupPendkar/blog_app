@@ -9,10 +9,18 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import UserService from '@services/userService';
 import CloseIcon from '@mui/icons-material/Close';
 import Register from '@components/register/Register';
+import { MessageIconTypeEnum } from '@models/common';
+import Toastr from '@components/toastr/Toastr';
+
+export enum RegisterFormCloseType {
+  REGISTER_SUCCESS = 1,
+  BACK_TO_LOGIN = 2,
+}
 
 const LoginPopup = ({ open, setOpen }) => {
   const { setUserLoginData } = useAuthMethods();
   const [isLoginForm, setIsLoginForm] = useState<boolean>(false);
+  const [openToast, setOpenToast] = useState(false);
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
   const userService = UserService();
 
@@ -34,12 +42,18 @@ const LoginPopup = ({ open, setOpen }) => {
     const res = await userService.submitLoginDetails({
       username: credentials.username,
       password: credentials.password,
-      // password: getHashedString(credentials.password),
       client_ip: 'http://172.16.120.20:3200',
     });
 
     setUserLoginData(res?.access, res?.refresh);
     setOpen(false);
+  }
+
+  function onCloseRegisterForm(type: RegisterFormCloseType) {
+    if (type === RegisterFormCloseType.REGISTER_SUCCESS) {
+      setOpenToast(true);
+    }
+    setIsLoginForm(true);
   }
 
   function onNewAccCreate() {
@@ -130,7 +144,9 @@ const LoginPopup = ({ open, setOpen }) => {
             </DialogContent>
           </Dialog>
 
-          <Register open={!isLoginForm} setOpen={setOpen} openLoginForm={setIsLoginForm}/>
+          <Register open={!isLoginForm} setOpen={setOpen} onCloseRegisterForm={onCloseRegisterForm} />
+
+          <Toastr msg={'Registeration successfull! Login to continue.'} type={MessageIconTypeEnum.SUCCESS} visibility={openToast} visibilitySetter={setOpenToast} />
         </>
       )}
     </>

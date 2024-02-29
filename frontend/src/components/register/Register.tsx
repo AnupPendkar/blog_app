@@ -10,9 +10,9 @@ import UserService from '@services/userService';
 import CloseIcon from '@mui/icons-material/Close';
 import { isPropEmpty } from '@shared/utilfunctions';
 import userImg from '@assets/userImg.png';
+import { RegisterFormCloseType } from '@components/login-popup/LoginPopup';
 
-const Register = ({ open, setOpen, openLoginForm }) => {
-  const { setUserLoginData } = useAuthMethods();
+const Register = ({ open, setOpen, onCloseRegisterForm }) => {
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
   const { registerUser } = UserService();
 
@@ -44,10 +44,8 @@ const Register = ({ open, setOpen, openLoginForm }) => {
   });
 
   async function onLoginClick(data) {
-    const res = await registerUser(data);
-    openLoginForm(true);
-
-    // setUserLoginData(res?.access, res?.refresh);
+    await registerUser(data);
+    onCloseRegisterForm(RegisterFormCloseType.REGISTER_SUCCESS);
   }
 
   const fileInputRef = React.useRef(null);
@@ -284,7 +282,7 @@ const Register = ({ open, setOpen, openLoginForm }) => {
           <CloseIcon />
         </div>
 
-        <span onClick={() => openLoginForm(true)} className="fsr-14 inter float-end cursor-pointer" style={{ color: '#266FDC' }}>
+        <span onClick={() => onCloseRegisterForm(RegisterFormCloseType.BACK_TO_LOGIN)} className="fsr-14 inter float-end cursor-pointer" style={{ color: '#266FDC' }}>
           Back to login
         </span>
       </DialogContent>
