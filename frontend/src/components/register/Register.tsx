@@ -10,7 +10,7 @@ import UserService from '@services/userService';
 import CloseIcon from '@mui/icons-material/Close';
 import { isPropEmpty } from '@shared/utilfunctions';
 import userImg from '@assets/userImg.png';
-import { RegisterFormCloseType } from '@components/login-popup/LoginPopup';
+import { RegisterFormCloseType } from '@components/login/Login';
 
 const Register = ({ open, setOpen, onCloseRegisterForm }) => {
   const [isPasswordVisible, setPasswordVisibility] = useState(false);

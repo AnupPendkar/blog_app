@@ -3,13 +3,14 @@ import { PostViewEnum } from '@models/homepage';
 import { useNavigate } from 'react-router-dom';
 import { AppRoutesEnum } from '@shared/appRotues';
 import { IPostDetails } from '@models/post_model';
+import { constructDateTime } from '@shared/utilfunctions';
 
-const Post = ({ postDetails, postView }: { postDetails: IPostDetails; postView: PostViewEnum }) => {
-  function constructDateTime(timestamp: number) {
-    const date = new Date(timestamp);
-    return `${date?.getFullYear()}-${date?.getMonth()}-${date?.getDay()}`;
-  }
+interface IPostProp {
+  postDetails: IPostDetails;
+  postView: PostViewEnum;
+}
 
+const Post = ({ postDetails, postView }: IPostProp) => {
   const navigate = useNavigate();
 
   function showFullPost(id: number) {

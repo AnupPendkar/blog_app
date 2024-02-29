@@ -1,8 +1,12 @@
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { Button, Menu, MenuItem } from '@mui/material';
+import { Button, IconButton, Menu, MenuItem } from '@mui/material';
+import ChatIcon from '@mui/icons-material/Chat';
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import React from 'react';
+import { constructDateTime } from '@shared/utilfunctions';
 
-export interface ICommentDetails {
+interface ICommentProp {
   userImg: string;
   username: string;
   timestamp: string;
@@ -11,39 +15,28 @@ export interface ICommentDetails {
   setComment?: (comment: string, parentId: number) => void;
 }
 
-const Comment = (props: ICommentDetails) => {
+const Comment = (props: ICommentProp) => {
   const [reply, setReply] = React.useState('');
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [moreAnchorEl, setMoreAnchorEl] = React.useState<null | HTMLElement>(null);
 
-  function constructDateTime(timestamp: string) {
-    const date = new Date(timestamp);
-    return `${date?.getFullYear()}-${date?.getMonth()}-${date?.getDay()}`;
+  function handleReplyClick(event: React.MouseEvent<HTMLButtonElement>) {
+    setAnchorEl(event.currentTarget);
   }
 
-  const handleReplyClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMoreClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  function handleMoreClick(event: React.MouseEvent<HTMLButtonElement>) {
     setMoreAnchorEl(event.currentTarget);
-  };
+  }
 
-  const handleCloseReplayMenu = () => {
-    setAnchorEl(null);
-  };
-
-  const handleCloseMoreMenu = () => {
-    setMoreAnchorEl(null);
-  };
-
-  function onSubmitClk() {
+  function handleReply() {
     setReply('');
     props.setComment(reply, props.commentId);
-    handleCloseReplayMenu();
+    setAnchorEl(null);
   }
 
-  // function onMore
+  function isUserAlreadyLiked() {
+    return true;
+  }
 
   return (
     <>
@@ -62,14 +55,20 @@ const Comment = (props: ICommentDetails) => {
         </div>
         <div className="absolute top-1 right-1 cursor-pointer">
           <span onClick={handleMoreClick}>
-            <MoreVertIcon className=" w-full h-full" />
+            <MoreVertIcon className="w-full h-full" />
           </span>
         </div>
-        <span className="fsr-16 inter">{props.comment}</span>
+        <div className="flex justify-between">
+          <span className="fsr-16 inter">{props.comment}</span>
+          <div onClick={() => {}} className="cursor-pointer">
+            {isUserAlreadyLiked() ? <FavoriteIcon style={{ color: 'tomato' }} /> : <FavoriteBorderOutlinedIcon />}
+            <span className="fsr-14 ml-2">{3}</span>
+          </div>
+        </div>
         {props?.setComment && (
-          <Button onClick={handleReplyClick} className="self-end" style={{ marginRight: 8, background: '#767882', padding: '2px 5px' }} color="success" variant="contained">
-            Reply
-          </Button>
+          <IconButton onClick={handleReplyClick} className="self-end mr-2" aria-label="reply">
+            <ChatIcon className="w-2 h-2" style={{ color: '#767882' }} />
+          </IconButton>
         )}
       </div>
 
@@ -77,7 +76,7 @@ const Comment = (props: ICommentDetails) => {
         id="basic-menu"
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
-        onClose={handleCloseReplayMenu}
+        onClose={() => setAnchorEl(null)}
         MenuListProps={{
           'aria-labelledby': 'basic-button',
         }}
@@ -93,14 +92,14 @@ const Comment = (props: ICommentDetails) => {
             <Button onClick={() => setReply('')} color="cancel" variant="contained" style={{ padding: '2px 5px' }}>
               Clear
             </Button>
-            <Button onClick={onSubmitClk} color="success" variant="contained" style={{ padding: '2px 5px' }}>
+            <Button onClick={handleReply} color="success" variant="contained" style={{ padding: '2px 5px' }}>
               Submit
             </Button>
           </div>
         </div>
       </Menu>
 
-      <Menu id="menu-appbar" anchorEl={moreAnchorEl} keepMounted open={Boolean(moreAnchorEl)} onClose={handleCloseMoreMenu}>
+      <Menu id="menu-appbar" anchorEl={moreAnchorEl} keepMounted open={Boolean(moreAnchorEl)} onClose={() => setMoreAnchorEl(null)}>
         <MenuItem onClick={() => {}}>
           <span className="fsr-14 font-isb ml-3">Edit</span>
         </MenuItem>

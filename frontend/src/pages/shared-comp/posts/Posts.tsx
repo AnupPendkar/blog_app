@@ -1,9 +1,14 @@
 import { PostViewEnum } from '@models/homepage';
 import { IPostDetails } from '@models/post_model';
-import Post from '@pages/posts/Post';
 import React from 'react';
+import Post from './Post';
 
-const Posts = ({ data, viewMethod }: { data: IPostDetails[]; viewMethod: PostViewEnum }) => {
+interface IPostsProp {
+  data: IPostDetails[];
+  viewMethod: PostViewEnum;
+}
+
+const Posts = ({ data, viewMethod }: IPostsProp) => {
   return (
     <>
       {viewMethod === PostViewEnum.PARTIAL && <span className="fsr-25 font-ib">Recent Posts</span>}

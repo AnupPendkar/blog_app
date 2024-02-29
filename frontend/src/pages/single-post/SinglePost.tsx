@@ -8,22 +8,22 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import postService from '@services/postService';
 import ReactQuill from 'react-quill';
 import { useNavigate, useParams } from 'react-router-dom';
-import { isPropEmpty } from '@shared/utilfunctions';
+import { constructDateTime, isPropEmpty } from '@shared/utilfunctions';
 import { AppRoutesEnum } from '@shared/appRotues';
 import { useAppSelector } from '@redux/store';
 import { IComment, IFollower, ILike, ISinglePost, PostMethodEnum } from '@models/post_model';
-import Comments from '@pages/homepage/comments/Comments';
-import LoginPopup from '@components/login-popup/LoginPopup';
+import LoginPopup from '@components/login/Login';
+import Comments from '@pages/shared-comp/comments/Comments';
 
 const SinglePost = () => {
   const [post, setPost] = React.useState<ISinglePost>(null);
   const [openLogin, setOpenLogin] = React.useState(false);
   const [commentVis, setCommentVis] = React.useState(false);
-  const { onPostAction, fetchLikesNCommentsByPostId, getPostById, onAuthorFollow } = postService();
   const { id } = useParams();
+  const navigate = useNavigate();
   const { parsedUserInfo } = useAppSelector((state) => state?.user);
   const { userLoggedIn } = useAppSelector((state) => state.user);
-  const navigate = useNavigate();
+  const { onPostAction, fetchLikesNCommentsByPostId, getPostById, onAuthorFollow } = postService();
 
   async function getCurrentPostById() {
     if (isPropEmpty(id) || isNaN(+id)) {
@@ -33,11 +33,6 @@ const SinglePost = () => {
 
     const res = await getPostById(+id);
     setPost(res?.post);
-  }
-
-  function constructDateTime(timestamp: string) {
-    const date = new Date(timestamp);
-    return `${date?.getFullYear()}-${date?.getMonth()}-${date?.getDay()}`;
   }
 
   function getPostLikesNComments(id: number): Promise<{

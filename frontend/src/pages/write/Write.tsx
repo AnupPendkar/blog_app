@@ -5,22 +5,22 @@ import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternate
 import CodeOutlinedIcon from '@mui/icons-material/CodeOutlined';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import FormatQuoteRoundedIcon from '@mui/icons-material/FormatQuoteRounded';
-import postService from '@services/postService';
 import UserService from '@services/userService';
 import PublishDialog from './PublishDialog';
 import { useAppSelector } from '@redux/store';
-import LoginPopup from '@components/login-popup/LoginPopup';
+import LoginPopup from '@components/login/Login';
 
 const Write = () => {
   const [title, setTitle] = useState('');
   const [value, setValue] = useState('');
-  const [openLogin, setOpenLogin] = React.useState(false);
-  const [publishDialogVis, setPublishDialogVis] = useState(false);
   const [top, setTop] = useState(12);
-  const [btnVisiblity, setBtnVisibility] = useState(true);
+  const [openLogin, setOpenLogin] = useState(false);
   const [isBtnClicked, setIsBtnClicked] = useState(false);
+  const [btnVisiblity, setBtnVisibility] = useState(true);
+  const [publishDialogVis, setPublishDialogVis] = useState(false);
   const editorRef = useRef(null);
   const { userLoggedIn } = useAppSelector((state) => state.user);
+  const { uploadImg } = UserService();
 
   const modules = {
     toolbar: [
@@ -30,7 +30,6 @@ const Write = () => {
     ],
   };
 
-  const { uploadImg } = UserService();
 
   function getUploadedImg(file) {
     return new Promise(async (resolve) => {

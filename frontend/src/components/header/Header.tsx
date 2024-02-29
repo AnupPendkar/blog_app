@@ -12,7 +12,7 @@ import twitter from '@assets/twitter.png';
 import linkedin from '@assets/linkedin.png';
 import { useNavigate } from 'react-router-dom';
 import { AppRoutesEnum } from '@shared/appRotues';
-import LoginPopup from '@components/login-popup/LoginPopup';
+import LoginPopup from '@components/login/Login';
 
 const Header = () => {
   const { toggleAppTheme } = useThemeSwitcher();

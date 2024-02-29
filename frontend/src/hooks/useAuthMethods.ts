@@ -41,11 +41,7 @@ const useAuthMethods = () => {
     dispatch(userDetailsAction(urlConfigManager.parsedUserInfo));
   }
 
-  function getLandingPageOnInit(): AppRoutesEnum {
-    return AppSolutionRegistry.landingPageRouteOnInit(parsedUserInfo.role as JwtUserRoleEnum);
-  }
-
-  return { setUserLoginData, logout, getLandingPageOnInit };
+  return { setUserLoginData, logout };
 };
 
 export default useAuthMethods;

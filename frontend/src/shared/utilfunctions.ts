@@ -74,6 +74,11 @@ export function convertMsIntoDayHrMinFormat(ms: number) {
   return `${paddedStr(hr)}:${paddedStr(min)}:${paddedStr(sec)}`;
 }
 
+export function constructDateTime(timestamp: string) {
+  const date = new Date(timestamp);
+  return `${date?.getFullYear()}-${date?.getMonth()}-${date?.getDay()}`;
+}
+
 export function getDateTime(timeStamp: number): { date: string; time: string } {
   const dateTime = new Date(timeStamp);
 

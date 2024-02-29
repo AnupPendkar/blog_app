@@ -2,7 +2,11 @@ import React from 'react';
 import design from '@assets/design1.png';
 import Category from './Category';
 
-const Categories = ({ img_n_name }: { img_n_name: boolean }) => {
+interface ICategoriesProp {
+  img_n_name: boolean;
+}
+
+const Categories = ({ img_n_name }: ICategoriesProp) => {
   return (
     <div className="categories mb-14">
       <span className="fsr-25 font-ib">{img_n_name ? 'Popular Categories' : 'Categories'}</span>

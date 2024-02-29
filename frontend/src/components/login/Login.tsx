@@ -17,7 +17,7 @@ export enum RegisterFormCloseType {
   BACK_TO_LOGIN = 2,
 }
 
-const LoginPopup = ({ open, setOpen }) => {
+const Login = ({ open, setOpen }) => {
   const { setUserLoginData } = useAuthMethods();
   const [isLoginForm, setIsLoginForm] = useState<boolean>(false);
   const [openToast, setOpenToast] = useState(false);
@@ -153,4 +153,4 @@ const LoginPopup = ({ open, setOpen }) => {
   );
 };
 
-export default LoginPopup;
+export default Login;

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import linkedin from '@assets/linkedin.png';
-import Categories from './categories/Categories';
 import { PostViewEnum } from '@models/homepage';
 import postService from '@services/postService';
-import Posts from '@pages/posts/Posts';
 import { IPostDetails } from '@models/post_model';
+import Posts from '@pages/shared-comp/posts/Posts';
+import Categories from '@pages/shared-comp/categories/Categories';
 
 const Homepage = () => {
   const [editorPick, setEditorPick] = useState<IPostDetails[]>([]);
@@ -50,10 +50,6 @@ const Homepage = () => {
               discover new voices that resonate with your own.Whether you're a seasoned wordsmith or just starting your journey as a blogger, StoryHaven offers a user-friendly
               interface and a supportive community to help you thrive.
             </span>
-
-            {/* <button className="blog_button" style={{ color: 'rgb(98,97,98)', backgroundColor: '#C0C0C0' }}>
-              Read More
-            </button> */}
           </div>
         </div>
 

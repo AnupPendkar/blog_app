@@ -1,12 +1,12 @@
 import { PostViewEnum } from '@models/homepage';
 import { IPostDetails } from '@models/post_model';
-import Posts from '@pages/posts/Posts';
+import Posts from '@pages/shared-comp/posts/Posts';
 import postService from '@services/postService';
 import React from 'react';
 
 const AllPosts = () => {
-  const { getUserPosts } = postService();
   const [posts, setPosts] = React.useState<IPostDetails[]>([]);
+  const { getUserPosts } = postService();
 
   async function getAllUserPosts() {
     const res = await getUserPosts();

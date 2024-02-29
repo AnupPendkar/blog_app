@@ -4,7 +4,14 @@ import { Button, Drawer } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { IComment } from '@models/post_model';
 
-const Comments = ({ data, open, onSubmit, setOpen }: { data: IComment[]; open: boolean; onSubmit: (comment: string, id?: number) => void; setOpen: (value: boolean) => void }) => {
+interface ICommentsProp {
+  data: IComment[];
+  open: boolean;
+  onSubmit: (comment: string, id?: number) => void;
+  setOpen: (value: boolean) => void;
+}
+
+const Comments = ({ data, open, onSubmit, setOpen }: ICommentsProp) => {
   const [comment, setComment] = React.useState('');
 
   async function onCommentSubmit(reply?: string, id?: number) {

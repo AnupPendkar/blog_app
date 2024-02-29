@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -10,7 +10,12 @@ import postService from '@services/postService';
 import { useNavigate } from 'react-router-dom';
 import { AppRoutesEnum } from '@shared/appRotues';
 
-const PublishDialog = ({ title, content }) => {
+interface IPublishDialogProp {
+  title: string;
+  content: string;
+}
+
+const PublishDialog = ({ title, content }: IPublishDialogProp) => {
   const [dialogVisibility, setDialogVisibility] = React.useState(true);
   const publishDialogForm = z.object({
     postDesc: z.string().min(2).max(20),

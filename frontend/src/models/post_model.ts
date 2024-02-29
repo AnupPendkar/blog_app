@@ -6,7 +6,7 @@ export interface IPublishPost {
 
 export interface IPostDetails {
   id: number;
-  createdAt: number;
+  createdAt: string;
   thumbnailImg: string;
   categories: Array<any>;
   title: string;

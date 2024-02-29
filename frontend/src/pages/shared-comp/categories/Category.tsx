@@ -1,13 +1,13 @@
 import React from 'react';
 
-interface ICategoryDetails {
+interface ICategoryProp {
   bColor: string;
   imgSrc: string;
   catName: string;
   img_n_name: boolean;
 }
 
-const Category = ({ bColor, imgSrc, catName, img_n_name }: ICategoryDetails) => {
+const Category = ({ bColor, imgSrc, catName, img_n_name }: ICategoryProp) => {
   return (
     <div className={`category ${img_n_name ? 'popular' : 'all'}`} style={{ backgroundColor: bColor }}>
       {img_n_name && <img className="category_img" src={imgSrc} alt="" />}
