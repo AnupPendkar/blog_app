@@ -4,6 +4,11 @@
   // List of extensions which should be recommended for users of this workspace.
   "recommendations": [
     "bierner.color-info",
+    "ms-azuretools.vscode-docker",
+    "dsznajder.es7-react-js-snippets",
+    "burkeholland.simple-react-snippets",
+    "bradlc.vscode-tailwindcss",
+    "timothymclane.react-redux-es6-snippets",
     "wix.vscode-import-cost",
     "stevencl.adddoccomments",
     "hookyqr.beautify",
