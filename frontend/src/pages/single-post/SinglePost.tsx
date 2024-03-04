@@ -3,27 +3,41 @@ import design from '@assets/design3.png';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import MessageOutlinedIcon from '@mui/icons-material/MessageOutlined';
 import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import postService from '@services/postService';
-import ReactQuill from 'react-quill';
 import { useNavigate, useParams } from 'react-router-dom';
 import { constructDateTime, isPropEmpty } from '@shared/utilfunctions';
 import { AppRoutesEnum } from '@shared/appRotues';
 import { useAppSelector } from '@redux/store';
-import { IComment, IFollower, ILike, ISinglePost, PostMethodEnum } from '@models/post_model';
+import { ISinglePost, PostMethodEnum } from '@models/post_model';
 import Login from '@components/login/Login';
 import Comments from '@pages/shared-comp/comments/Comments';
+import { Button, IconButton, Menu, MenuItem } from '@mui/material';
+import CustomQuill from '@pages/shared-comp/CustomQull';
+import usePostRequestUtility from '@hooks/usePostRequestUtility';
+import AddToCollections from '@pages/shared-comp/AddToCollections';
 
 const SinglePost = () => {
   const [post, setPost] = React.useState<ISinglePost>(null);
   const [openLogin, setOpenLogin] = React.useState(false);
   const [commentVis, setCommentVis] = React.useState(false);
+  const [collections, setCollections] = React.useState([]);
+  const [wishlistVis, setWishlistVis] = React.useState(false);
+  const [moreAnchorEl, setMoreAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [isContentEditable, setContentEditable] = React.useState(false);
+
+  const [content, setContent] = React.useState('');
+  const [title, setTitle] = React.useState('');
+  const [desc, setDesc] = React.useState('');
+
   const { id } = useParams();
-  const navigate = useNavigate();
   const { parsedUserInfo } = useAppSelector((state) => state?.user);
   const { userLoggedIn } = useAppSelector((state) => state.user);
-  const { onPostAction, fetchLikesNCommentsByPostId, getPostById, onAuthorFollow } = postService();
+  const navigate = useNavigate();
+  const { onPostAction, getPostById, onAuthorFollow, editPostDetails, deletePost } = postService();
+  const { calculateReadingTime, getPostLikesNComments } = usePostRequestUtility();
 
   async function getCurrentPostById() {
     if (isPropEmpty(id) || isNaN(+id)) {
@@ -32,24 +46,24 @@ const SinglePost = () => {
     }
 
     const res = await getPostById(+id);
+    setContent(res?.post?.content);
+    setTitle(res?.post?.title);
+    setDesc(res?.post?.desc);
+    setCollections(res?.post?.collections);
     setPost(res?.post);
   }
 
-  function calculateReadingTime(text: string) {
-    const wordCount = text?.split(/\s+/)?.length;
-    const readingTime = wordCount / 230;
-    return Math.round(readingTime);
+  function handleMoreClick(event: React.MouseEvent<HTMLButtonElement>) {
+    setMoreAnchorEl(event.currentTarget);
   }
 
-  function getPostLikesNComments(id: number): Promise<{
-    likes: ILike[];
-    comments: IComment[];
-    followers: IFollower[];
-  }> {
-    return new Promise(async (resolve) => {
-      const res = await fetchLikesNCommentsByPostId(post?.authorId, id);
-      resolve(res);
-    });
+  function isUserAlreadyWishlisted() {
+    return collections?.some((coll) => coll?.collection?.userId === parsedUserInfo?.id);
+  }
+
+  function onCloseWishlistPopup() {
+    setWishlistVis(false);
+    getCurrentPostById();
   }
 
   async function onFollowClick() {
@@ -59,7 +73,7 @@ const SinglePost = () => {
     }
 
     await onAuthorFollow(post?.authorId, !isUserAlreadyFollowing());
-    const res = await getPostLikesNComments(post?.id);
+    const res = await getPostLikesNComments(post?.authorId, post?.id);
     setPost({
       ...post,
       author: {
@@ -77,7 +91,7 @@ const SinglePost = () => {
 
     await onPostAction({ postId: post?.id }, PostMethodEnum.POST_LIKE, isUserAlreadyLiked() ? 'put' : 'post');
 
-    const res = await getPostLikesNComments(post?.id);
+    const res = await getPostLikesNComments(post?.authorId, post?.id);
     setPost({ ...post, likes: res?.likes });
   }
 
@@ -93,6 +107,26 @@ const SinglePost = () => {
     return post?.author?.followers?.some((follower) => follower?.follower === parsedUserInfo?.id);
   }
 
+  function onEditComplete() {
+    editPostDetails({ postId: post?.id, title, content, desc });
+    setContentEditable(false);
+  }
+
+  function onPostDelete() {
+    deletePost(post?.id);
+    navigate(AppRoutesEnum.HOMEPAGE);
+  }
+
+  function onEditClick() {
+    setMoreAnchorEl(null);
+    setContentEditable(true);
+  }
+
+  function onEditCancel() {
+    setContentEditable(false);
+    setContent(post?.content);
+  }
+
   async function onSubmitComment(comment: string, parentCommentId?: number) {
     if (!userLoggedIn) {
       setOpenLogin(true);
@@ -105,7 +139,7 @@ const SinglePost = () => {
       await onPostAction({ parentCommentId, comment }, PostMethodEnum.REPLY, 'post');
     }
 
-    const res = await getPostLikesNComments(post?.id);
+    const res = await getPostLikesNComments(post?.authorId, post?.id);
     setPost({ ...post, comments: res?.comments });
   }
 
@@ -117,10 +151,19 @@ const SinglePost = () => {
     <div className="w-full flex items-center justify-center">
       <div className="mb-5 flex flex-col items-center justify-center lg:w-[40%] md:w-[70%] s:w-full">
         <div className="w-full flex flex-col mt-20">
-          <span className="post-title fsr-30 font-ib mb-1">{post?.title}</span>
-          <span className="post-desc fsr-22 inter mb-3" style={{ color: '#6B6B6B' }}>
-            {post?.desc}
-          </span>
+          <textarea
+            className="fsr-30 font-ib mb-1 resize-none border-none outline-none bg-transparent"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            readOnly={!isContentEditable}
+          />
+          <textarea
+            value={desc}
+            onChange={(e) => setDesc(e.target.value)}
+            readOnly={!isContentEditable}
+            className="fsr-22 inter mb-3 resize-none border-none outline-none bg-transparent"
+            style={{ color: '#6B6B6B' }}
+          />
 
           <div className="user flex items-center">
             <img className="w-16 h-16 mr-6" style={{ borderRadius: '50%' }} src={design} alt="" />
@@ -164,15 +207,22 @@ const SinglePost = () => {
             </div>
 
             <div className="cursor-pointer ml-auto">
-              <BookmarkBorderOutlinedIcon className="mr-6" style={{ width: 25 }} />
-              <MoreHorizOutlinedIcon style={{ width: 25 }} />
+              <IconButton className="mr-6" onClick={() => setWishlistVis(true)}>
+                {isUserAlreadyWishlisted() ? <BookmarkIcon style={{ width: 25 }} /> : <BookmarkBorderOutlinedIcon style={{ width: 25 }} />}
+              </IconButton>
+
+              {isAuthorIsVistor() && (
+                <IconButton onClick={handleMoreClick}>
+                  <MoreHorizOutlinedIcon style={{ width: 25 }} />
+                </IconButton>
+              )}
             </div>
           </div>
           <div className="w-full" style={{ height: 1, background: '#6B6B6B' }}></div>
         </div>
 
         <div className="w-full mt-5">
-          <ReactQuill className="quill_input" style={{ width: '100%' }} value={post?.content} readOnly={true} />
+          <CustomQuill value={content} setValue={setContent} readonly={!isContentEditable} />
         </div>
       </div>
 
@@ -181,6 +231,27 @@ const SinglePost = () => {
       </div>
 
       <Login open={openLogin} setOpen={setOpenLogin} />
+      <Menu id="menu-appbar" anchorEl={moreAnchorEl} keepMounted open={Boolean(moreAnchorEl)} onClose={() => setMoreAnchorEl(null)}>
+        <MenuItem onClick={onEditClick}>
+          <span className="fsr-14 font-isb ml-3">Edit</span>
+        </MenuItem>
+        <MenuItem onClick={onPostDelete}>
+          <span className="fsr-14 font-isb ml-3">Delete</span>
+        </MenuItem>
+      </Menu>
+
+      {isContentEditable && (
+        <div className="absolute top-20 right-10 flex gap-3">
+          <Button onClick={onEditCancel} color="cancel" variant="contained">
+            Cancel
+          </Button>
+          <Button onClick={onEditComplete} color="success" variant="contained">
+            Done
+          </Button>
+        </div>
+      )}
+
+      {wishlistVis && <AddToCollections postId={post?.id} showWishlist={onCloseWishlistPopup} />}
     </div>
   );
 };

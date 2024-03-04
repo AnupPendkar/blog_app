@@ -2,7 +2,7 @@ import { eq } from 'drizzle-orm';
 import { db } from '../config';
 import { Request, Response, NextFunction } from 'express';
 import { isPropEmpty } from '../utils/utils';
-import { followers, followersToAuthors, users } from '../schema/userSchema';
+import { collections, followers, followersToAuthors, users } from '../schema/userSchema';
 import jwt from 'jsonwebtoken';
 import 'dotenv/config';
 
@@ -148,6 +148,36 @@ export async function onAuthorFollow(req, res: Response, next: NextFunction) {
   }
 }
 
+export async function createCollection(req, res: Response, next: NextFunction) {
+  try {
+    const { collectionName } = req.body;
+    const userId = req.user.userId;
+
+    const [collection, ...rest] = await db.insert(collections).values({ name: collectionName, userId }).returning({ id: collections?.id });
+
+    res.status(200).json({ id: collection?.id });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function getUserCollections(req, res: Response, next: NextFunction) {
+  try {
+    const userId = req.user.userId;
+    const { postId } = req.query;
+
+    const data = await db.query.collections.findMany({
+      where: (collections, { eq }) => eq(collections?.userId, userId),
+      with: {
+        post: true,
+      },
+    });
+
+    res.status(200).json(data);
+  } catch (err) {
+    next(err);
+  }
+}
 
 export async function userDetails(req, res: Response, next: NextFunction) {
   try {
@@ -164,8 +194,8 @@ export async function userDetails(req, res: Response, next: NextFunction) {
       with: {
         followers: {
           with: {
-            follower: true
-          }
+            follower: true,
+          },
         },
         posts: true,
       },

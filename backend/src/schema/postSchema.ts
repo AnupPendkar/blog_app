@@ -1,5 +1,5 @@
 import { integer, pgEnum, pgTable, serial, text, varchar, primaryKey, timestamp } from 'drizzle-orm/pg-core';
-import { users } from './userSchema';
+import { collectionToPosts, users } from './userSchema';
 import { relations, sql } from 'drizzle-orm';
 
 // <-------------------Posts Model-------------------------->
@@ -24,6 +24,7 @@ export const postRelations = relations(posts, ({ one, many }) => ({
   categories: many(postsToCategories),
   likes: many(likes),
   comments: many(comments),
+  collections: many(collectionToPosts),
 }));
 // ----------------------------------------------------------------
 
@@ -140,7 +141,7 @@ export const categories = pgTable('categories', {
   id: serial('id').primaryKey(),
   name: varchar('name', { length: 50 }),
   img: varchar('img'),
-  bgColor: varchar('bg_color', {length: 50})
+  bgColor: varchar('bg_color', { length: 50 }),
 });
 
 export const categoryRelations = relations(categories, ({ many }) => ({

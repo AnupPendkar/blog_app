@@ -64,7 +64,31 @@ const UserService = () => {
     });
   }
 
-  return { submitLoginDetails, uploadImg, registerUser, fetchUserDetails };
+  function createCollection(collectionName: string): Promise<{ id: number }> {
+    return new Promise(async (resolve) => {
+      const res = await http.request('post', '/create-collection', '', { collectionName });
+
+      if (res?.status === 200) {
+        resolve(res?.data);
+      } else {
+        handleErr(res);
+      }
+    });
+  }
+
+  function fetchUserCollections(): Promise<any> {
+    return new Promise(async (resolve) => {
+      const res = await http.request('get', '/get-collections');
+
+      if (res?.status === 200) {
+        resolve(res?.data);
+      } else {
+        handleErr(res);
+      }
+    });
+  }
+
+  return { submitLoginDetails, uploadImg, registerUser, fetchUserDetails, createCollection, fetchUserCollections };
 };
 
 export default UserService;

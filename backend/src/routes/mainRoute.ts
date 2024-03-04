@@ -1,16 +1,7 @@
 import express from 'express';
 import { db } from '../config';
-import { userLogin, onAuthorFollow, userRegister, userDetails, updateUsername, deleteUser } from '../controllers/userControllers';
-import {
-  allPosts,
-  userPosts,
-  createPost,
-  updatePost,
-  deletePost,
-  getPostById,
-  totalLikesNComment,
-  onPostAction,
-} from '../controllers/postController';
+import { userLogin, onAuthorFollow, userRegister, userDetails, updateUsername, deleteUser, createCollection, getUserCollections } from '../controllers/userControllers';
+import { allPosts, userPosts, createPost, updatePost, deletePost, getPostById, totalLikesNComment, onPostAction, addPostToCollection } from '../controllers/postController';
 import { uploadFile } from '../controllers/fileController';
 import multer from 'multer';
 
@@ -34,6 +25,8 @@ router.post('/register', userRegister);
 router.put('/update', updateUsername);
 router.delete('/delete', deleteUser);
 router.get('/user-details', userDetails);
+router.get('/get-collections', getUserCollections);
+router.post('/create-collection', createCollection);
 
 // Posts routes
 router.get('/get-all-posts', allPosts);
@@ -45,6 +38,8 @@ router.delete('/delete-post', deletePost);
 
 router.get('/get-post-likes-comments', totalLikesNComment);
 router.post('/follow-author', onAuthorFollow);
+
+router.post('/add-post-to-collection', addPostToCollection);
 
 router.post('/on-post-action', onPostAction);
 router.put('/on-post-action', onPostAction);

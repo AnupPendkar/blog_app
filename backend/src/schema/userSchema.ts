@@ -21,8 +21,42 @@ export const userRelations = relations(users, ({ many }) => ({
   replylikes: many(replyLikes),
   commentLikes: many(commentLikes),
   comments: many(comments),
+  collections: many(collections),
 }));
 // <--------------------------------------------------------------------------------------->
+
+export const collections = pgTable('collections', {
+  id: serial('id').primaryKey(),
+  name: varchar('name'),
+  userId: integer('user_id').references(() => users?.id, { onDelete: 'cascade' }),
+});
+
+export const collectionRelations = relations(collections, ({ one, many }) => ({
+  user: one(users, {
+    fields: [collections?.userId],
+    references: [users?.id],
+  }),
+  post: many(collectionToPosts),
+}));
+
+export const collectionToPosts = pgTable('collections_to_posts', {
+  collectionId: integer('collection_id').references(() => collections?.id, { onDelete: 'cascade' }),
+  postId: integer('post_id').references(() => posts?.id, { onDelete: 'cascade' }),
+},
+(t) => ({
+  pk: primaryKey(t.collectionId, t.postId),
+}));
+
+export const collectionToPostRelations = relations(collectionToPosts, ({ one }) => ({
+  collection: one(collections, {
+    fields: [collectionToPosts?.collectionId],
+    references: [collections?.id],
+  }),
+  post: one(posts, {
+    fields: [collectionToPosts?.postId],
+    references: [posts?.id],
+  }),
+}));
 
 // <-----------------------------------Follower Model-------------------------------------->
 export const followers = pgTable('followers', {

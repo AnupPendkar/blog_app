@@ -109,7 +109,43 @@ const postService = () => {
     });
   }
 
-  return { publishPost, getUserPosts, getAllPosts, getPostById, onPostAction, fetchLikesNCommentsByPostId, onAuthorFollow };
+  function editPostDetails(reqBody: { postId: number; title: string; desc: string; content: string }): Promise<void> {
+    return new Promise(async (resolve) => {
+      const res = await http.request('put', '/update-post', '', reqBody);
+
+      if (res?.status === 200) {
+        resolve();
+      } else {
+        handleErr(res);
+      }
+    });
+  }
+
+  function deletePost(id: number): Promise<void> {
+    return new Promise(async (resolve) => {
+      const res = await http.request('delete', '/delete-post', '', { postId: id });
+
+      if (res?.status === 200) {
+        resolve();
+      } else {
+        handleErr(res);
+      }
+    });
+  }
+
+  function addPostToCollection(reqBody: { postId: number; collectionIdList: number[] }): Promise<void> {
+    return new Promise(async (resolve) => {
+      const res = await http.request('post', '/add-post-to-collection', '', reqBody);
+
+      if (res?.status === 200) {
+        resolve();
+      } else {
+        handleErr(res);
+      }
+    });
+  }
+
+  return { publishPost, getUserPosts, getAllPosts, getPostById, onPostAction, fetchLikesNCommentsByPostId, onAuthorFollow, editPostDetails, deletePost, addPostToCollection };
 };
 
 export default postService;

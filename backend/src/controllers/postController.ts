@@ -2,7 +2,7 @@ import { eq } from 'drizzle-orm';
 import { db } from '../config';
 import { Request, Response, NextFunction } from 'express';
 import { isPropEmpty } from '../utils/utils';
-import { users } from '../schema/userSchema';
+import { collectionToPosts, users } from '../schema/userSchema';
 import { checkUserExists, checkUsernameExists, getUserDetailsByName } from './userControllers';
 import { categories, commentLikes, comments, likes, posts, postsToCategories, replies, replyLikes } from '../schema/postSchema';
 import { PostMethodEnum } from '../models/common';
@@ -280,6 +280,11 @@ export async function getPostById(req, res: Response, next: NextFunction) {
     const post = await db.query.posts.findFirst({
       with: {
         categories: true,
+        collections: {
+          with: {
+            collection: true,
+          },
+        },
         comments: {
           with: {
             user: {
@@ -354,8 +359,8 @@ export async function getPostById(req, res: Response, next: NextFunction) {
 
 export async function updatePost(req: Request, res: Response, next: NextFunction) {
   try {
-    const { postId, title, content } = req.body;
-    const updatedPost = await db.update(posts).set({ content, title }).where(eq(posts?.id, postId));
+    const { postId, title, content, desc } = req.body;
+    const updatedPost = await db.update(posts).set({ content, title, desc }).where(eq(posts?.id, postId));
 
     if (updatedPost) {
       res.json({ message: 'Post has been updated!' });
@@ -373,6 +378,22 @@ export async function deletePost(req: Request, res: Response, next: NextFunction
     if (deletedPost) {
       res.json({ message: 'Post has been deleted successfully!' });
     }
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function addPostToCollection(req, res: Response, next: NextFunction) {
+  try {
+    const { collectionIdList, postId } = req.body;
+
+    await db.delete(collectionToPosts).where(eq(collectionToPosts?.postId, postId));
+
+    collectionIdList?.forEach(async (collId: number) => {
+      await db.insert(collectionToPosts).values({ postId, collectionId: collId });
+    });
+
+    res.json('Post has been added successfully');
   } catch (err) {
     next(err);
   }
