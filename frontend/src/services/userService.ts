@@ -1,6 +1,6 @@
 import useHttp from '@hooks/useHttp';
 import useSharedEssentials from '@hooks/useSharedEssentials';
-import { ILoginParams, ILoginRes } from '@models/user_service_model';
+import { ILoginParams, ILoginRes, IUserDetailsAPI } from '@models/user_service_model';
 import React from 'react';
 
 const UserService = () => {
@@ -52,7 +52,19 @@ const UserService = () => {
     });
   }
 
-  return { submitLoginDetails, uploadImg, registerUser };
+  function fetchUserDetails(id: number): Promise<IUserDetailsAPI> {
+    return new Promise(async (resolve) => {
+      const res = await http.request('get', '/user-details', { id });
+
+      if (res?.status === 200) {
+        resolve(res?.data);
+      } else {
+        handleErr(res);
+      }
+    });
+  }
+
+  return { submitLoginDetails, uploadImg, registerUser, fetchUserDetails };
 };
 
 export default UserService;

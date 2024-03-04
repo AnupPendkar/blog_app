@@ -147,3 +147,32 @@ export async function onAuthorFollow(req, res: Response, next: NextFunction) {
     next(err);
   }
 }
+
+
+export async function userDetails(req, res: Response, next: NextFunction) {
+  try {
+    const { id } = req.query;
+
+    const userData = await db.query.users.findFirst({
+      where: (users, { eq }) => eq(users?.id, id),
+      columns: {
+        email: true,
+        fullName: true,
+        username: true,
+        profileImg: true,
+      },
+      with: {
+        followers: {
+          with: {
+            follower: true
+          }
+        },
+        posts: true,
+      },
+    });
+
+    res.status(200).json({ ...userData });
+  } catch (err) {
+    next(err);
+  }
+}

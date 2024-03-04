@@ -1,6 +1,6 @@
 export enum AppRoutesEnum {
   CONFIG = '/config',
-  PROFILE = '/profile',
+  HOMEPAGE = '/homepage',
   POSTS = '/posts',
   DISCOVER = '/discover',
   WRITE = '/write',

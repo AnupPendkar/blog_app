@@ -12,7 +12,7 @@ import { constructDateTime, isPropEmpty } from '@shared/utilfunctions';
 import { AppRoutesEnum } from '@shared/appRotues';
 import { useAppSelector } from '@redux/store';
 import { IComment, IFollower, ILike, ISinglePost, PostMethodEnum } from '@models/post_model';
-import LoginPopup from '@components/login/Login';
+import Login from '@components/login/Login';
 import Comments from '@pages/shared-comp/comments/Comments';
 
 const SinglePost = () => {
@@ -33,6 +33,12 @@ const SinglePost = () => {
 
     const res = await getPostById(+id);
     setPost(res?.post);
+  }
+
+  function calculateReadingTime(text: string) {
+    const wordCount = text?.split(/\s+/)?.length;
+    const readingTime = wordCount / 230;
+    return Math.round(readingTime);
   }
 
   function getPostLikesNComments(id: number): Promise<{
@@ -139,7 +145,7 @@ const SinglePost = () => {
                 </span>
               </div>
               <div className="flex items-center fsr-16" style={{ color: '#6B6B6B' }}>
-                <span className="mr-4">7 min read</span>
+                <span className="mr-4">{calculateReadingTime(post?.content)} min read</span>
                 <span>{constructDateTime(post?.createdAt)}</span>
               </div>
             </div>
@@ -174,7 +180,7 @@ const SinglePost = () => {
         <Comments data={post?.comments} open={commentVis} onSubmit={onSubmitComment} setOpen={setCommentVis} />
       </div>
 
-      <LoginPopup open={openLogin} setOpen={setOpenLogin} />
+      <Login open={openLogin} setOpen={setOpenLogin} />
     </div>
   );
 };

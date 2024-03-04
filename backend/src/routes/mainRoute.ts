@@ -1,6 +1,6 @@
 import express from 'express';
 import { db } from '../config';
-import { userLogin, onAuthorFollow, userRegister, updateUsername, deleteUser } from '../controllers/userControllers';
+import { userLogin, onAuthorFollow, userRegister, userDetails, updateUsername, deleteUser } from '../controllers/userControllers';
 import {
   allPosts,
   userPosts,
@@ -33,6 +33,7 @@ router.post('/login', userLogin);
 router.post('/register', userRegister);
 router.put('/update', updateUsername);
 router.delete('/delete', deleteUser);
+router.get('/user-details', userDetails);
 
 // Posts routes
 router.get('/get-all-posts', allPosts);

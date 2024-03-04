@@ -39,7 +39,6 @@
   "explorer.confirmDelete": false,
   "explorer.confirmDragAndDrop": false,
   "terminal.integrated.cursorBlinking": true,
-  "terminal.integrated.enableBell": true,
   "typescript.updateImportsOnFileMove.enabled": "always",
   "javascript.updateImportsOnFileMove.enabled": "always",
   "typescript.inlayHints.parameterNames.enabled": "all",
@@ -123,5 +122,9 @@
     "titleBar.activeForeground": "#e7e7e7",
     "titleBar.inactiveForeground": "#e7e7e799"
   },
-  "peacock.color": "#ff3d00"
+  "peacock.color": "#ff3d00",
+  "accessibility.signals.terminalBell": {
+    "sound": "on"
+  },
+  "terminal.integrated.enableVisualBell": true
 }

@@ -4,3 +4,8 @@ export enum PostViewEnum {
   PARTIAL = 2,
   COMPLETE = 3,
 }
+
+export enum ProfileTypeEnum {
+  POSTS = 1,
+  ABOUT = 2
+}

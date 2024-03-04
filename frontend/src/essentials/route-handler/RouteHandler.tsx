@@ -10,6 +10,7 @@ import Write from '@pages/write/Write';
 import SinglePost from '@pages/single-post/SinglePost';
 import AllPosts from '@pages/all-posts/AllPosts';
 import Discover from '@pages/discover/Discover';
+import Profile from '@pages/profile/Profile';
 
 const RouteHandler = () => {
   const theme = useTheme();
@@ -31,11 +32,12 @@ const RouteHandler = () => {
         <Route path={AppRoutesEnum.CONFIG} element={<BaseUrlConfigurator />} />
         <Route element={<AuthGuard />}>
           <Route path="/" element={<Navigate to={AppRoutesEnum.DISCOVER} />} />
-          <Route path={AppRoutesEnum.PROFILE} element={<Homepage />} />
+          <Route path={AppRoutesEnum.HOMEPAGE} element={<Homepage />} />
           <Route path={AppRoutesEnum.POSTS} element={<AllPosts />} />
           <Route path={AppRoutesEnum.DISCOVER} element={<Discover />} />
           <Route path="/write" element={<Write />} />
           <Route path="/single-post/:id" element={<SinglePost />} />
+          <Route path="/profile/:id" element={<Profile />} />
 
           <Route path="*" element={<Navigate to={AppRoutesEnum.DISCOVER} />} />
         </Route>

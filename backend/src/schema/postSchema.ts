@@ -139,6 +139,8 @@ export const replyLikesRelations = relations(replyLikes, ({ one }) => ({
 export const categories = pgTable('categories', {
   id: serial('id').primaryKey(),
   name: varchar('name', { length: 50 }),
+  img: varchar('img'),
+  bgColor: varchar('bg_color', {length: 50})
 });
 
 export const categoryRelations = relations(categories, ({ many }) => ({
