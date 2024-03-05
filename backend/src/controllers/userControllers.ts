@@ -2,7 +2,7 @@ import { eq } from 'drizzle-orm';
 import { db } from '../config';
 import { Request, Response, NextFunction } from 'express';
 import { isPropEmpty } from '../utils/utils';
-import { collections, followers, followersToAuthors, users } from '../schema/userSchema';
+import { about, collections, followers, followersToAuthors, users } from '../schema/userSchema';
 import jwt from 'jsonwebtoken';
 import 'dotenv/config';
 
@@ -198,10 +198,48 @@ export async function userDetails(req, res: Response, next: NextFunction) {
           },
         },
         posts: true,
+        about: true,
       },
     });
 
     res.status(200).json({ ...userData });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function updateProfileInfo(req, res: Response, next: NextFunction) {
+  try {
+    const { profileImg, username, name } = req.query;
+    const userId = req.user.userId;
+
+    await db.update(users).set({ profileImg, username, fullName: name }).where(eq(users?.id, userId));
+    res.status(200).json('update successfull');
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function setAboutDetails(req, res: Response, next: NextFunction) {
+  try {
+    const { desc } = req.body;
+    const userId = req.user.userId;
+
+    await db.insert(about).values({ desc, userId });
+    res.status(200).json('updated successfull');
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function updateAboutDetails(req, res: Response, next: NextFunction) {
+  try {
+    const { desc } = req.body;
+    const userId = req.user.userId;
+    console.log(desc);
+
+    await db.update(about).set({ desc }).where(eq(about?.userId, userId));
+    res.status(200).json('Update successfull!');
   } catch (err) {
     next(err);
   }

@@ -20,6 +20,7 @@ const Header = () => {
   const { logout } = useAuthMethods();
   const { loading } = useAppSelector((state) => state.http);
   const [openLogin, setOpenLogin] = React.useState(false);
+  const { parsedUserInfo } = useAppSelector((state) => state?.user);
   const { userLoggedIn } = useAppSelector((state) => state.user);
   const navigate = useNavigate();
 
@@ -61,9 +62,15 @@ const Header = () => {
               </span>
 
               {userLoggedIn ? (
-                <span onClick={logout} className="fsr-16 inter cursor-pointer">
-                  Logout
-                </span>
+                <>
+                  <span className="fsr-16 inter mr-5 cursor-pointer" onClick={() => navigate(`profile/${parsedUserInfo?.id}`)}>
+                    Profile
+                  </span>
+
+                  <span onClick={logout} className="fsr-16 inter cursor-pointer">
+                    Logout
+                  </span>
+                </>
               ) : (
                 <span onClick={() => setOpenLogin(true)} className="fsr-16 inter cursor-pointer">
                   Login

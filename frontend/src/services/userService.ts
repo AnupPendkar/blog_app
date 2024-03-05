@@ -78,7 +78,7 @@ const UserService = () => {
 
   function fetchUserCollections(): Promise<any> {
     return new Promise(async (resolve) => {
-      const res = await http.request('get', '/get-collections');
+      const res = await http.noLoader().request('get', '/get-collections');
 
       if (res?.status === 200) {
         resolve(res?.data);
@@ -88,7 +88,31 @@ const UserService = () => {
     });
   }
 
-  return { submitLoginDetails, uploadImg, registerUser, fetchUserDetails, createCollection, fetchUserCollections };
+  function setAboutDetails(aboutData: string, type: string): Promise<void> {
+    return new Promise(async (resolve) => {
+      const res = await http.request(type, '/set-about-details', '', { desc: aboutData });
+
+      if (res?.status === 200) {
+        resolve(res?.data);
+      } else {
+        handleErr(res);
+      }
+    });
+  }
+
+  function updateUserProfile(params: { profileImg: string; username: string; name: string }): Promise<void> {
+    return new Promise(async (resolve) => {
+      const res = await http.noLoader().request('put', '/update-profile', params);
+
+      if (res?.status === 200) {
+        resolve();
+      } else {
+        handleErr(res);
+      }
+    });
+  }
+
+  return { submitLoginDetails, uploadImg, registerUser, fetchUserDetails, createCollection, fetchUserCollections, updateUserProfile, setAboutDetails };
 };
 
 export default UserService;

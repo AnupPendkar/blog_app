@@ -12,20 +12,27 @@ import facebook from '@assets/facebook.png';
 import instagram from '@assets/instagram.png';
 import twitter from '@assets/twitter.png';
 import linkedin from '@assets/linkedin.png';
+import blankUser from '@assets/blank_user.svg';
+import EditProfileDialog from './EditProfileDialog';
 
 const Profile = () => {
   const [profileType, setProfileType] = React.useState<ProfileTypeEnum>(ProfileTypeEnum.POSTS);
   const [userData, setUserData] = React.useState<IUserDetailsAPI>();
+  const [showEditProfilePop, setEditProfilePopVis] = React.useState(false);
   const [openLogin, setOpenLogin] = React.useState(false);
   const { fetchUserDetails } = UserService();
   const { userLoggedIn } = useAppSelector((state) => state.user);
   const { parsedUserInfo } = useAppSelector((state) => state?.user);
   const { id } = useParams();
-  const { fetchLikesNCommentsByPostId, onAuthorFollow } = postService();
+  const { onAuthorFollow } = postService();
 
   async function getUserDetails() {
     const res = await fetchUserDetails(+id);
     setUserData(res);
+  }
+
+  function isAuthorIsVistor() {
+    return parsedUserInfo?.id === +id;
   }
 
   async function onFollowClk() {
@@ -38,6 +45,14 @@ const Profile = () => {
     getUserDetails();
   }
 
+  async function onEditProfilePopClosed(closeType: string) {
+    if (closeType === 'update') {
+      await getUserDetails();
+    }
+
+    setEditProfilePopVis(false);
+  }
+
   function isUserAlreadyFollowing() {
     console.log(userData);
     return userData?.followers?.some((foll) => foll?.follower?.userId === parsedUserInfo?.id);
@@ -48,16 +63,22 @@ const Profile = () => {
   }, []);
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center mt-10">
       <div className="flex flex-col lg:w-[50%] md:w-[70%] s:w-full px-5 py-5">
         <div className="flex gap-7 items-center">
-          <img src={userData?.profileImg} style={{ borderRadius: '50%', width: '55px', height: '55px' }} alt="" />
+          <img src={userData?.profileImg ?? blankUser} style={{ borderRadius: '50%', width: '55px', height: '55px' }} alt="" />
           <div className="flex flex-col">
             <span className="fsr-25 font-ib capitalize">{userData?.fullName}</span>
             <span className="fsr-16" style={{ color: '#6B6B6B' }}>
               {userData?.followers?.length} Followers
             </span>
           </div>
+          {isAuthorIsVistor() && (
+            <Button onClick={() => setEditProfilePopVis(true)} className="self-start" color="success" variant="outlined">
+              Edit Profile
+            </Button>
+          )}
+          <EditProfileDialog userData={userData} visibility={showEditProfilePop} onClose={onEditProfilePopClosed} />
         </div>
         <div className="profession sm:my-2">
           <span className="fsr-18" style={{ color: '#6B6B6B' }}>
@@ -99,7 +120,7 @@ const Profile = () => {
           </div>
         </div>
 
-        <ProfileTab tabType={profileType} postsData={userData?.posts} aboutData="sldkfjsdkf" />
+        <ProfileTab tabType={profileType} postsData={userData?.posts} aboutData={userData?.about} isAuthorVis={isAuthorIsVistor()} />
       </div>
 
       <Login open={openLogin} setOpen={setOpenLogin} />

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { AppRoutesEnum } from '@shared/appRotues';
 import { IPostDetails } from '@models/post_model';
 import { constructDateTime } from '@shared/utilfunctions';
+import blogAvatar from '@assets/blog_avatar.svg';
 
 interface IPostProp {
   postDetails: IPostDetails;
@@ -22,7 +23,7 @@ const Post = ({ postDetails, postView }: IPostProp) => {
       {[PostViewEnum.PARTIAL, PostViewEnum.COMPLETE]?.indexOf(postView) >= 0 ? (
         <div className="post flex items-center gap-7 mb-12 cursor-pointer" onClick={() => showFullPost(postDetails?.id)}>
           <div className="basis-1/2">
-            <img className="w-full max-h-[300px]" src={postDetails?.thumbnailImg} alt="" />
+            <img className="w-full max-h-[300px]" src={postDetails?.thumbnailImg ?? blogAvatar} alt="" />
           </div>
           <div className="flex flex-col basis-1/2">
             <div className="mb-6">
@@ -51,7 +52,7 @@ const Post = ({ postDetails, postView }: IPostProp) => {
         </div>
       ) : (
         <div className="flex items-center mb-2 cursor-pointer" onClick={() => showFullPost(postDetails?.id)}>
-          {postView === PostViewEnum.TITLE_WITH_IMG && <img className="w-11 h-11 rounded-full mr-4" src={postDetails?.thumbnailImg} alt="" />}
+          {postView === PostViewEnum.TITLE_WITH_IMG && <img className="w-11 h-11 rounded-full mr-4" src={postDetails?.thumbnailImg ?? blogAvatar} alt="" />}
           <div className="flex flex-col">
             <div className="w-fit rounded-lg" style={{ backgroundColor: '#652034', padding: '0 10px' }}>
               {postDetails?.categories?.map((cat) => (

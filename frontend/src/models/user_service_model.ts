@@ -13,6 +13,7 @@ export interface ILoginRes {
 
 export interface IUserDetailsAPI {
   fullName: string;
+  about: IUserAboutAPI;
   profileImg: string;
   username: string;
   email: string;
@@ -25,4 +26,11 @@ export interface IUserDetailsAPI {
     };
   }[];
   posts: Exclude<ISinglePost, 'comments' | 'likes'>[];
+}
+
+export interface IUserAboutAPI {
+  desc: string;
+  id: number;
+  profession: string;
+  userId: number;
 }

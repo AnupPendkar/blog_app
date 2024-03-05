@@ -10,7 +10,9 @@ const AllPosts = () => {
 
   async function getAllUserPosts() {
     const res = await getUserPosts();
-    setPosts(res);
+    if (res?.length > 0) {
+      setPosts(res);
+    }
   }
 
   React.useEffect(() => {

@@ -1,6 +1,18 @@
 import express from 'express';
 import { db } from '../config';
-import { userLogin, onAuthorFollow, userRegister, userDetails, updateUsername, deleteUser, createCollection, getUserCollections } from '../controllers/userControllers';
+import {
+  userLogin,
+  onAuthorFollow,
+  userRegister,
+  userDetails,
+  updateUsername,
+  deleteUser,
+  createCollection,
+  getUserCollections,
+  updateProfileInfo,
+  setAboutDetails,
+  updateAboutDetails,
+} from '../controllers/userControllers';
 import { allPosts, userPosts, createPost, updatePost, deletePost, getPostById, totalLikesNComment, onPostAction, addPostToCollection } from '../controllers/postController';
 import { uploadFile } from '../controllers/fileController';
 import multer from 'multer';
@@ -27,6 +39,11 @@ router.delete('/delete', deleteUser);
 router.get('/user-details', userDetails);
 router.get('/get-collections', getUserCollections);
 router.post('/create-collection', createCollection);
+
+router.put('/set-about-details', updateAboutDetails);
+router.post('/set-about-details', setAboutDetails);
+
+router.put('/update-profile', updateProfileInfo);
 
 // Posts routes
 router.get('/get-all-posts', allPosts);

@@ -18,6 +18,7 @@ import { Button, IconButton, Menu, MenuItem } from '@mui/material';
 import CustomQuill from '@pages/shared-comp/CustomQull';
 import usePostRequestUtility from '@hooks/usePostRequestUtility';
 import AddToCollections from '@pages/shared-comp/AddToCollections';
+import blankUser from '@assets/blank_user.svg';
 
 const SinglePost = () => {
   const [post, setPost] = React.useState<ISinglePost>(null);
@@ -125,6 +126,8 @@ const SinglePost = () => {
   function onEditCancel() {
     setContentEditable(false);
     setContent(post?.content);
+    setTitle(post?.title);
+    setDesc(post?.desc);
   }
 
   async function onSubmitComment(comment: string, parentCommentId?: number) {
@@ -166,7 +169,7 @@ const SinglePost = () => {
           />
 
           <div className="user flex items-center">
-            <img className="w-16 h-16 mr-6" style={{ borderRadius: '50%' }} src={design} alt="" />
+            <img className="w-16 h-16 mr-6" style={{ borderRadius: '50%' }} src={post?.author?.profileImg ?? blankUser} alt="" />
             <div className="flex flex-col">
               <div className="flex items-center">
                 <span className="fsr-16 inter mr-4" style={{ color: '#6B6B6B' }}>
