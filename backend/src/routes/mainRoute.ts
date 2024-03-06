@@ -13,7 +13,7 @@ import {
   setAboutDetails,
   updateAboutDetails,
 } from '../controllers/userControllers';
-import { allPosts, userPosts, createPost, updatePost, deletePost, getPostById, totalLikesNComment, onPostAction, addPostToCollection } from '../controllers/postController';
+import { allPosts, userPosts, createPost, updatePost, deletePost, getPostById, totalLikesNComment, onPostAction, addPostToCollection, postComments } from '../controllers/postController';
 import { uploadFile } from '../controllers/fileController';
 import multer from 'multer';
 
@@ -48,6 +48,7 @@ router.put('/update-profile', updateProfileInfo);
 // Posts routes
 router.get('/get-all-posts', allPosts);
 router.get('/get-posts', userPosts);
+router.get('/get-post-comments', postComments);
 router.get('/get-post-by-id', getPostById);
 router.post('/create-post', createPost);
 router.put('/update-post', updatePost);

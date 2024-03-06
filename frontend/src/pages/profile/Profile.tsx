@@ -14,6 +14,7 @@ import twitter from '@assets/twitter.png';
 import linkedin from '@assets/linkedin.png';
 import blankUser from '@assets/blank_user.svg';
 import EditProfileDialog from './EditProfileDialog';
+import { isPropEmpty } from '@shared/utilfunctions';
 
 const Profile = () => {
   const [profileType, setProfileType] = React.useState<ProfileTypeEnum>(ProfileTypeEnum.POSTS);
@@ -54,7 +55,6 @@ const Profile = () => {
   }
 
   function isUserAlreadyFollowing() {
-    console.log(userData);
     return userData?.followers?.some((foll) => foll?.follower?.userId === parsedUserInfo?.id);
   }
 
@@ -66,7 +66,7 @@ const Profile = () => {
     <div className="flex justify-center mt-10">
       <div className="flex flex-col lg:w-[50%] md:w-[70%] s:w-full px-5 py-5">
         <div className="flex gap-7 items-center">
-          <img src={userData?.profileImg ?? blankUser} style={{ borderRadius: '50%', width: '55px', height: '55px' }} alt="" />
+          <img src={!isPropEmpty(userData?.profileImg) ? userData?.profileImg : blankUser} style={{ borderRadius: '50%', width: '55px', height: '55px' }} alt="" />
           <div className="flex flex-col">
             <span className="fsr-25 font-ib capitalize">{userData?.fullName}</span>
             <span className="fsr-16" style={{ color: '#6B6B6B' }}>

@@ -145,7 +145,31 @@ const postService = () => {
     });
   }
 
-  return { publishPost, getUserPosts, getAllPosts, getPostById, onPostAction, fetchLikesNCommentsByPostId, onAuthorFollow, editPostDetails, deletePost, addPostToCollection };
+  function fetchPostComments(postId: number) {
+    return new Promise(async (resolve) => {
+      const res = await http.request('get', '/get-post-comments', { postId });
+
+      if (res?.status === 200) {
+        resolve(res?.data);
+      } else {
+        handleErr(res);
+      }
+    });
+  }
+
+  return {
+    publishPost,
+    getUserPosts,
+    getAllPosts,
+    getPostById,
+    onPostAction,
+    fetchLikesNCommentsByPostId,
+    onAuthorFollow,
+    editPostDetails,
+    deletePost,
+    addPostToCollection,
+    fetchPostComments,
+  };
 };
 
 export default postService;

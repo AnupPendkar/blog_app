@@ -130,11 +130,17 @@ const SinglePost = () => {
     setDesc(post?.desc);
   }
 
+  async function shouldFetchAPI() {
+    await getCurrentPostById();
+  }
+
   async function onSubmitComment(comment: string, parentCommentId?: number) {
     if (!userLoggedIn) {
       setOpenLogin(true);
       return;
     }
+    console.log(comment, parentCommentId);
+    return;
 
     if (isPropEmpty(parentCommentId)) {
       await onPostAction({ postId: post?.id, comment }, PostMethodEnum.COMMENT, 'post');
@@ -144,6 +150,10 @@ const SinglePost = () => {
 
     const res = await getPostLikesNComments(post?.authorId, post?.id);
     setPost({ ...post, comments: res?.comments });
+  }
+
+  function onCommentLike(commentId: number, isReply: boolean) {
+    console.log(commentId, isReply);
   }
 
   React.useEffect(() => {
@@ -169,7 +179,7 @@ const SinglePost = () => {
           />
 
           <div className="user flex items-center">
-            <img className="w-16 h-16 mr-6" style={{ borderRadius: '50%' }} src={post?.author?.profileImg ?? blankUser} alt="" />
+            <img className="w-16 h-16 mr-6" style={{ borderRadius: '50%' }} src={!isPropEmpty(post?.author?.profileImg) ? post?.author?.profileImg : blankUser} alt="" />
             <div className="flex flex-col">
               <div className="flex items-center">
                 <span className="fsr-16 inter mr-4" style={{ color: '#6B6B6B' }}>
@@ -230,7 +240,7 @@ const SinglePost = () => {
       </div>
 
       <div className="absolute">
-        <Comments data={post?.comments} open={commentVis} onSubmit={onSubmitComment} setOpen={setCommentVis} />
+        <Comments data={post} open={commentVis} closeComments={setCommentVis} shouldFetchAPI={shouldFetchAPI} />
       </div>
 
       <Login open={openLogin} setOpen={setOpenLogin} />

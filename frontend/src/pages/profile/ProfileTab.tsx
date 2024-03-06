@@ -4,7 +4,6 @@ import { IUserAboutAPI } from '@models/user_service_model';
 import { Button } from '@mui/material';
 import CustomQuill from '@pages/shared-comp/CustomQull';
 import Posts from '@pages/shared-comp/posts/Posts';
-import { useAppSelector } from '@redux/store';
 import UserService from '@services/userService';
 import { isPropEmpty } from '@shared/utilfunctions';
 import React from 'react';

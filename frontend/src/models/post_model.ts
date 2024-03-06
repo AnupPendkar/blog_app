@@ -50,6 +50,12 @@ export interface IComment {
   profileImg: string;
   username: string;
   comment: string;
+  expand: boolean;
+  likes: {
+    id: number;
+    userId: number;
+  }[];
+  parentCommentId?: number;
   replies: Exclude<IComment, 'replies'>[];
   postId: number;
   userId: number;

@@ -114,14 +114,14 @@ export const repliesRelations = relations(replies, ({ one, many }) => ({
     fields: [replies?.userId],
     references: [users?.id],
   }),
-  like: many(replyLikes),
+  likes: many(replyLikes),
 }));
 // <--------------------------------------------------------------------------->
 
 export const replyLikes = pgTable('reply_likes', {
   id: serial('id').primaryKey(),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-  replyId: integer('reply_id').references(() => comments?.id, { onDelete: 'cascade' }),
+  replyId: integer('reply_id').references(() => replies?.id, { onDelete: 'cascade' }),
   userId: integer('user_id').references(() => users?.id, { onDelete: 'cascade' }),
 });
 

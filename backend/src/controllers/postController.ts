@@ -273,6 +273,24 @@ export async function createPost(req, res: Response, next: NextFunction) {
   }
 }
 
+export async function postComments(req, res: Response, next: NextFunction) {
+  try {
+    const { postId } = req.query;
+
+    const comments = await db.query.comments.findMany({
+      where: (comments, { eq }) => eq(comments?.postId, postId),
+      with: {
+        replies: true,
+        likes: true,
+      },
+    });
+
+    res.status(200).json(comments);
+  } catch (err) {
+    next(err);
+  }
+}
+
 export async function getPostById(req, res: Response, next: NextFunction) {
   try {
     const { postId } = req.query;
@@ -304,8 +322,10 @@ export async function getPostById(req, res: Response, next: NextFunction) {
                     email: true,
                   },
                 },
+                likes: true,
               },
             },
+            likes: true,
           },
         },
         likes: true,
