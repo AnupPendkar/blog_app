@@ -1,8 +1,5 @@
-import { JwtUserRoleEnum } from '@models/common';
 import { userActiveAction, userDetailsAction } from '@redux/actions/userInfoActions';
 import { useAppDispatch, useAppSelector } from '@redux/store';
-import { AppRoutesEnum } from '@shared/appRotues';
-import { AppSolutionRegistry } from '@shared/appSolutionsRegistry';
 import UrlConfigManager from '@shared/urlConfigManager';
 import { makeRequest } from '@redux/thunks/axiosRequestThunk';
 import { isPropEmpty } from '@shared/utilfunctions';

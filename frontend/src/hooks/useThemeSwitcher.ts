@@ -1,10 +1,10 @@
+import React from 'react';
 import { ThemePrefEnum } from '@models/common';
 import { useMediaQuery } from '@mui/material';
 import { changeThemePref } from '@redux/actions/userInfoActions';
 import { useAppDispatch, useAppSelector } from '@redux/store';
 import StorageHandler from '@shared/storageHandler';
 import { isPropEmpty } from '@shared/utilfunctions';
-import React from 'react';
 
 const useThemeSwitcher = () => {
   const { themePref } = useAppSelector((state) => state.user);
