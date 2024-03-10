@@ -5,6 +5,7 @@ import postService from '@services/postService';
 import { IPostDetails } from '@models/post_model';
 import Posts from '@pages/shared-comp/posts/Posts';
 import Categories from '@pages/shared-comp/categories/Categories';
+import logo from '@assets/logo.png';
 
 const Homepage = () => {
   const [editorPick, setEditorPick] = useState<IPostDetails[]>([]);
@@ -41,7 +42,7 @@ const Homepage = () => {
 
         <div className="featured-blog mt-14 mb-14 flex gap-1 items-center justify-between">
           <div className="basis-1/2 flex items-center justify-center">
-            <img className="w-70 h-70" src={linkedin} alt="" />
+            <img className="w-[700px]" src={logo} alt="" />
           </div>
           <div className="blog_card basis-1/2">
             <span className="blog_title">StoryHaven</span>

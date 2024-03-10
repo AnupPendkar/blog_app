@@ -16,12 +16,24 @@ const EditProfileDialog = ({ userData, visibility, onClose }: IEditProfileDialog
   const [updatedProfileImg, setUpdatedProfileImg] = React.useState('');
   const [updatedUsername, setUpdatedUsername] = React.useState('');
   const [updatedName, setUpdatedName] = React.useState('');
-  const { updateUserProfile } = UserService();
+  const fileInputRef = React.useRef(null);
+  const { updateUserProfile, uploadImg } = UserService();
 
   async function onSaveBtnClk() {
     await updateUserProfile({ profileImg: updatedProfileImg, name: updatedName, username: updatedUsername });
     onClose('update');
   }
+
+  async function handleFileInputChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event?.target?.files?.[0];
+    const img = await uploadImg(file);
+
+    setUpdatedProfileImg(img.path);
+  }
+
+  const handleImgClick = () => {
+    fileInputRef.current.click();
+  };
 
   React.useEffect(() => {
     setUpdatedName(userData?.fullName);
@@ -43,20 +55,21 @@ const EditProfileDialog = ({ userData, visibility, onClose }: IEditProfileDialog
           <div className="flex">
             <img className="mr-8" src={updatedProfileImg ?? blankUser} style={{ borderRadius: '50%', width: '55px', height: '55px' }} alt="" />
             {isPropEmpty(updatedProfileImg) ? (
-              <Button color="success" variant="text">
+              <Button color="success" variant="text" onClick={handleImgClick}>
                 Add Profile Img
               </Button>
             ) : (
               <>
-                <Button color="success" variant="text">
+                <Button color="success" variant="text" onClick={handleImgClick}>
                   Update
                 </Button>
 
-                <Button color="error" variant="text">
+                <Button onClick={() => setUpdatedProfileImg('')} color="error" variant="text">
                   Remove
                 </Button>
               </>
             )}
+            <input className="w-full h-full" ref={fileInputRef} onChange={handleFileInputChange} type="file" hidden />
           </div>
         </div>
         <div className="field flex flex-col mt-6 gap-2">

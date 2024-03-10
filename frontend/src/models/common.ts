@@ -125,10 +125,18 @@ export interface MessageBoxProps {
   iconType?: MessageIconTypeEnum;
   confirmMsg?: string;
   closeMsg?: string;
+  confirmFor?: MessageBoxCloseTypeEnum;
+}
+
+export enum MessageBoxCloseTypeEnum {
+  CONFIRM_LOGOUT = 1,
+  CONFIRM_DELETE_POST = 2,
+  CONFIRM_DELETE_COMMENT = 3,
 }
 
 export interface INotificationReducerState {
   messageDialogDetails?: MessageBoxProps;
+  closeType?: MessageBoxCloseTypeEnum;
 }
 
 export interface ParsedUserInfo {

@@ -4,6 +4,7 @@ import { setMessageDialogDetails } from '@redux/actions/notificationActions';
 import { useAppDispatch, useAppSelector } from '@redux/store';
 import { isPropEmpty } from '@shared/utilfunctions';
 import React, { useEffect, useState } from 'react';
+import Header from '@components/header/Header';
 
 const MessageDialog = () => {
   const [showMessageDialog, setMessageDialogVisibility] = useState(false);

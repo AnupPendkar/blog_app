@@ -203,7 +203,7 @@ export async function onPostAction(req, res: Response, next: NextFunction) {
             userId,
           });
         } else if (req.method === 'PUT') {
-          await db.delete(commentLikes).where(eq(commentLikes?.id, data?.commentId));
+          await db.delete(commentLikes).where(eq(commentLikes?.id, data?.commentId) && eq(commentLikes?.userId, userId));
         }
         break;
 
@@ -229,7 +229,7 @@ export async function onPostAction(req, res: Response, next: NextFunction) {
             userId,
           });
         } else if (req.method === 'PUT') {
-          await db.delete(replyLikes).where(eq(replyLikes?.id, data?.commentId));
+          await db.delete(replyLikes).where(eq(replyLikes?.id, data?.replyId) && eq(replyLikes?.userId, userId));
         }
 
         break;

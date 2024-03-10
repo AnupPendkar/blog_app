@@ -13,16 +13,36 @@ import linkedin from '@assets/linkedin.png';
 import { useNavigate } from 'react-router-dom';
 import { AppRoutesEnum } from '@shared/appRotues';
 import LoginPopup from '@components/login/Login';
+import useSharedEssentials from '@hooks/useSharedEssentials';
+import { MessageBoxCloseTypeEnum } from '@models/common';
+import { isPropEmpty } from '@shared/utilfunctions';
 
 const Header = () => {
   const { toggleAppTheme } = useThemeSwitcher();
   const theme = useTheme();
+  const navigate = useNavigate();
   const { logout } = useAuthMethods();
   const { loading } = useAppSelector((state) => state.http);
+  const { closeType, messageDialogDetails } = useAppSelector((state) => state.notification);
   const [openLogin, setOpenLogin] = React.useState(false);
-  const { parsedUserInfo } = useAppSelector((state) => state?.user);
-  const { userLoggedIn } = useAppSelector((state) => state.user);
-  const navigate = useNavigate();
+  const { parsedUserInfo, userLoggedIn } = useAppSelector((state) => state?.user);
+  const { askConfirmation } = useSharedEssentials();
+
+  function askLogoutConfirmation() {
+    askConfirmation('Are you really want to logout', MessageBoxCloseTypeEnum.CONFIRM_LOGOUT);
+  }
+
+  React.useEffect(() => {
+    if (isPropEmpty(messageDialogDetails)) {
+      // return;
+    }
+
+    switch (closeType) {
+      case MessageBoxCloseTypeEnum.CONFIRM_LOGOUT:
+        logout();
+        break;
+    }
+  }, [closeType]);
 
   return (
     <div className="app-header">
@@ -36,19 +56,19 @@ const Header = () => {
               <img className="w-5 mr-3 cursor-pointer" src={linkedin} alt="" />
             </div>
 
-            <span className="fsr-18 font-im ml-7">StoryHaven</span>
+            <span className="fsr-18 font-im ml-7 cursor-pointer" onClick={() => navigate(AppRoutesEnum.HOMEPAGE)}>StoryHaven</span>
 
             <div className="flex items-center">
               <IconButton onClick={toggleAppTheme} color="inherit" disabled={loading}>
                 {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
               </IconButton>
 
-              <span className="fsr-16 inter ml-10 mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.HOMEPAGE)}>
+              {/* <span className="fsr-16 inter ml-10 mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.HOMEPAGE)}>
                 Homepage
-              </span>
+              </span> */}
               {userLoggedIn && (
                 <>
-                  <span className="fsr-16 inter mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.POSTS)}>
+                  <span className="fsr-16 inter ml-10 mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.POSTS)}>
                     Posts
                   </span>
                 </>
@@ -67,7 +87,7 @@ const Header = () => {
                     Profile
                   </span>
 
-                  <span onClick={logout} className="fsr-16 inter cursor-pointer">
+                  <span onClick={askLogoutConfirmation} className="fsr-16 inter cursor-pointer">
                     Logout
                   </span>
                 </>

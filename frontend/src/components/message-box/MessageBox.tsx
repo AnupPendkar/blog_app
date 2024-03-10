@@ -4,10 +4,13 @@ import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import DangerousOutlinedIcon from '@mui/icons-material/DangerousOutlined';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import { IMessageBoxEmitter, MessageBoxProps, MessageIconTypeEnum, PopupActionEnum } from '@models/common';
+import { IMessageBoxEmitter, MessageBoxCloseTypeEnum, MessageBoxProps, MessageIconTypeEnum, PopupActionEnum } from '@models/common';
+import { useAppDispatch } from '@redux/store';
+import { setMessageDialogClose } from '@redux/actions/notificationActions';
 
 const MessageBox = ({ dialogDetails, confirmBtnEmitter }: { dialogDetails: MessageBoxProps; confirmBtnEmitter: (data: IMessageBoxEmitter) => void }) => {
   const [open, setOpen] = useState<boolean>(true);
+  const dispatch = useAppDispatch();
 
   function handleClose() {
     setOpen(false);
@@ -15,6 +18,7 @@ const MessageBox = ({ dialogDetails, confirmBtnEmitter }: { dialogDetails: Messa
   }
 
   function handleSubmitBtn() {
+    dispatch(setMessageDialogClose(dialogDetails?.confirmFor))
     confirmBtnEmitter({ action: PopupActionEnum.SUBMIT });
   }
 

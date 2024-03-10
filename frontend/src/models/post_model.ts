@@ -46,6 +46,7 @@ export interface IFollower {
 export interface IComment {
   id: number;
   createdAt: string;
+  updatedAt: string;
   email: string;
   profileImg: string;
   username: string;

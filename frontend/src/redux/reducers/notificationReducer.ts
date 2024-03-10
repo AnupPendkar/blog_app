@@ -1,5 +1,5 @@
 import { INotificationReducerState } from '@models/common';
-import { setMessageDialogDetails } from '@redux/actions/notificationActions';
+import { setMessageDialogClose, setMessageDialogDetails } from '@redux/actions/notificationActions';
 import { createReducer } from '@reduxjs/toolkit';
 
 /**
@@ -13,6 +13,9 @@ const notificationInitialStates: INotificationReducerState = {};
 const notificationReducer = createReducer(notificationInitialStates, (actions) => {
   actions.addCase(setMessageDialogDetails, (state, action) => {
     state.messageDialogDetails = action?.payload;
+  });
+  actions.addCase(setMessageDialogClose, (state, action) => {
+    state.closeType = action?.payload;
   });
 });
 

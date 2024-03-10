@@ -6,6 +6,8 @@ import { IComment, ISinglePost, PostMethodEnum } from '@models/post_model';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import postService from '@services/postService';
 import { ReqMethodEnum } from '@models/common';
+import { useAppSelector } from '@redux/store';
+import Login from '@components/login/Login';
 
 interface ICommentsProp {
   data: ISinglePost;
@@ -16,14 +18,24 @@ interface ICommentsProp {
 
 const Comments = ({ data, open, closeComments, shouldFetchAPI }: ICommentsProp) => {
   const [comment, setComment] = React.useState('');
+  const [openLogin, setOpenLogin] = React.useState(false);
   const { fetchPostComments, onPostAction } = postService();
+  const { userLoggedIn } = useAppSelector((state) => state.user);
 
   async function submitComment() {
+    if (!userLoggedIn) {
+      setOpenLogin(true);
+      return;
+    }
     await _onCommentSubmit(comment, ReqMethodEnum.POST, data?.id);
     setComment('');
   }
 
   async function _onCommentSubmit(comment: string, reqMethod: ReqMethodEnum, id: number, isReply = false) {
+    if (!userLoggedIn) {
+      setOpenLogin(true);
+      return;
+    }
     switch (reqMethod) {
       case ReqMethodEnum.POST: // Insert comment
         if (!isReply) {
@@ -53,6 +65,10 @@ const Comments = ({ data, open, closeComments, shouldFetchAPI }: ICommentsProp) 
   }
 
   async function _onCommentLike(id: number, addLike: boolean, isReply = false) {
+    if (!userLoggedIn) {
+      setOpenLogin(true);
+      return;
+    }
     if (!isReply) {
       await onPostAction({ commentId: id }, PostMethodEnum.COMMENT_LIKE, addLike ? 'post' : 'put');
     } else {
@@ -115,6 +131,7 @@ const Comments = ({ data, open, closeComments, shouldFetchAPI }: ICommentsProp) 
           </div>
         </div>
       </Drawer>
+      <Login open={openLogin} setOpen={setOpenLogin} />
     </>
   );
 };

@@ -9,6 +9,7 @@ import { constructDateTime, isPropEmpty } from '@shared/utilfunctions';
 import { IComment } from '@models/post_model';
 import { ReqMethodEnum } from '@models/common';
 import { useAppSelector } from '@redux/store';
+import blankUser from '@assets/blank_user.svg';
 
 interface ICommentProp {
   data: IComment;
@@ -55,11 +56,15 @@ const Comment = ({ data, onCommentSubmit, onCommentLike, parentId }: ICommentPro
     }
   }
 
+  function isCommentAuthor(data: IComment) {
+    return data?.userId === parsedUserInfo?.id;
+  }
+
   function handleDelete() {
     if (isPropEmpty(parentId)) {
       onCommentSubmit('', ReqMethodEnum.DELETE, data?.id);
     } else {
-      onCommentSubmit('', ReqMethodEnum.DELETE, parentId, true);
+      onCommentSubmit('', ReqMethodEnum.DELETE, data?.id, true);
     }
   }
 
@@ -71,21 +76,23 @@ const Comment = ({ data, onCommentSubmit, onCommentLike, parentId }: ICommentPro
     <>
       <div className="comment relative flex flex-col mb-5">
         <div className="flex items-center user-details mb-4">
-          <img className="w-12 h-12 rounded-full mr-3" src={data.profileImg} alt="" />
+          <img className="w-12 h-12 rounded-full mr-3" src={!isPropEmpty(data.profileImg) ? data.profileImg : blankUser} alt="" />
 
           <div className="flex flex-col">
             <span className="fsr-14 inter mb-1" style={{ color: '#767882' }}>
               {data.username}
             </span>
             <span className="fsr-12 inter" style={{ color: '#767882' }}>
-              {constructDateTime(data.createdAt)}
+              Updated {constructDateTime(data.updatedAt)}
             </span>
           </div>
         </div>
         <div className="absolute -top-1 right-1 cursor-pointer">
-          <IconButton onClick={handleMoreClick} className="mr-2" aria-label="More">
-            <MoreVertIcon className="w-full h-full" />
-          </IconButton>
+          {isCommentAuthor(data) && (
+            <IconButton onClick={handleMoreClick} className="mr-2" aria-label="More">
+              <MoreVertIcon className="w-full h-full" />
+            </IconButton>
+          )}
         </div>
         <span className="fsr-16 inter">{data.comment}</span>
 

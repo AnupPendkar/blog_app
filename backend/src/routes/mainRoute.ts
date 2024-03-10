@@ -12,10 +12,23 @@ import {
   updateProfileInfo,
   setAboutDetails,
   updateAboutDetails,
+  userLogout,
 } from '../controllers/userControllers';
-import { allPosts, userPosts, createPost, updatePost, deletePost, getPostById, totalLikesNComment, onPostAction, addPostToCollection, postComments } from '../controllers/postController';
+import {
+  allPosts,
+  userPosts,
+  createPost,
+  updatePost,
+  deletePost,
+  getPostById,
+  totalLikesNComment,
+  onPostAction,
+  addPostToCollection,
+  postComments,
+} from '../controllers/postController';
 import { uploadFile } from '../controllers/fileController';
 import multer from 'multer';
+import passport from 'passport';
 
 const router = express.Router();
 
@@ -33,6 +46,7 @@ router.post('/upload_file', upload.single('image'), uploadFile);
 
 // User routes
 router.post('/login', userLogin);
+router.post('/logout', userLogout);
 router.post('/register', userRegister);
 router.put('/update', updateUsername);
 router.delete('/delete', deleteUser);
@@ -62,5 +76,22 @@ router.post('/add-post-to-collection', addPostToCollection);
 router.post('/on-post-action', onPostAction);
 router.put('/on-post-action', onPostAction);
 router.delete('/on-post-action', onPostAction);
+
+router.get('/auth/protected', (req: any, res) => {
+  console.log(req.user);
+  res.status(200).json({ user: req.user });
+});
+router.get('/auth/failure', (req, res) => {
+  res.send('error happened!!!');
+});
+
+router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+router.get(
+  '/auth/google/callback',
+  passport.authenticate('google', {
+    successRedirect: 'http://10.0.2.15:3200/#/',
+    failureRedirect: '/api/auth/failure',
+  })
+);
 
 export default router;

@@ -8,7 +8,12 @@ import 'dotenv/config';
 
 export async function userLogin(req: Request, res: Response, next: NextFunction) {
   try {
-    const { username, password } = req.body;
+    const { username, password, social } = req.body;
+
+    if(social) {
+
+    }
+
     const [foundUsr, ...rest] = await db.select().from(users).where(eq(users.username, username));
 
     if (!foundUsr) {
@@ -33,6 +38,15 @@ export async function userLogin(req: Request, res: Response, next: NextFunction)
     }
   } catch (error) {
     next(error);
+  }
+}
+
+export async function userLogout(req, res: Response, next: NextFunction) {
+  try {
+    req.session.destroy();
+    res.status(200).json('Successfully logged out!');
+  } catch (err) {
+    next(err);
   }
 }
 

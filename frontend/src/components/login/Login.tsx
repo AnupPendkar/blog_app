@@ -11,6 +11,10 @@ import CloseIcon from '@mui/icons-material/Close';
 import Register from '@components/register/Register';
 import { MessageIconTypeEnum } from '@models/common';
 import Toastr from '@components/toastr/Toastr';
+import facebook from '@assets/facebook.png';
+import instagram from '@assets/instagram.png';
+import twitter from '@assets/twitter.png';
+import linkedin from '@assets/linkedin.png';
 
 export enum RegisterFormCloseType {
   REGISTER_SUCCESS = 1,
@@ -58,6 +62,13 @@ const Login = ({ open, setOpen }) => {
 
   function onNewAccCreate() {
     setIsLoginForm(false);
+  }
+
+  async function onGoogleClk() {
+    const res = await userService.logout();
+    window.open("http://10.0.2.15:8005/api/auth/google", "_self")
+
+    console.log(res);
   }
 
   React.useEffect(() => {
@@ -141,6 +152,12 @@ const Login = ({ open, setOpen }) => {
                   Create an account
                 </a>
               </span>
+              <div className="logos flex items-center select-none">
+                <img className="w-5 mr-3 cursor-pointer" onClick={onGoogleClk} src={facebook} alt="" />
+                <img className="w-5 mr-3 cursor-pointer" src={instagram} alt="" />
+                <img className="w-5 mr-3 cursor-pointer" src={twitter} alt="" />
+                <img className="w-5 mr-3 cursor-pointer" src={linkedin} alt="" />
+              </div>
             </DialogContent>
           </Dialog>
 

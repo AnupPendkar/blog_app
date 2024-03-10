@@ -1,11 +1,12 @@
 import { Tooltip } from '@mui/material';
 import React from 'react';
+import blankImg from '@assets/blank_user.svg'
 
 const ViewProfileTooltip = () => {
   return (
-    <Tooltip title="profile">
+    <Tooltip title="profile" disableFocusListener>
       <div>
-        <span>hey there</span>
+        <img src={blankImg} alt="" />
       </div>
     </Tooltip>
   );

@@ -1,5 +1,5 @@
 import React from 'react';
-import { HttpResponse, MessageBoxProps } from '@models/common';
+import { HttpResponse, MessageBoxCloseTypeEnum, MessageBoxProps, MessageBoxTypeEnum } from '@models/common';
 import { setHttpErrDetails } from '@redux/actions/httpActions';
 import { useAppDispatch } from '@redux/store';
 import { setMessageDialogDetails } from '@redux/actions/notificationActions';
@@ -28,7 +28,20 @@ const useSharedEssentials = () => {
     dispatch(setMessageDialogDetails(prop));
   }
 
-  return { handleErr, showMessageBox };
+  function askConfirmation(msg: string, type: MessageBoxCloseTypeEnum) {
+    const msgProp: MessageBoxProps = {
+      title: 'Confirmation',
+      content: msg,
+      type: MessageBoxTypeEnum.MESSAGE_BOX,
+      closeMsg: 'Close',
+      confirmMsg: 'Confirm',
+      confirmFor: type,
+      // iconType
+    };
+    dispatch(setMessageDialogDetails(msgProp));
+  }
+
+  return { handleErr, showMessageBox, askConfirmation };
 };
 
 export default useSharedEssentials;

@@ -1,5 +1,4 @@
 import React from 'react';
-import design from '@assets/design3.png';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import MessageOutlinedIcon from '@mui/icons-material/MessageOutlined';
 import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
@@ -19,6 +18,9 @@ import CustomQuill from '@pages/shared-comp/CustomQull';
 import usePostRequestUtility from '@hooks/usePostRequestUtility';
 import AddToCollections from '@pages/shared-comp/AddToCollections';
 import blankUser from '@assets/blank_user.svg';
+import ViewProfileTooltip from '@pages/shared-comp/ViewProfileTooltip';
+import useSharedEssentials from '@hooks/useSharedEssentials';
+import { MessageBoxCloseTypeEnum } from '@models/common';
 
 const SinglePost = () => {
   const [post, setPost] = React.useState<ISinglePost>(null);
@@ -36,9 +38,11 @@ const SinglePost = () => {
   const { id } = useParams();
   const { parsedUserInfo } = useAppSelector((state) => state?.user);
   const { userLoggedIn } = useAppSelector((state) => state.user);
+  const { closeType, messageDialogDetails } = useAppSelector((state) => state.notification);
   const navigate = useNavigate();
   const { onPostAction, getPostById, onAuthorFollow, editPostDetails, deletePost } = postService();
   const { calculateReadingTime, getPostLikesNComments } = usePostRequestUtility();
+  const { askConfirmation } = useSharedEssentials();
 
   async function getCurrentPostById() {
     if (isPropEmpty(id) || isNaN(+id)) {
@@ -113,6 +117,10 @@ const SinglePost = () => {
     setContentEditable(false);
   }
 
+  function askDeleteConfirmation() {
+    askConfirmation('Do you really want to delete this post?', MessageBoxCloseTypeEnum.CONFIRM_DELETE_POST);
+  }
+
   function onPostDelete() {
     deletePost(post?.id);
     navigate(AppRoutesEnum.HOMEPAGE);
@@ -134,27 +142,17 @@ const SinglePost = () => {
     await getCurrentPostById();
   }
 
-  async function onSubmitComment(comment: string, parentCommentId?: number) {
-    if (!userLoggedIn) {
-      setOpenLogin(true);
+  React.useEffect(() => {
+    if (isPropEmpty(messageDialogDetails)) {
       return;
     }
-    console.log(comment, parentCommentId);
-    return;
 
-    if (isPropEmpty(parentCommentId)) {
-      await onPostAction({ postId: post?.id, comment }, PostMethodEnum.COMMENT, 'post');
-    } else {
-      await onPostAction({ parentCommentId, comment }, PostMethodEnum.REPLY, 'post');
+    switch (closeType) {
+      case MessageBoxCloseTypeEnum.CONFIRM_DELETE_POST:
+        onPostDelete();
+        break;
     }
-
-    const res = await getPostLikesNComments(post?.authorId, post?.id);
-    setPost({ ...post, comments: res?.comments });
-  }
-
-  function onCommentLike(commentId: number, isReply: boolean) {
-    console.log(commentId, isReply);
-  }
+  }, [closeType]);
 
   React.useEffect(() => {
     getCurrentPostById();
@@ -206,6 +204,7 @@ const SinglePost = () => {
               </div>
             </div>
           </div>
+          {/* <ViewProfileTooltip/> */}
 
           <div className="w-full mt-5" style={{ height: 1, background: '#6B6B6B' }}></div>
           <div className="flex items-center py-2" style={{ color: '#6B6B6B' }}>
@@ -248,7 +247,7 @@ const SinglePost = () => {
         <MenuItem onClick={onEditClick}>
           <span className="fsr-14 font-isb ml-3">Edit</span>
         </MenuItem>
-        <MenuItem onClick={onPostDelete}>
+        <MenuItem onClick={askDeleteConfirmation}>
           <span className="fsr-14 font-isb ml-3">Delete</span>
         </MenuItem>
       </Menu>

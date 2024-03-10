@@ -22,7 +22,7 @@ const Register = ({ open, setOpen, onCloseRegisterForm }) => {
       name: z.string().min(2, { message: 'name is too short' }).max(20, { message: 'Username is too long' }),
       password: z.string().min(1, { message: 'password is too short' }).max(20, { message: 'Username is too long' }),
       confirmPassword: z.string().min(1, { message: 'password is too short' }).max(20, { message: 'Username is too long' }),
-      profileImg: z.string().url('Invalid Url'),
+      // profileImg: z.string().url('Invalid Url'),
       mobileNo: z.string().min(10, { message: 'Enter valid mobile no' }).max(10, { message: 'Enter valid mobile no' }),
       email: z.string().email('Enter valid email'),
     })
@@ -56,7 +56,7 @@ const Register = ({ open, setOpen, onCloseRegisterForm }) => {
     const file = event?.target?.files?.[0];
     const img = await uploadImg(file);
 
-    setValue('profileImg', img.path);
+    // setValue('profileImg', img.path);
     setThumbImg(img.path);
   }
 
@@ -85,11 +85,11 @@ const Register = ({ open, setOpen, onCloseRegisterForm }) => {
               <input className="w-full h-full" ref={fileInputRef} onChange={handleFileInputChange} type="file" hidden />
             </div>
             <span className="fsr-16 inter">Profile Img</span>
-            {errors.profileImg && (
+            {/* {errors.profileImg && (
               <span className="fsr-12 -bottom-4" style={{ color: 'tomato' }}>
                 *{errors.profileImg.message}
               </span>
-            )}
+            )} */}
           </div>
 
           <div className="field mt-5 mb-4 flex justify-between items-center">

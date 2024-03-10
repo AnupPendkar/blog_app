@@ -172,13 +172,18 @@ export const darkTheme = createTheme({
         root: {
           paddingTop: 10,
           paddingBottom: 10,
-          backgroundColor: '#F9F9F9',
+          backgroundColor: '#OF1111 !important',
           color: '#191919',
 
-          '&:hover': {
-            backgroundColor: '#F1f1f1 !important',
-            color: '#191919',
-          },
+          // '&:hover': {
+          //   backgroundColor: '#F1f1f1 !important',
+          //   color: '#191919',
+          // },
+
+          // '&:selected': {
+          //   backgroundColor: 'rgb(27, 30, 31) !important',
+          //   color: '#191919',
+          // },
         },
       },
     },

@@ -40,6 +40,8 @@ export function handleTableCellData(val: any): any {
   }
 }
 
+export function convertIntoMonthYrFormat(date: string) {}
+
 export function convertMsIntoDayHrMinFormat(ms: number) {
   if (isPropEmpty(ms)) {
     return;
@@ -75,8 +77,9 @@ export function convertMsIntoDayHrMinFormat(ms: number) {
 }
 
 export function constructDateTime(timestamp: string) {
+  const monthMap = { 1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'Jun', 7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Auc', 11: 'Nov', 12: 'DecI' };
   const date = new Date(timestamp);
-  return `${date?.getFullYear()}-${date?.getMonth()}-${date?.getDay()}`;
+  return `${date?.getDate()} ${monthMap?.[date?.getMonth() + 1]} ${date?.getFullYear()}`;
 }
 
 export function getDateTime(timeStamp: number): { date: string; time: string } {

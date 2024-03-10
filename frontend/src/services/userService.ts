@@ -24,6 +24,31 @@ const UserService = () => {
     });
   }
 
+  function logout(): Promise<void> {
+    return new Promise(async (resolve) => {
+      const res = await http.request('post', '/logout', '');
+
+      if (res?.status === 200) {
+        resolve();
+      } else {
+        handleErr(res);
+      }
+    });
+  }
+
+  function loginUsingSocialMedia(): Promise<any> {
+    return new Promise(async (resolve) => {
+      // const res = await http.request('post', '/login', '', {social: true});
+      const res = await http.request('get', '/auth/googlee');
+
+      if (res?.status === 200) {
+        resolve(res);
+      } else {
+        handleErr(res);
+      }
+    });
+  }
+
   function registerUser(params) {
     return new Promise(async (resolve) => {
       const res = await http.request('post', '/register', '', params);
@@ -112,7 +137,18 @@ const UserService = () => {
     });
   }
 
-  return { submitLoginDetails, uploadImg, registerUser, fetchUserDetails, createCollection, fetchUserCollections, updateUserProfile, setAboutDetails };
+  return {
+    submitLoginDetails,
+    logout,
+    uploadImg,
+    registerUser,
+    fetchUserDetails,
+    createCollection,
+    fetchUserCollections,
+    updateUserProfile,
+    setAboutDetails,
+    loginUsingSocialMedia,
+  };
 };
 
 export default UserService;
