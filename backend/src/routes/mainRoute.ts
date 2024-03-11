@@ -1,5 +1,6 @@
 import express from 'express';
 import { db } from '../config';
+import path from 'path';
 import {
   userLogin,
   onAuthorFollow,
@@ -34,7 +35,7 @@ const router = express.Router();
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, '../uploads/');
+    cb(null, path.join(__dirname, '../../uploads'));
   },
   filename: function (req, file, cb) {
     cb(null, file.originalname);
