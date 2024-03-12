@@ -33,8 +33,8 @@ const RouteHandler = () => {
         <Route element={<AuthGuard />}>
           <Route path="/" element={<Navigate to={AppRoutesEnum.DISCOVER} />} />
           <Route path={AppRoutesEnum.HOMEPAGE} element={<Homepage />} />
-          <Route path={AppRoutesEnum.POSTS} element={<AllPosts />} />
-          <Route path={AppRoutesEnum.DISCOVER} element={<Discover />} />
+          <Route path={AppRoutesEnum.POSTS + '/:id'} element={<AllPosts />} />
+          <Route path={AppRoutesEnum.DISCOVER + '/:id'} element={<Discover />} />
           <Route path="/write" element={<Write />} />
           <Route path="/single-post/:id" element={<SinglePost />} />
           <Route path="/profile/:id" element={<Profile />} />

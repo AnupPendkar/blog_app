@@ -52,9 +52,10 @@ const postService = () => {
     });
   }
 
-  function getAllPosts(): Promise<any> {
+  function getAllPosts(ids?: Array<number>): Promise<any> {
+    console.log(ids)
     return new Promise(async (resolve) => {
-      const res = await http.request('get', '/get-all-posts');
+      const res = await http.request('get', '/get-all-posts', { ids });
 
       if (res?.status === 200) {
         resolve(res?.data);
