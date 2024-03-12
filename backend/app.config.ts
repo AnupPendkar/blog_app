@@ -1,7 +1,7 @@
 import type { Config } from 'drizzle-kit';
 
 export const corsOptions = {
-  origin: 'http://10.0.2.15:3200', // replace with your client's origin
+  origin: '*', // replace with your client's origin
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true, // enable cookies and other credentials
 };

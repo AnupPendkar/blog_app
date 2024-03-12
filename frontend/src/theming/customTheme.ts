@@ -172,18 +172,17 @@ export const darkTheme = createTheme({
         root: {
           paddingTop: 10,
           paddingBottom: 10,
-          backgroundColor: '#OF1111 !important',
-          color: '#191919',
+          backgroundColor: '#2E2E2E !important',
+          color: '#f1f1f1',
 
-          // '&:hover': {
-          //   backgroundColor: '#F1f1f1 !important',
-          //   color: '#191919',
-          // },
-
-          // '&:selected': {
-          //   backgroundColor: 'rgb(27, 30, 31) !important',
-          //   color: '#191919',
-          // },
+          '&:hover': {
+            backgroundColor: '#363636 !important',
+            color: '#f1f1f1',
+          },
+          '&.Mui-selected': {
+            backgroundColor: '#363636 !important',
+            color: '#f1f1f1',
+          },
         },
       },
     },
@@ -357,6 +356,10 @@ export const lightTheme = createTheme({
           color: '#191919',
 
           '&:hover': {
+            backgroundColor: '#F1f1f1 !important',
+            color: '#191919',
+          },
+          '&.Mui-selected': {
             backgroundColor: '#F1f1f1 !important',
             color: '#191919',
           },

@@ -36,8 +36,11 @@ export default function CheckboxSelector({ selectedCat, categories, handleChange
   return (
     <div>
       <FormControl sx={{ m: 1, width: 300 }}>
-        <InputLabel id="demo-multiple-checkbox-label">Categories</InputLabel>
+        <InputLabel color="info" id="demo-multiple-checkbox-label">
+          Categories
+        </InputLabel>
         <Select
+          color="info"
           labelId="demo-multiple-checkbox-label"
           id="demo-multiple-checkbox"
           multiple
@@ -49,7 +52,7 @@ export default function CheckboxSelector({ selectedCat, categories, handleChange
         >
           {categories.map((cat) => (
             <MenuItem key={cat?.id} value={cat?.id}>
-              <Checkbox checked={selectedCat.includes(cat?.id)} />
+              <Checkbox color="success" checked={selectedCat.includes(cat?.id)} />
               <ListItemText primary={cat?.name} />
             </MenuItem>
           ))}

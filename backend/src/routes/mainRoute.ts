@@ -26,6 +26,7 @@ import {
   onPostAction,
   addPostToCollection,
   postComments,
+  getCategories
 } from '../controllers/postController';
 import { uploadFile } from '../controllers/fileController';
 import multer from 'multer';
@@ -62,6 +63,7 @@ router.put('/update-profile', updateProfileInfo);
 
 // Posts routes
 router.get('/get-all-posts', allPosts);
+router.get('/categories', getCategories);
 router.get('/get-posts', userPosts);
 router.get('/get-post-comments', postComments);
 router.get('/get-post-by-id', getPostById);
@@ -79,7 +81,6 @@ router.put('/on-post-action', onPostAction);
 router.delete('/on-post-action', onPostAction);
 
 router.get('/auth/protected', (req: any, res) => {
-  console.log(req.user);
   res.status(200).json({ user: req.user });
 });
 router.get('/auth/failure', (req, res) => {
@@ -90,7 +91,7 @@ router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 
 router.get(
   '/auth/google/callback',
   passport.authenticate('google', {
-    successRedirect: 'http://10.0.2.15:3200/#/',
+    successRedirect: 'http://localhost:3200/#/',
     failureRedirect: '/api/auth/failure',
   })
 );

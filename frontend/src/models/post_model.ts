@@ -8,7 +8,7 @@ export interface IPostDetails {
   id: number;
   createdAt: string;
   thumbnailImg: string;
-  categories: Array<any>;
+  categories: Array<ICategories>;
   title: string;
   desc: string;
   content: string;
@@ -33,9 +33,16 @@ export interface ISinglePost {
   thumbnailImg: string;
   content: string;
   authorId: number;
-  categories: [];
+  categories: ICategories[];
   comments: IComment[];
   likes: ILike[];
+}
+
+export interface ICategories {
+  id: number;
+  name: string;
+  bgColor: string;
+  img: string;
 }
 
 export interface IFollower {

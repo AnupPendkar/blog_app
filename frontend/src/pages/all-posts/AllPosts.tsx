@@ -1,3 +1,4 @@
+import useCategories from '@hooks/useCategories';
 import { PostViewEnum } from '@models/homepage';
 import { IPostDetails } from '@models/post_model';
 import CheckboxSelector from '@pages/shared-comp/CheckboxSelector';
@@ -10,34 +11,18 @@ const AllPosts = () => {
   const [categories, setCategories] = React.useState<{ id: number; name: string }[]>([]);
   const [selectedCat, setSelectedCat] = React.useState<{ id: number; name: string }[]>([]);
   const { getUserPosts } = postService();
+  const { getCategories } = useCategories();
 
   async function getAllUserPosts() {
     const res = await getUserPosts();
-    setCategories([
-      {
-        id: 1,
-        name: 'cat1',
-      },
-      {
-        id: 2,
-        name: 'cat2',
-      },
-      {
-        id: 3,
-        name: 'cat3',
-      },
-      {
-        id: 4,
-        name: 'cat4',
-      },
-      {
-        id: 5,
-        name: 'cat5',
-      },
-    ]);
     if (res?.length > 0) {
       setPosts(res);
     }
+  }
+
+  async function getAllCategories() {
+    const res = await getCategories();
+    setCategories(res);
   }
 
   function handleChange(event) {
@@ -49,6 +34,7 @@ const AllPosts = () => {
 
   React.useEffect(() => {
     getAllUserPosts();
+    getAllCategories();
   }, []);
 
   return (

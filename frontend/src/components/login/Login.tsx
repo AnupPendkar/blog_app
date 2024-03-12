@@ -65,10 +65,10 @@ const Login = ({ open, setOpen }) => {
   }
 
   async function onGoogleClk() {
-    const res = await userService.logout();
-    window.open("http://10.0.2.15:8005/api/auth/google", "_self")
+    // const res = await userService.logout();
+    window.open("http://localhost:8005/api/auth/google", "_self")
 
-    console.log(res);
+    // console.log(res);
   }
 
   React.useEffect(() => {

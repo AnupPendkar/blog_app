@@ -56,7 +56,9 @@ const Header = () => {
               <img className="w-5 mr-3 cursor-pointer" src={linkedin} alt="" />
             </div>
 
-            <span className="fsr-18 font-im ml-7 cursor-pointer" onClick={() => navigate(AppRoutesEnum.HOMEPAGE)}>StoryHaven</span>
+            <span className="fsr-18 font-im ml-7 cursor-pointer" onClick={() => navigate(AppRoutesEnum.HOMEPAGE)}>
+              StoryHaven
+            </span>
 
             <div className="flex items-center">
               <IconButton onClick={toggleAppTheme} color="inherit" disabled={loading}>
@@ -66,17 +68,18 @@ const Header = () => {
               {/* <span className="fsr-16 inter ml-10 mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.HOMEPAGE)}>
                 Homepage
               </span> */}
+              <span className="fsr-16 inter ml-10 mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.DISCOVER)}>
+                Discover
+              </span>
+
               {userLoggedIn && (
                 <>
-                  <span className="fsr-16 inter ml-10 mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.POSTS)}>
+                  <span className="fsr-16 inter mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.POSTS)}>
                     Posts
                   </span>
                 </>
               )}
 
-              <span className="fsr-16 inter mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.DISCOVER)}>
-                Discover
-              </span>
               <span className="fsr-16 inter mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.WRITE)}>
                 Write
               </span>

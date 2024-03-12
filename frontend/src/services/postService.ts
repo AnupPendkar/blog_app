@@ -1,6 +1,6 @@
 import useHttp from '@hooks/useHttp';
 import useSharedEssentials from '@hooks/useSharedEssentials';
-import { IComment, IFollower, ILike, IPostDetails, IPublishPost, PostMethodEnum } from '@models/post_model';
+import { ICategories, IComment, IFollower, ILike, IPostDetails, IPublishPost, PostMethodEnum } from '@models/post_model';
 import React from 'react';
 
 const postService = () => {
@@ -157,6 +157,18 @@ const postService = () => {
     });
   }
 
+  function fetchCategories(): Promise<ICategories[]> {
+    return new Promise(async (resolve) => {
+      const res = await http.request('get', '/categories');
+
+      if (res?.status === 200) {
+        resolve(res?.data);
+      } else {
+        handleErr(res);
+      }
+    });
+  }
+
   return {
     publishPost,
     getUserPosts,
@@ -169,6 +181,7 @@ const postService = () => {
     deletePost,
     addPostToCollection,
     fetchPostComments,
+    fetchCategories,
   };
 };
 

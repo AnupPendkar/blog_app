@@ -52,7 +52,7 @@ const Comment = ({ data, onCommentSubmit, onCommentLike, parentId }: ICommentPro
     if (isPropEmpty(parentId)) {
       onCommentSubmit('', ReqMethodEnum.PUT, data?.id);
     } else {
-      onCommentSubmit('', ReqMethodEnum.PUT, parentId, true);
+      onCommentSubmit('', ReqMethodEnum.PUT, data?.id, true);
     }
   }
 

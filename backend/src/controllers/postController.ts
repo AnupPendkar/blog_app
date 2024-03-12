@@ -7,7 +7,7 @@ import { checkUserExists, checkUsernameExists, getUserDetailsByName } from './us
 import { categories, commentLikes, comments, likes, posts, postsToCategories, replies, replyLikes } from '../schema/postSchema';
 import { PostMethodEnum } from '../models/common';
 
-export async function allPosts(req: Request, res: Response, next: NextFunction) {
+export async function allPosts(req, res: Response, next: NextFunction) {
   try {
     const posts = await db.query.posts.findMany({
       columns: {
@@ -414,6 +414,16 @@ export async function addPostToCollection(req, res: Response, next: NextFunction
     });
 
     res.json('Post has been added successfully');
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function getCategories(req, res: Response, next: NextFunction) {
+  try {
+    const categoryList = await db.select().from(categories);
+
+    res.status(200).json(categoryList);
   } catch (err) {
     next(err);
   }
