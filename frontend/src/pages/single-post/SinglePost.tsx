@@ -33,7 +33,9 @@ const SinglePost = () => {
 
   const [content, setContent] = React.useState('');
   const [title, setTitle] = React.useState('');
+  const defaultTitle = React.useRef('');
   const [desc, setDesc] = React.useState('');
+  const defaultDesc = React.useRef('');
 
   const { id } = useParams();
   const { parsedUserInfo } = useAppSelector((state) => state?.user);
@@ -56,6 +58,8 @@ const SinglePost = () => {
     setDesc(res?.post?.desc);
     setCollections(res?.post?.collections);
     setPost(res?.post);
+    defaultTitle.current = res?.post?.title;
+    defaultDesc.current = res?.post?.desc;
   }
 
   function handleMoreClick(event: React.MouseEvent<HTMLButtonElement>) {
@@ -132,6 +136,8 @@ const SinglePost = () => {
   }
 
   function onEditCancel() {
+    defaultDesc.current = post?.desc;
+    defaultTitle.current = title;
     setContentEditable(false);
     setContent(post?.content);
     setTitle(post?.title);
@@ -162,19 +168,19 @@ const SinglePost = () => {
     <div className="w-full flex items-center justify-center">
       <div className="mb-5 flex flex-col items-center justify-center lg:w-[40%] md:w-[70%] s:w-full">
         <div className="w-full flex flex-col mt-20">
-          <textarea
-            className="fsr-30 font-ib mb-1 resize-none border-none outline-none bg-transparent"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            readOnly={!isContentEditable}
-          />
-          <textarea
-            value={desc}
-            onChange={(e) => setDesc(e.target.value)}
-            readOnly={!isContentEditable}
-            className="fsr-22 inter mb-3 resize-none border-none outline-none bg-transparent"
+          <span className="fsr-30 font-ib mb-1 outline-none" role="textbox" onInput={(e: any) => setTitle(e.target.outerText)} contentEditable={isContentEditable}>
+            {defaultTitle.current}
+          </span>
+
+          <span
+            className="fsr-22 inter mb-3 outline-none"
             style={{ color: '#6B6B6B' }}
-          />
+            role="textbox"
+            onInput={(e: any) => setDesc(e.target.outerText)}
+            contentEditable={isContentEditable}
+          >
+            {defaultDesc.current}
+          </span>
 
           <div className="user flex items-center">
             <img className="w-16 h-16 mr-6" style={{ borderRadius: '50%' }} src={!isPropEmpty(post?.author?.profileImg) ? post?.author?.profileImg : blankUser} alt="" />
