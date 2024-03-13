@@ -33,7 +33,7 @@ const Post = ({ postDetails, postView }: IPostProp) => {
 
               {postDetails?.categories?.map((cat) => (
                 <span className="fsr-14  font-rm" style={{ color: '#652034', textTransform: 'uppercase' }}>
-                  {cat}
+                  {cat?.name}&nbsp;&nbsp;
                 </span>
               ))}
             </div>
@@ -57,7 +57,7 @@ const Post = ({ postDetails, postView }: IPostProp) => {
             <div className="w-fit rounded-lg" style={{ backgroundColor: '#652034', padding: '0 10px' }}>
               {postDetails?.categories?.map((cat) => (
                 <span className="fsr-10 font-rm" style={{ color: '#ffffff' }}>
-                  {cat}
+                  {cat?.name}&nbsp;&nbsp;
                 </span>
               ))}
             </div>

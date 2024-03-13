@@ -5,23 +5,35 @@ import { Button } from '@mui/material';
 import CheckboxSelector from '@pages/shared-comp/CheckboxSelector';
 import Posts from '@pages/shared-comp/posts/Posts';
 import postService from '@services/postService';
+import { isPropEmpty } from '@shared/utilfunctions';
 import React from 'react';
+import { useParams } from 'react-router-dom';
 
 const Discover = () => {
   const [posts, setPosts] = React.useState<IPostDetails[]>([]);
   const [categories, setCategories] = React.useState<{ id: number; name: string }[]>([]);
-  const [selectedCat, setSelectedCat] = React.useState<{ id: number; name: string }[]>([]);
+  const [selectedCat, setSelectedCat] = React.useState<number[]>([]);
   const { getAllPosts } = postService();
   const { getCategories } = useCategories();
+  const { id } = useParams();
 
   async function getAllUserPosts() {
-    const res = await getAllPosts();
+    const res = await getAllPosts(selectedCat);
     setPosts(res);
+  }
+
+  function setSelectedCategories() {
+    if (isPropEmpty(id) || isNaN(+id)) {
+      getAllUserPosts();
+    } else {
+      setSelectedCat((prev) => [...prev, +id]);
+    }
   }
 
   async function getAllCategories() {
     const res = await getCategories();
     setCategories(res);
+    setSelectedCategories();
   }
 
   function handleChange(event) {
@@ -31,10 +43,17 @@ const Discover = () => {
     setSelectedCat(value);
   }
 
-  function onFilterClk() {}
+  function onFilterClk() {
+    getAllUserPosts();
+  }
 
   React.useEffect(() => {
-    getAllUserPosts();
+    if (!isPropEmpty(selectedCat)) {
+      getAllUserPosts();
+    }
+  }, [selectedCat]);
+
+  React.useEffect(() => {
     getAllCategories();
   }, []);
 

@@ -1,6 +1,7 @@
 import useHttp from '@hooks/useHttp';
 import useSharedEssentials from '@hooks/useSharedEssentials';
 import { ICategories, IComment, IFollower, ILike, IPostDetails, IPublishPost, PostMethodEnum } from '@models/post_model';
+import { isPropEmpty } from '@shared/utilfunctions';
 import React from 'react';
 
 const postService = () => {
@@ -40,9 +41,13 @@ const postService = () => {
     });
   }
 
-  function getUserPosts(): Promise<IPostDetails[]> {
+  function getUserPosts(ids?: Array<number>): Promise<IPostDetails[]> {
+    let params;
+    if (!isPropEmpty(ids)) {
+      params = { ids: JSON.stringify(ids) };
+    }
     return new Promise(async (resolve) => {
-      const res = await http.request('get', '/get-posts');
+      const res = await http.request('get', '/get-posts', params);
 
       if (res?.status === 200) {
         resolve(res?.data);
@@ -52,10 +57,13 @@ const postService = () => {
     });
   }
 
-  function getAllPosts(ids?: Array<number>): Promise<any> {
-    console.log(ids)
+  function getAllPosts(ids?: Array<number>): Promise<IPostDetails[]> {
+    let params;
+    if (!isPropEmpty(ids)) {
+      params = { ids: JSON.stringify(ids) };
+    }
     return new Promise(async (resolve) => {
-      const res = await http.request('get', '/get-all-posts', { ids });
+      const res = await http.request('get', '/get-all-posts', params);
 
       if (res?.status === 200) {
         resolve(res?.data);

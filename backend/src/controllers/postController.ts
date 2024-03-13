@@ -1,13 +1,18 @@
 import { eq } from 'drizzle-orm';
 import { db } from '../config';
 import { Request, Response, NextFunction } from 'express';
-import { isPropEmpty } from '../utils/utils';
 import { collectionToPosts, users } from '../schema/userSchema';
 import { checkUserExists, checkUsernameExists, getUserDetailsByName } from './userControllers';
 import { categories, commentLikes, comments, likes, posts, postsToCategories, replies, replyLikes } from '../schema/postSchema';
 import { PostMethodEnum } from '../models/common';
+import { isPropEmpty } from '../utils/utils';
 
 export async function allPosts(req, res: Response, next: NextFunction) {
+  let { ids } = req.query;
+  if (ids?.length > 0) {
+    ids = JSON.parse(ids);
+  }
+
   try {
     const posts = await db.query.posts.findMany({
       columns: {
@@ -35,7 +40,15 @@ export async function allPosts(req, res: Response, next: NextFunction) {
       (post as any).categories = post?.categories?.map((cat) => cat?.category);
     });
 
-    res.json(posts);
+    let modifiedPosts = posts;
+    if (ids?.length > 0) {
+      modifiedPosts = posts?.filter((post) => {
+        const b = post?.categories?.filter((cat: any) => ids?.includes(cat?.id));
+        return b.length > 0;
+      });
+    }
+
+    res.json(modifiedPosts);
   } catch (err) {
     next(err);
   }
@@ -43,6 +56,11 @@ export async function allPosts(req, res: Response, next: NextFunction) {
 
 export async function userPosts(req, res: Response, next: NextFunction) {
   try {
+    let { ids } = req.query;
+    if (ids?.length > 0) {
+      ids = JSON.parse(ids);
+    }
+
     const postData = await db.query.users.findFirst({
       columns: {},
       where: (users, { eq }) => eq(req.user.username as any, users?.username),
@@ -75,7 +93,15 @@ export async function userPosts(req, res: Response, next: NextFunction) {
       (post as any).categories = post?.categories?.map((cat) => cat?.category);
     });
 
-    res.json(postData?.posts);
+    let modifiedPosts = postData?.posts;
+    if (ids?.length > 0) {
+      modifiedPosts = postData?.posts?.filter((post) => {
+        const b = post?.categories?.filter((cat: any) => ids?.includes(cat?.id));
+        return b.length > 0;
+      });
+    }
+
+    res.json(modifiedPosts);
   } catch (err) {
     next(err);
   }
