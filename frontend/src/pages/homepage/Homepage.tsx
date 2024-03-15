@@ -1,16 +1,15 @@
-import React, { useState } from 'react';
-import linkedin from '@assets/linkedin.png';
-import { PostViewEnum } from '@models/homepage';
+import React from 'react';
 import postService from '@services/postService';
-import { IPostDetails } from '@models/post_model';
 import Posts from '@pages/shared-comp/posts/Posts';
 import Categories from '@pages/shared-comp/categories/Categories';
 import logo from '@assets/logo.png';
+import { PostViewEnum } from '@models/homepage';
+import { IPostDetails } from '@models/post_model';
 
 const Homepage = () => {
-  const [editorPick, setEditorPick] = useState<IPostDetails[]>([]);
-  const [recentPosts, setRecentPosts] = useState<IPostDetails[]>([]);
-  const [popular, setPopular] = useState<IPostDetails[]>([]);
+  const [editorPick, setEditorPick] = React.useState<IPostDetails[]>([]);
+  const [recentPosts, setRecentPosts] = React.useState<IPostDetails[]>([]);
+  const [popular, setPopular] = React.useState<IPostDetails[]>([]);
   const { getAllPosts } = postService();
 
   async function getAllUserPosts() {

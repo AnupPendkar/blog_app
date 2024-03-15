@@ -1,13 +1,12 @@
 import React from 'react';
 import Comment from './Comment';
-import { Button, Drawer, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { IComment, ISinglePost, PostMethodEnum } from '@models/post_model';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import postService from '@services/postService';
+import Login from '@components/login/Login';
+import { Button, Drawer } from '@mui/material';
+import { ISinglePost, PostMethodEnum } from '@models/post_model';
 import { ReqMethodEnum } from '@models/common';
 import { useAppSelector } from '@redux/store';
-import Login from '@components/login/Login';
 
 interface ICommentsProp {
   data: ISinglePost;
@@ -19,7 +18,7 @@ interface ICommentsProp {
 const Comments = ({ data, open, closeComments, shouldFetchAPI }: ICommentsProp) => {
   const [comment, setComment] = React.useState('');
   const [openLogin, setOpenLogin] = React.useState(false);
-  const { fetchPostComments, onPostAction } = postService();
+  const { onPostAction } = postService();
   const { userLoggedIn } = useAppSelector((state) => state.user);
 
   async function submitComment() {
@@ -27,11 +26,11 @@ const Comments = ({ data, open, closeComments, shouldFetchAPI }: ICommentsProp) 
       setOpenLogin(true);
       return;
     }
-    await _onCommentSubmit(comment, ReqMethodEnum.POST, data?.id);
+    await onCommentSubmit(comment, ReqMethodEnum.POST, data?.id);
     setComment('');
   }
 
-  async function _onCommentSubmit(comment: string, reqMethod: ReqMethodEnum, id: number, isReply = false) {
+  async function onCommentSubmit(comment: string, reqMethod: ReqMethodEnum, id: number, isReply = false) {
     if (!userLoggedIn) {
       setOpenLogin(true);
       return;
@@ -64,7 +63,7 @@ const Comments = ({ data, open, closeComments, shouldFetchAPI }: ICommentsProp) 
     shouldFetchAPI();
   }
 
-  async function _onCommentLike(id: number, addLike: boolean, isReply = false) {
+  async function onCommentLike(id: number, addLike: boolean, isReply = false) {
     if (!userLoggedIn) {
       setOpenLogin(true);
       return;
@@ -108,7 +107,7 @@ const Comments = ({ data, open, closeComments, shouldFetchAPI }: ICommentsProp) 
           <div className="mt-3 overflow-auto h-full">
             {data?.comments?.map((rec, idx) => (
               <div key={idx + ' comment'}>
-                <Comment data={rec} onCommentSubmit={_onCommentSubmit} onCommentLike={_onCommentLike} />
+                <Comment data={rec} onCommentSubmit={onCommentSubmit} onCommentLike={onCommentLike} />
               </div>
             ))}
           </div>

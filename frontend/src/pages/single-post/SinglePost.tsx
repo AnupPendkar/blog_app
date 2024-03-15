@@ -6,20 +6,20 @@ import BookmarkIcon from '@mui/icons-material/Bookmark';
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import postService from '@services/postService';
-import { useNavigate, useParams } from 'react-router-dom';
-import { constructDateTime, isPropEmpty } from '@shared/utilfunctions';
-import { AppRoutesEnum } from '@shared/appRotues';
-import { useAppSelector } from '@redux/store';
-import { ISinglePost, PostMethodEnum } from '@models/post_model';
 import Login from '@components/login/Login';
 import Comments from '@pages/shared-comp/comments/Comments';
-import { Button, IconButton, Menu, MenuItem } from '@mui/material';
 import CustomQuill from '@pages/shared-comp/CustomQull';
 import usePostRequestUtility from '@hooks/usePostRequestUtility';
 import AddToCollections from '@pages/shared-comp/AddToCollections';
 import blankUser from '@assets/blank_user.svg';
 import ViewProfileTooltip from '@pages/shared-comp/ViewProfileTooltip';
 import useSharedEssentials from '@hooks/useSharedEssentials';
+import { useNavigate, useParams } from 'react-router-dom';
+import { constructDateTime, isPropEmpty } from '@shared/utilfunctions';
+import { AppRoutesEnum } from '@shared/appRotues';
+import { useAppSelector } from '@redux/store';
+import { ISinglePost, PostMethodEnum } from '@models/post_model';
+import { Button, IconButton, Menu, MenuItem } from '@mui/material';
 import { MessageBoxCloseTypeEnum } from '@models/common';
 
 const SinglePost = () => {
@@ -30,21 +30,19 @@ const SinglePost = () => {
   const [wishlistVis, setWishlistVis] = React.useState(false);
   const [moreAnchorEl, setMoreAnchorEl] = React.useState<null | HTMLElement>(null);
   const [isContentEditable, setContentEditable] = React.useState(false);
-
   const [content, setContent] = React.useState('');
   const [title, setTitle] = React.useState('');
-  const defaultTitle = React.useRef('');
   const [desc, setDesc] = React.useState('');
+  const defaultTitle = React.useRef('');
   const defaultDesc = React.useRef('');
-
-  const { id } = useParams();
   const { parsedUserInfo } = useAppSelector((state) => state?.user);
   const { userLoggedIn } = useAppSelector((state) => state.user);
   const { closeType, messageDialogDetails } = useAppSelector((state) => state.notification);
-  const navigate = useNavigate();
   const { onPostAction, getPostById, onAuthorFollow, editPostDetails, deletePost } = postService();
   const { calculateReadingTime, getPostLikesNComments } = usePostRequestUtility();
   const { askConfirmation } = useSharedEssentials();
+  const { id } = useParams();
+  const navigate = useNavigate();
 
   async function getCurrentPostById() {
     if (isPropEmpty(id) || isNaN(+id)) {

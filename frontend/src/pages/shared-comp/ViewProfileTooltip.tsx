@@ -1,6 +1,6 @@
-import { Tooltip } from '@mui/material';
 import React from 'react';
 import blankImg from '@assets/blank_user.svg'
+import { Tooltip } from '@mui/material';
 
 const ViewProfileTooltip = () => {
   return (

@@ -1,5 +1,5 @@
-import { AppRoutesEnum } from '@shared/appRotues';
 import React from 'react';
+import { AppRoutesEnum } from '@shared/appRotues';
 import { useNavigate } from 'react-router-dom';
 
 interface ICategoryProp {

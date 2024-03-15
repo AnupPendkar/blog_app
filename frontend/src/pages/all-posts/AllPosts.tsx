@@ -1,13 +1,12 @@
+import React from 'react';
 import useCategories from '@hooks/useCategories';
-import { PostViewEnum } from '@models/homepage';
-import { IPostDetails } from '@models/post_model';
-import { Button } from '@mui/material';
 import CheckboxSelector from '@pages/shared-comp/CheckboxSelector';
 import Posts from '@pages/shared-comp/posts/Posts';
 import postService from '@services/postService';
-import { isPropEmpty } from '@shared/utilfunctions';
-import React from 'react';
 import { useParams } from 'react-router-dom';
+import { PostViewEnum } from '@models/homepage';
+import { IPostDetails } from '@models/post_model';
+import { isPropEmpty } from '@shared/utilfunctions';
 
 const AllPosts = () => {
   const [posts, setPosts] = React.useState<IPostDetails[]>([]);
@@ -43,10 +42,6 @@ const AllPosts = () => {
     setSelectedCat(value);
   }
 
-  function onFilterClk() {
-    getAllUserPosts();
-  }
-
   React.useEffect(() => {
     if (!isPropEmpty(selectedCat)) {
       getAllUserPosts();
@@ -63,9 +58,6 @@ const AllPosts = () => {
         <div className="flex justify-between items-center">
           <span className="fsr-25 font-isb">All posts</span>
           <CheckboxSelector selectedCat={selectedCat} categories={categories} handleChange={handleChange} />
-          {/* <Button className="h-fit py-1 px-3 ml-2" color="success" variant="outlined" onClick={() => onFilterClk()}>
-            Apply filter
-          </Button> */}
         </div>
         <Posts data={posts} viewMethod={PostViewEnum.COMPLETE} />
       </div>

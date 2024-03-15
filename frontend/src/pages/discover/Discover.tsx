@@ -1,17 +1,16 @@
+import React from 'react';
 import useCategories from '@hooks/useCategories';
-import { PostViewEnum } from '@models/homepage';
-import { IPostDetails } from '@models/post_model';
-import { Button } from '@mui/material';
 import CheckboxSelector from '@pages/shared-comp/CheckboxSelector';
 import Posts from '@pages/shared-comp/posts/Posts';
 import postService from '@services/postService';
+import { ICategories, IPostDetails } from '@models/post_model';
+import { PostViewEnum } from '@models/homepage';
 import { isPropEmpty } from '@shared/utilfunctions';
-import React from 'react';
 import { useParams } from 'react-router-dom';
 
 const Discover = () => {
   const [posts, setPosts] = React.useState<IPostDetails[]>([]);
-  const [categories, setCategories] = React.useState<{ id: number; name: string }[]>([]);
+  const [categories, setCategories] = React.useState<ICategories[]>([]);
   const [selectedCat, setSelectedCat] = React.useState<number[]>([]);
   const { getAllPosts } = postService();
   const { getCategories } = useCategories();
@@ -43,10 +42,6 @@ const Discover = () => {
     setSelectedCat(value);
   }
 
-  function onFilterClk() {
-    getAllUserPosts();
-  }
-
   React.useEffect(() => {
     if (!isPropEmpty(selectedCat)) {
       getAllUserPosts();
@@ -64,9 +59,6 @@ const Discover = () => {
           <span className="fsr-25 font-isb">All posts</span>
           <div className="flex items-center">
             <CheckboxSelector selectedCat={selectedCat} categories={categories} handleChange={handleChange} />
-            {/* <Button className="h-fit py-1 px-3 ml-2" color="success" variant="outlined" onClick={() => onFilterClk()}>
-              Apply filter
-            </Button> */}
           </div>
         </div>
         <Posts data={posts} viewMethod={PostViewEnum.COMPLETE} />

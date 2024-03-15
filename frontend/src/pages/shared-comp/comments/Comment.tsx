@@ -1,15 +1,15 @@
+import React from 'react';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { Button, IconButton, Menu, MenuItem } from '@mui/material';
 import ChatIcon from '@mui/icons-material/Chat';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import React from 'react';
+import blankUser from '@assets/blank_user.svg';
+import { Button, IconButton, Menu, MenuItem } from '@mui/material';
 import { constructDateTime, isPropEmpty } from '@shared/utilfunctions';
 import { IComment } from '@models/post_model';
 import { ReqMethodEnum } from '@models/common';
 import { useAppSelector } from '@redux/store';
-import blankUser from '@assets/blank_user.svg';
 
 interface ICommentProp {
   data: IComment;
@@ -23,7 +23,6 @@ const Comment = ({ data, onCommentSubmit, onCommentLike, parentId }: ICommentPro
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [showReply, setShowReply] = React.useState(false);
   const [isEditClk, setEditClk] = React.useState(false);
-
   const [moreAnchorEl, setMoreAnchorEl] = React.useState<null | HTMLElement>(null);
   const { parsedUserInfo } = useAppSelector((state) => state?.user);
 
@@ -35,24 +34,28 @@ const Comment = ({ data, onCommentSubmit, onCommentLike, parentId }: ICommentPro
     setMoreAnchorEl(event.currentTarget);
   }
 
-  function handleReply() {
-    if (isEditClk) {
-      if (isPropEmpty(parentId)) {
-        onCommentSubmit(reply, ReqMethodEnum.PUT, data?.id);
-      } else {
-        onCommentSubmit(reply, ReqMethodEnum.PUT, data?.id, true);
-      }
+  function handleEditSubmit() {
+    if (isPropEmpty(parentId)) {
+      onCommentSubmit(reply, ReqMethodEnum.PUT, data?.id);
     } else {
-      onCommentSubmit(reply, ReqMethodEnum.POST, data?.id, true);
-      setShowReply(true);
+      onCommentSubmit(reply, ReqMethodEnum.PUT, data?.id, true);
     }
+  }
+
+  function handleReplySubmit() {
+    onCommentSubmit(reply, ReqMethodEnum.POST, data?.id, true);
+    setShowReply(true);
+  }
+
+  function onSubmitCommentClk() {
+    isEditClk ? handleEditSubmit() : handleReplySubmit();
 
     setReply('');
     setAnchorEl(null);
     setEditClk(false);
   }
 
-  function handleLike(addLike: boolean) {
+  function handleLikeClk(addLike: boolean) {
     if (isPropEmpty(parentId)) {
       onCommentLike(data?.id, addLike);
     } else {
@@ -60,7 +63,7 @@ const Comment = ({ data, onCommentSubmit, onCommentLike, parentId }: ICommentPro
     }
   }
 
-  function handleEdit(event: React.MouseEvent<any>) {
+  function handleEditClk(event: React.MouseEvent<any>) {
     setEditClk(true);
     setAnchorEl(event.currentTarget);
     setMoreAnchorEl(null);
@@ -71,7 +74,7 @@ const Comment = ({ data, onCommentSubmit, onCommentLike, parentId }: ICommentPro
     return data?.userId === parsedUserInfo?.id;
   }
 
-  function handleDelete() {
+  function handleDeleteClk() {
     if (isPropEmpty(parentId)) {
       onCommentSubmit('', ReqMethodEnum.DELETE, data?.id);
     } else {
@@ -95,7 +98,7 @@ const Comment = ({ data, onCommentSubmit, onCommentLike, parentId }: ICommentPro
               {data.username}
             </span>
             <span className="fsr-12 inter" style={{ color: '#767882' }}>
-              Updated {constructDateTime(data.updatedAt)}
+              Published &nbsp;{constructDateTime(data.createdAt)}
             </span>
           </div>
         </div>
@@ -112,7 +115,7 @@ const Comment = ({ data, onCommentSubmit, onCommentLike, parentId }: ICommentPro
           {isUserAlreadyLiked(data) ? (
             <IconButton
               onClick={() => {
-                handleLike(false);
+                handleLikeClk(false);
               }}
               aria-label="More"
             >
@@ -121,7 +124,7 @@ const Comment = ({ data, onCommentSubmit, onCommentLike, parentId }: ICommentPro
           ) : (
             <IconButton
               onClick={() => {
-                handleLike(true);
+                handleLikeClk(true);
               }}
               aria-label="More"
             >
@@ -156,15 +159,7 @@ const Comment = ({ data, onCommentSubmit, onCommentLike, parentId }: ICommentPro
           data?.replies?.map((rec) => <Comment key={rec?.id} data={rec} parentId={rec?.parentCommentId} onCommentSubmit={onCommentSubmit} onCommentLike={onCommentLike} />)}
       </div>
 
-      <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={() => setAnchorEl(null)}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button',
-        }}
-      >
+      <Menu id="basic-menu" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
         <div className="flex flex-col items-end mt-3">
           <textarea
             value={reply}
@@ -176,7 +171,7 @@ const Comment = ({ data, onCommentSubmit, onCommentLike, parentId }: ICommentPro
             <Button onClick={() => setReply('')} color="cancel" variant="contained" style={{ padding: '2px 5px' }}>
               Clear
             </Button>
-            <Button disabled={reply === ''} onClick={handleReply} color="success" variant="contained" style={{ padding: '2px 5px' }}>
+            <Button disabled={reply === ''} onClick={onSubmitCommentClk} color="success" variant="contained" style={{ padding: '2px 5px' }}>
               Submit
             </Button>
           </div>
@@ -184,10 +179,10 @@ const Comment = ({ data, onCommentSubmit, onCommentLike, parentId }: ICommentPro
       </Menu>
 
       <Menu id="menu-appbar" anchorEl={moreAnchorEl} keepMounted open={Boolean(moreAnchorEl)} onClose={() => setMoreAnchorEl(null)}>
-        <MenuItem onClick={handleEdit}>
+        <MenuItem onClick={handleEditClk}>
           <span className="fsr-14 font-isb ml-3">Edit</span>
         </MenuItem>
-        <MenuItem onClick={handleDelete}>
+        <MenuItem onClick={handleDeleteClk}>
           <span className="fsr-14 font-isb ml-3">Delete</span>
         </MenuItem>
       </Menu>

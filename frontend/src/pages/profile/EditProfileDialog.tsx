@@ -1,9 +1,9 @@
-import { Button, Dialog, DialogContent, IconButton } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
 import React from 'react';
-import { IUserDetailsAPI } from '@models/user_service_model';
+import CloseIcon from '@mui/icons-material/Close';
 import UserService from '@services/userService';
 import blankUser from '@assets/blank_user.svg';
+import { Button, Dialog, DialogContent, IconButton } from '@mui/material';
+import { IUserDetailsAPI } from '@models/user_service_model';
 import { isPropEmpty } from '@shared/utilfunctions';
 
 interface IEditProfileDialogProp {

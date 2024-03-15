@@ -4,8 +4,9 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import ListItemText from '@mui/material/ListItemText';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
+import { ICategories } from '@models/post_model';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -19,7 +20,13 @@ const MenuProps = {
   },
 };
 
-export default function CheckboxSelector({ selectedCat, categories, handleChange }) {
+interface ICheckBoxSelectorProp {
+  selectedCat: Array<number>;
+  categories: ICategories[];
+  handleChange: (event: any) => void;
+}
+
+export default function CheckboxSelector({ selectedCat, categories, handleChange }: ICheckBoxSelectorProp) {
   function getSelectedCatName() {
     return categories
       .filter((cat) => selectedCat.includes(cat?.id))

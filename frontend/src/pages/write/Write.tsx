@@ -1,15 +1,15 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
 import 'react-quill/dist/quill.bubble.css';
 import PublishDialog from './PublishDialog';
-import { useAppSelector } from '@redux/store';
 import LoginPopup from '@components/login/Login';
 import CustomQuill from '@pages/shared-comp/CustomQull';
+import { useAppSelector } from '@redux/store';
 
 const Write = () => {
-  const [title, setTitle] = useState('');
-  const [value, setValue] = useState('');
-  const [openLogin, setOpenLogin] = useState(false);
-  const [publishDialogVis, setPublishDialogVis] = useState(false);
+  const [title, setTitle] = React.useState('');
+  const [value, setValue] = React.useState('');
+  const [openLogin, setOpenLogin] = React.useState(false);
+  const [publishDialogVis, setPublishDialogVis] = React.useState(false);
   const { userLoggedIn } = useAppSelector((state) => state.user);
 
   async function onPublishClk() {

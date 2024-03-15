@@ -1,12 +1,12 @@
+import React from 'react';
+import CustomQuill from '@pages/shared-comp/CustomQull';
+import Posts from '@pages/shared-comp/posts/Posts';
+import UserService from '@services/userService';
 import { PostViewEnum, ProfileTypeEnum } from '@models/homepage';
 import { IPostDetails } from '@models/post_model';
 import { IUserAboutAPI } from '@models/user_service_model';
 import { Button } from '@mui/material';
-import CustomQuill from '@pages/shared-comp/CustomQull';
-import Posts from '@pages/shared-comp/posts/Posts';
-import UserService from '@services/userService';
 import { isPropEmpty } from '@shared/utilfunctions';
-import React from 'react';
 
 interface IProfileTabProps {
   tabType: ProfileTypeEnum;
@@ -19,7 +19,6 @@ const ProfileTab = ({ tabType, postsData, aboutData, isAuthorVis }: IProfileTabP
   const [aboutVal, setAboutVal] = React.useState<string>();
   const [showEditor, setEditorVis] = React.useState(false);
   const [readonly, setReadonly] = React.useState(true);
-
   const { setAboutDetails } = UserService();
 
   async function onSaveClk() {

@@ -1,11 +1,6 @@
 import React from 'react';
-import { Button } from '@mui/material';
-import { ProfileTypeEnum } from '@models/homepage';
 import ProfileTab from './ProfileTab';
 import UserService from '@services/userService';
-import { useParams } from 'react-router-dom';
-import { IUserDetailsAPI } from '@models/user_service_model';
-import { useAppSelector } from '@redux/store';
 import Login from '@components/login/Login';
 import postService from '@services/postService';
 import facebook from '@assets/facebook.png';
@@ -14,6 +9,11 @@ import twitter from '@assets/twitter.png';
 import linkedin from '@assets/linkedin.png';
 import blankUser from '@assets/blank_user.svg';
 import EditProfileDialog from './EditProfileDialog';
+import { Button } from '@mui/material';
+import { ProfileTypeEnum } from '@models/homepage';
+import { useParams } from 'react-router-dom';
+import { IUserDetailsAPI } from '@models/user_service_model';
+import { useAppSelector } from '@redux/store';
 import { isPropEmpty } from '@shared/utilfunctions';
 
 const Profile = () => {
@@ -21,11 +21,11 @@ const Profile = () => {
   const [userData, setUserData] = React.useState<IUserDetailsAPI>();
   const [showEditProfilePop, setEditProfilePopVis] = React.useState(false);
   const [openLogin, setOpenLogin] = React.useState(false);
-  const { fetchUserDetails } = UserService();
   const { userLoggedIn } = useAppSelector((state) => state.user);
   const { parsedUserInfo } = useAppSelector((state) => state?.user);
-  const { id } = useParams();
+  const { fetchUserDetails } = UserService();
   const { onAuthorFollow } = postService();
+  const { id } = useParams();
 
   async function getUserDetails() {
     const res = await fetchUserDetails(+id);

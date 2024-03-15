@@ -1,11 +1,15 @@
-import { Button, Checkbox, Dialog, DialogContent } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
 import React from 'react';
+import AddIcon from '@mui/icons-material/Add';
 import userService from '@services/userService';
 import postService from '@services/postService';
-import { useAppSelector } from '@redux/store';
+import { Button, Checkbox, Dialog, DialogContent } from '@mui/material';
 
-const AddToCollections = ({ postId, showWishlist }: { postId: number; showWishlist: () => void }) => {
+interface IAddToCollectionsProp {
+  postId: number;
+  showWishlist: () => void;
+}
+
+const AddToCollections = ({ postId, showWishlist }: IAddToCollectionsProp) => {
   const [dialogType, setDialogType] = React.useState(1);
   const [collections, setCollections] = React.useState([]);
   const [collectionName, setCollectionName] = React.useState('');

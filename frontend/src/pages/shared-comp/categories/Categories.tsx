@@ -1,5 +1,4 @@
 import React from 'react';
-import design from '@assets/design1.png';
 import Category from './Category';
 import useCategories from '@hooks/useCategories';
 import { ICategories } from '@models/post_model';
