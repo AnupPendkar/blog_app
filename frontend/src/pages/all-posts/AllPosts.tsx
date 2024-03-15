@@ -5,12 +5,12 @@ import Posts from '@pages/shared-comp/posts/Posts';
 import postService from '@services/postService';
 import { useParams } from 'react-router-dom';
 import { PostViewEnum } from '@models/homepage';
-import { IPostDetails } from '@models/post_model';
+import { ICategories, IPostDetails } from '@models/post_model';
 import { isPropEmpty } from '@shared/utilfunctions';
 
 const AllPosts = () => {
   const [posts, setPosts] = React.useState<IPostDetails[]>([]);
-  const [categories, setCategories] = React.useState<{ id: number; name: string }[]>([]);
+  const [categories, setCategories] = React.useState<ICategories[]>([]);
   const [selectedCat, setSelectedCat] = React.useState<Array<number>>([]);
   const { getUserPosts } = postService();
   const { getCategories } = useCategories();
