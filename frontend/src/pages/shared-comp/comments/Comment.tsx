@@ -22,6 +22,7 @@ const Comment = ({ data, onCommentSubmit, onCommentLike, parentId }: ICommentPro
   const [reply, setReply] = React.useState('');
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [showReply, setShowReply] = React.useState(false);
+  const [isEditClk, setEditClk] = React.useState(false);
 
   const [moreAnchorEl, setMoreAnchorEl] = React.useState<null | HTMLElement>(null);
   const { parsedUserInfo } = useAppSelector((state) => state?.user);
@@ -35,9 +36,20 @@ const Comment = ({ data, onCommentSubmit, onCommentLike, parentId }: ICommentPro
   }
 
   function handleReply() {
-    onCommentSubmit(reply, ReqMethodEnum.POST, data?.id, true);
+    if (isEditClk) {
+      if (isPropEmpty(parentId)) {
+        onCommentSubmit(reply, ReqMethodEnum.PUT, data?.id);
+      } else {
+        onCommentSubmit(reply, ReqMethodEnum.PUT, data?.id, true);
+      }
+    } else {
+      onCommentSubmit(reply, ReqMethodEnum.POST, data?.id, true);
+      setShowReply(true);
+    }
+
     setReply('');
     setAnchorEl(null);
+    setEditClk(false);
   }
 
   function handleLike(addLike: boolean) {
@@ -48,12 +60,11 @@ const Comment = ({ data, onCommentSubmit, onCommentLike, parentId }: ICommentPro
     }
   }
 
-  function handleEdit() {
-    if (isPropEmpty(parentId)) {
-      onCommentSubmit('', ReqMethodEnum.PUT, data?.id);
-    } else {
-      onCommentSubmit('', ReqMethodEnum.PUT, data?.id, true);
-    }
+  function handleEdit(event: React.MouseEvent<any>) {
+    setEditClk(true);
+    setAnchorEl(event.currentTarget);
+    setMoreAnchorEl(null);
+    setReply(data?.comment);
   }
 
   function isCommentAuthor(data: IComment) {
@@ -66,6 +77,7 @@ const Comment = ({ data, onCommentSubmit, onCommentLike, parentId }: ICommentPro
     } else {
       onCommentSubmit('', ReqMethodEnum.DELETE, data?.id, true);
     }
+    setMoreAnchorEl(null);
   }
 
   function isUserAlreadyLiked(data: IComment) {
@@ -131,7 +143,9 @@ const Comment = ({ data, onCommentSubmit, onCommentLike, parentId }: ICommentPro
                 setShowReply((prev) => !prev);
               }}
             >
-              <KeyboardArrowDownIcon style={{ color: '#767882', width: 20, height: 20 }} />
+              <KeyboardArrowDownIcon
+                style={{ color: '#767882', width: 20, height: 20, transition: 'transform 0.2s linear', transform: `rotate(${showReply ? '180deg' : '0deg'})` }}
+              />
             </IconButton>
           )}
         </div>
