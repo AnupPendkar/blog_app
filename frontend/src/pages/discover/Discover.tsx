@@ -64,9 +64,9 @@ const Discover = () => {
           <span className="fsr-25 font-isb">All posts</span>
           <div className="flex items-center">
             <CheckboxSelector selectedCat={selectedCat} categories={categories} handleChange={handleChange} />
-            <Button className="h-fit py-1 px-3 ml-2" color="success" variant="outlined" onClick={() => onFilterClk()}>
+            {/* <Button className="h-fit py-1 px-3 ml-2" color="success" variant="outlined" onClick={() => onFilterClk()}>
               Apply filter
-            </Button>
+            </Button> */}
           </div>
         </div>
         <Posts data={posts} viewMethod={PostViewEnum.COMPLETE} />

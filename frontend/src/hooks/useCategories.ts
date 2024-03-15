@@ -127,7 +127,7 @@ const useCategories = () => {
     return appendCategoryViewProp(res);
   }
 
-  return { getCategories };
+  return { getCategories, categoryMap };
 };
 
 export default useCategories;

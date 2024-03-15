@@ -5,6 +5,7 @@ import { AppRoutesEnum } from '@shared/appRotues';
 import { IPostDetails } from '@models/post_model';
 import { constructDateTime } from '@shared/utilfunctions';
 import blogAvatar from '@assets/blog_avatar.svg';
+import useCategories from '@hooks/useCategories';
 
 interface IPostProp {
   postDetails: IPostDetails;
@@ -13,6 +14,7 @@ interface IPostProp {
 
 const Post = ({ postDetails, postView }: IPostProp) => {
   const navigate = useNavigate();
+  const {categoryMap} = useCategories();
 
   function showFullPost(id: number) {
     navigate(`${AppRoutesEnum.SINGLE_POST}/${id}`);
@@ -54,11 +56,13 @@ const Post = ({ postDetails, postView }: IPostProp) => {
         <div className="flex items-center mb-2 cursor-pointer" onClick={() => showFullPost(postDetails?.id)}>
           {postView === PostViewEnum.TITLE_WITH_IMG && <img className="w-11 h-11 rounded-full mr-4" src={postDetails?.thumbnailImg ?? blogAvatar} alt="" />}
           <div className="flex flex-col">
-            <div className="w-fit rounded-lg" style={{ backgroundColor: '#652034', padding: '0 10px' }}>
+            <div className="flex items-center gap-2">
               {postDetails?.categories?.map((cat) => (
-                <span className="fsr-10 font-rm" style={{ color: '#ffffff' }}>
-                  {cat?.name}&nbsp;&nbsp;
-                </span>
+                <div className="w-fit flex items-center justify-center rounded-lg" style={{ backgroundColor: categoryMap[cat?.id]?.bgColor, padding: '5px 10px' }}>
+                  <span className="fsr-10 font-rm" style={{ color: '#ffffff' }}>
+                    {cat?.name}&nbsp;&nbsp;
+                  </span>
+                </div>
               ))}
             </div>
             <span className="fsr-16 font-montm mt-2 mb-1">{postDetails?.title}</span>
