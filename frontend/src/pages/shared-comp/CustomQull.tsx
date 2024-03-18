@@ -1,11 +1,12 @@
 import React, { useRef, useState } from 'react';
-import ReactQuill from 'react-quill';
+import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.bubble.css';
 import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
 import CodeOutlinedIcon from '@mui/icons-material/CodeOutlined';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import FormatQuoteRoundedIcon from '@mui/icons-material/FormatQuoteRounded';
 import UserService from '@services/userService';
+import ImageResize from 'quill-image-resize-module-react';
 
 interface ICustomQuillProp {
   value: string;
@@ -20,11 +21,20 @@ const CustomQuill = ({ value, setValue, readonly }: ICustomQuillProp) => {
   const editorRef = useRef(null);
   const { uploadImg } = UserService();
 
+  var Size = Quill.import('attributors/style/size');
+  const fontSizeArr = ['8px', '14px', '15px', '16px', '18px', '24px', '36px', '48px'];
+  Size.whitelist = fontSizeArr;
+  Quill.register(Size, true);
+  Quill.register('modules/imageResize', ImageResize);
+
   const modules = {
     toolbar: [
+      [{ font: [] }, { size: fontSizeArr }],
+      [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
       ['bold', 'italic', 'link'],
       [{ script: 'sub' }, { script: 'super' }],
       ['underline', 'strike'],
+      ['clean'],
     ],
   };
 
@@ -107,7 +117,13 @@ const CustomQuill = ({ value, setValue, readonly }: ICustomQuillProp) => {
     <div className="flex flex-col items-center justify-center w-full relative">
       <ReactQuill
         className="quill_input"
-        modules={modules}
+        modules={{
+          toolbar: modules?.toolbar,
+          imageResize: {
+            parchment: Quill.import('parchment'),
+            modules: ['Resize', 'DisplaySize'],
+          },
+        }}
         theme="bubble"
         value={value}
         onChange={setValue}

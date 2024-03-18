@@ -11,12 +11,14 @@ import { useNavigate } from 'react-router-dom';
 import { AppRoutesEnum } from '@shared/appRotues';
 
 interface IPublishDialogProp {
+  visibility: boolean;
   title: string;
   content: string;
+  isVisible: (flag: boolean) => void;
 }
 
-const PublishDialog = ({ title, content }: IPublishDialogProp) => {
-  const [dialogVisibility, setDialogVisibility] = React.useState(true);
+const PublishDialog = ({ visibility, title, content, isVisible }: IPublishDialogProp) => {
+  // const [dialogVisibility, setDialogVisibility] = React.useState(true);
   const publishDialogForm = z.object({
     postDesc: z.string().min(2).max(20),
     thumbnailImg: z.string(),
@@ -32,13 +34,13 @@ const PublishDialog = ({ title, content }: IPublishDialogProp) => {
   });
 
   function onCancelClick() {
-    setDialogVisibility(false);
+    isVisible(false);
   }
 
   async function onConfirmClick() {
     const res = await publishPost(title, content, getValues()?.postDesc, getValues()?.thumbnailImg);
 
-    setDialogVisibility(false);
+    isVisible(false);
     navigate(`${AppRoutesEnum.SINGLE_POST}/${res}`);
   }
 
@@ -59,7 +61,7 @@ const PublishDialog = ({ title, content }: IPublishDialogProp) => {
   };
 
   return (
-    <Dialog open={dialogVisibility}>
+    <Dialog open={visibility}>
       <DialogTitle className="flex items-center">Publish</DialogTitle>
       <DialogContent color="secondary">
         <div className="flex items-center mb-6">

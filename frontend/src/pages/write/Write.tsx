@@ -40,7 +40,7 @@ const Write = () => {
         Publish
       </button>
 
-      {publishDialogVis && <PublishDialog title={title} content={value} />}
+      {<PublishDialog visibility={publishDialogVis} title={title} content={value} isVisible={setPublishDialogVis} />}
 
       <LoginPopup open={openLogin} setOpen={setOpenLogin} />
     </div>

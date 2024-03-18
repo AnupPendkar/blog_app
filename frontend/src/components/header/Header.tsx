@@ -10,6 +10,7 @@ import facebook from '@assets/facebook.png';
 import instagram from '@assets/instagram.png';
 import twitter from '@assets/twitter.png';
 import linkedin from '@assets/linkedin.png';
+import logo from '@assets/logo.png';
 import { useNavigate } from 'react-router-dom';
 import { AppRoutesEnum } from '@shared/appRotues';
 import LoginPopup from '@components/login/Login';
@@ -50,10 +51,11 @@ const Header = () => {
         <div className="flex justify-center">
           <Toolbar className="flex items-center justify-between w-4/5" style={{ paddingLeft: '0', paddingRight: '0' }}>
             <div className="logos flex items-center select-none">
-              <img className="w-5 mr-3 cursor-pointer" src={facebook} alt="" />
+              {/* <img className="w-5 mr-3 cursor-pointer" src={facebook} alt="" />
               <img className="w-5 mr-3 cursor-pointer" src={instagram} alt="" />
               <img className="w-5 mr-3 cursor-pointer" src={twitter} alt="" />
-              <img className="w-5 mr-3 cursor-pointer" src={linkedin} alt="" />
+              <img className="w-5 mr-3 cursor-pointer" src={linkedin} alt="" /> */}
+              <img className="w-[80px] mr-3 cursor-pointer" src={logo} alt="" />
             </div>
 
             <span className="fsr-18 font-im ml-7 cursor-pointer" onClick={() => navigate(AppRoutesEnum.HOMEPAGE)}>
