@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm';
+import { eq, inArray } from 'drizzle-orm';
 import { db } from '../config';
 import { Request, Response, NextFunction } from 'express';
 import { collectionToPosts, users } from '../schema/userSchema';
@@ -8,13 +8,15 @@ import { PostMethodEnum } from '../models/common';
 import { isPropEmpty } from '../utils/utils';
 
 export async function allPosts(req, res: Response, next: NextFunction) {
-  let { ids } = req.query;
+  let { ids, page_no, page_size } = req.query;
   if (ids?.length > 0) {
     ids = JSON.parse(ids);
   }
 
   try {
-    const posts = await db.query.posts.findMany({
+    const _posts = await db.query.posts.findMany({
+      // limit: page_size, // the number of rows to return
+      // offset: (page_no - 1) * page_size, // the number of rows to skip
       columns: {
         id: true,
         title: true,
@@ -36,19 +38,22 @@ export async function allPosts(req, res: Response, next: NextFunction) {
       },
     });
 
-    posts?.forEach((post) => {
+    _posts?.forEach((post) => {
       (post as any).categories = post?.categories?.map((cat) => cat?.category);
     });
 
-    let modifiedPosts = posts;
+    let modifiedPosts = _posts;
     if (ids?.length > 0) {
-      modifiedPosts = posts?.filter((post) => {
+      modifiedPosts = _posts?.filter((post) => {
         const b = post?.categories?.filter((cat: any) => ids?.includes(cat?.id));
         return b.length > 0;
       });
     }
 
-    res.json(modifiedPosts);
+    const totalRecords = modifiedPosts?.length;
+    const filteredPosts = modifiedPosts?.slice((page_no - 1) * page_size, page_no * page_size > totalRecords ? totalRecords : page_size);
+
+    res.json({ count: totalRecords, posts: filteredPosts });
   } catch (err) {
     next(err);
   }
@@ -56,52 +61,51 @@ export async function allPosts(req, res: Response, next: NextFunction) {
 
 export async function userPosts(req, res: Response, next: NextFunction) {
   try {
-    let { ids } = req.query;
+    let { ids, page_no, page_size } = req.query;
     if (ids?.length > 0) {
       ids = JSON.parse(ids);
     }
 
-    const postData = await db.query.users.findFirst({
-      columns: {},
-      where: (users, { eq }) => eq(req.user.username as any, users?.username),
+    const _posts = await db.query.posts.findMany({
+      where: (posts, { eq }) => eq(posts?.authorId, req.user.userId),
+      // limit: page_size, // the number of rows to return
+      // offset: (page_no - 1) * page_size, // the number of rows to skip
+      columns: {
+        id: true,
+        title: true,
+        content: true,
+        thumbnailImg: true,
+        createdAt: true,
+        authorId: true,
+        desc: true,
+      },
       with: {
-        posts: {
-          columns: {
-            id: true,
-            title: true,
-            content: true,
-            thumbnailImg: true,
-            createdAt: true,
-            authorId: true,
-            desc: true,
-          },
+        categories: {
+          columns: {},
 
           with: {
-            categories: {
-              columns: {},
-
-              with: {
-                category: true,
-              },
-            },
+            category: true,
           },
         },
       },
     });
 
-    postData?.posts?.forEach((post) => {
+    _posts?.forEach((post) => {
       (post as any).categories = post?.categories?.map((cat) => cat?.category);
     });
 
-    let modifiedPosts = postData?.posts;
+    let modifiedPosts = _posts;
     if (ids?.length > 0) {
-      modifiedPosts = postData?.posts?.filter((post) => {
+      modifiedPosts = _posts?.filter((post) => {
         const b = post?.categories?.filter((cat: any) => ids?.includes(cat?.id));
         return b.length > 0;
       });
     }
 
-    res.json(modifiedPosts);
+    const totalRecords = modifiedPosts?.length;
+    const filteredPosts = modifiedPosts?.slice((page_no - 1) * page_size, page_no * page_size > totalRecords ? totalRecords : page_size);
+
+    res.json({ count: totalRecords, posts: filteredPosts });
   } catch (err) {
     next(err);
   }

@@ -1,6 +1,6 @@
 import useHttp from '@hooks/useHttp';
 import useSharedEssentials from '@hooks/useSharedEssentials';
-import { ICategories, IComment, IFollower, ILike, IPostDetails, IPublishPost, PostMethodEnum } from '@models/post_model';
+import { ICategories, IComment, IFollower, ILike, IPostDetails, IPublishPost, PostMethodEnum, PostPagination } from '@models/post_model';
 import { isPropEmpty } from '@shared/utilfunctions';
 import React from 'react';
 
@@ -41,10 +41,13 @@ const postService = () => {
     });
   }
 
-  function getUserPosts(ids?: Array<number>): Promise<IPostDetails[]> {
-    let params;
+  function getUserPosts(pageNo: number, records: number, ids?: Array<number>): Promise<PostPagination<IPostDetails[]>> {
+    let params = {
+      page_no: pageNo,
+      page_size: records,
+    };
     if (!isPropEmpty(ids)) {
-      params = { ids: JSON.stringify(ids) };
+      params = Object.assign(params, { ids: JSON.stringify(ids) });
     }
     return new Promise(async (resolve) => {
       const res = await http.request('get', '/get-posts', params);
@@ -57,10 +60,13 @@ const postService = () => {
     });
   }
 
-  function getAllPosts(ids?: Array<number>): Promise<IPostDetails[]> {
-    let params;
+  function getAllPosts(pageNo: number, records: number, ids?: Array<number>): Promise<PostPagination<IPostDetails[]>> {
+    let params = {
+      page_no: pageNo,
+      page_size: records,
+    };
     if (!isPropEmpty(ids)) {
-      params = { ids: JSON.stringify(ids) };
+      params = Object.assign(params, { ids: JSON.stringify(ids) });
     }
     return new Promise(async (resolve) => {
       const res = await http.request('get', '/get-all-posts', params);

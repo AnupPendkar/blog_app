@@ -14,7 +14,7 @@ interface IPostProp {
 
 const Post = ({ postDetails, postView }: IPostProp) => {
   const navigate = useNavigate();
-  const {categoryMap} = useCategories();
+  const { categoryMap } = useCategories();
 
   function showFullPost(id: number) {
     navigate(`${AppRoutesEnum.SINGLE_POST}/${id}`);
@@ -24,8 +24,8 @@ const Post = ({ postDetails, postView }: IPostProp) => {
     <>
       {[PostViewEnum.PARTIAL, PostViewEnum.COMPLETE]?.indexOf(postView) >= 0 ? (
         <div className="post flex items-center gap-7 mb-12 cursor-pointer" onClick={() => showFullPost(postDetails?.id)}>
-          <div className="basis-1/2">
-            <img className="w-full max-h-[300px]" src={postDetails?.thumbnailImg ?? blogAvatar} alt="" />
+          <div className="basis-1/2 max-w-[270px]">
+            <img className="w-ful" src={postDetails?.thumbnailImg ?? blogAvatar} alt="" />
           </div>
           <div className="flex flex-col basis-1/2">
             <div className="mb-6">
@@ -33,8 +33,8 @@ const Post = ({ postDetails, postView }: IPostProp) => {
                 {constructDateTime(postDetails?.createdAt)}
               </span>
 
-              {postDetails?.categories?.map((cat) => (
-                <span className="fsr-14  font-rm" style={{ color: '#652034', textTransform: 'uppercase' }}>
+              {postDetails?.categories?.map((cat, idx) => (
+                <span key={idx} className="fsr-14  font-rm" style={{ color: '#652034', textTransform: 'uppercase' }}>
                   {cat?.name}&nbsp;&nbsp;
                 </span>
               ))}
@@ -57,8 +57,8 @@ const Post = ({ postDetails, postView }: IPostProp) => {
           {postView === PostViewEnum.TITLE_WITH_IMG && <img className="w-11 h-11 rounded-full mr-4" src={postDetails?.thumbnailImg ?? blogAvatar} alt="" />}
           <div className="flex flex-col">
             <div className="flex items-center gap-2">
-              {postDetails?.categories?.map((cat) => (
-                <div className="w-fit flex items-center justify-center rounded-lg" style={{ backgroundColor: categoryMap[cat?.id]?.bgColor, padding: '5px 10px' }}>
+              {postDetails?.categories?.map((cat, idx) => (
+                <div key={idx} className="w-fit flex items-center justify-center rounded-lg" style={{ backgroundColor: categoryMap[cat?.id]?.bgColor, padding: '5px 10px' }}>
                   <span className="fsr-10 font-rm" style={{ color: '#ffffff' }}>
                     {cat?.name}&nbsp;&nbsp;
                   </span>

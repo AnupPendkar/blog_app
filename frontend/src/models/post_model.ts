@@ -14,6 +14,11 @@ export interface IPostDetails {
   content: string;
 }
 
+export type PostPagination<T> = {
+  count: number;
+  posts: T;
+};
+
 export interface IPostAuthor {
   id: number;
   fullName: string;

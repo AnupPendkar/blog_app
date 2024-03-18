@@ -6,12 +6,11 @@ import { about, collections, followers, followersToAuthors, users } from '../sch
 import jwt from 'jsonwebtoken';
 import 'dotenv/config';
 
-export async function userLogin(req: Request, res: Response, next: NextFunction) {
+export async function userLogin(req, res: Response, next: NextFunction) {
   try {
     const { username, password, social } = req.body;
 
-    if(social) {
-
+    if (social) {
     }
 
     const [foundUsr, ...rest] = await db.select().from(users).where(eq(users.username, username));
@@ -43,7 +42,8 @@ export async function userLogin(req: Request, res: Response, next: NextFunction)
 
 export async function userLogout(req, res: Response, next: NextFunction) {
   try {
-    req.session.destroy();
+    req.logout();
+    // res.redirect(CLIENT_URL);
     res.status(200).json('Successfully logged out!');
   } catch (err) {
     next(err);

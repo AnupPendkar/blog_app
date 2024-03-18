@@ -7,6 +7,8 @@ import { useParams } from 'react-router-dom';
 import { PostViewEnum } from '@models/homepage';
 import { ICategories, IPostDetails } from '@models/post_model';
 import { isPropEmpty } from '@shared/utilfunctions';
+import CustomPagination from '@components/pagination/Pagination';
+import { useTheme } from '@mui/material';
 
 const AllPosts = () => {
   const [posts, setPosts] = React.useState<IPostDetails[]>([]);
@@ -14,11 +16,16 @@ const AllPosts = () => {
   const [selectedCat, setSelectedCat] = React.useState<Array<number>>([]);
   const { getUserPosts } = postService();
   const { getCategories } = useCategories();
+  const totalCount = React.useRef(0);
+  const pageNo = React.useRef(1);
+  const recordsCount = React.useRef(10);
   const { id } = useParams();
+  const theme = useTheme();
 
   async function getAllUserPosts() {
-    const res = await getUserPosts(selectedCat);
-    setPosts(res);
+    const res = await getUserPosts(pageNo.current, recordsCount.current, selectedCat);
+    totalCount.current = res?.count;
+    setPosts(res?.posts);
   }
 
   function setSelectedCategories() {
@@ -27,6 +34,17 @@ const AllPosts = () => {
     } else {
       setSelectedCat((prev) => [...prev, +id]);
     }
+  }
+
+  function onPageSelection(pageSize: number) {
+    pageNo.current = pageSize;
+    getAllUserPosts();
+  }
+
+  function onPageRecordsSelection(recordSize: number) {
+    pageNo.current = 1;
+    recordsCount.current = recordSize;
+    getAllUserPosts();
   }
 
   async function getAllCategories() {
@@ -43,8 +61,8 @@ const AllPosts = () => {
   }
 
   React.useEffect(() => {
+    getAllUserPosts();
     if (!isPropEmpty(selectedCat)) {
-      getAllUserPosts();
     }
   }, [selectedCat]);
 
@@ -55,11 +73,25 @@ const AllPosts = () => {
   return (
     <div className="w-full flex items-center justify-center">
       <div className="mb-5 lg:w-[60%] md:w-[80%] s:w-full">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center sticky top-0 left-0" style={{ background: theme?.palette?.primary?.main }}>
           <span className="fsr-25 font-isb">All posts</span>
-          <CheckboxSelector selectedCat={selectedCat} categories={categories} handleChange={handleChange} />
+          <div className="flex items-center">
+            <CheckboxSelector selectedCat={selectedCat} categories={categories} handleChange={handleChange} />
+          </div>
         </div>
-        <Posts data={posts} viewMethod={PostViewEnum.COMPLETE} />
+        <div className="flex flex-col">
+          <Posts data={posts} viewMethod={PostViewEnum.COMPLETE} />
+
+          <div className="flex items-end">
+            <CustomPagination
+              currentPage={pageNo.current}
+              totalCount={totalCount.current}
+              pageRecords={recordsCount.current}
+              pageSelectionEmitter={onPageSelection}
+              setPageRecordsEmitter={onPageRecordsSelection}
+            ></CustomPagination>
+          </div>
+        </div>
       </div>
     </div>
   );
