@@ -70,6 +70,41 @@ export async function allPosts(req, res: Response, next: NextFunction) {
   }
 }
 
+export async function fetchFeaturedPosts(req, res: Response, next: NextFunction) {
+  let { editors_pick } = req.query;
+
+  try {
+    const _posts = await db.query.posts.findMany({
+      orderBy: (posts, { desc }) => desc(posts?.createdAt),
+      where: (posts) => (editors_pick ? inArray(posts?.id, [1, 2, 3]) : undefined),
+      columns: {
+        id: true,
+        title: true,
+        content: true,
+        thumbnailImg: true,
+        createdAt: true,
+        authorId: true,
+        desc: true,
+      },
+      with: {
+        author: {
+          columns: {
+            fullName: true,
+          },
+        },
+        categories: {
+          columns: {},
+          with: {
+            category: true,
+          },
+        },
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
 export async function userPosts(req, res: Response, next: NextFunction) {
   try {
     let { ids, page_no, page_size } = req.query;

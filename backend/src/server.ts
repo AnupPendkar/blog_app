@@ -11,10 +11,14 @@ import path from 'path';
 import './config/auth';
 import passport from 'passport';
 import session from 'express-session';
+import http from 'http';
+import fs from 'fs';
 
 const app = express();
 const host = process.env.HOST;
 const port = process.env.PORT;
+
+app.use(express.static(path.resolve(__dirname, '../../frontend/dist')));
 
 app.use(
   session({
