@@ -14,11 +14,12 @@ const Homepage = () => {
 
   async function getAllUserPosts() {
     let postsData = [];
-    postsData = await getAllPosts();
+    const res = await getAllPosts(1, 3);
 
-    if (postsData?.length > 3) {
-      postsData = postsData.slice(0, 3);
-    }
+    postsData = res?.posts;
+    // if (postsData?.length > 3) {
+    //   postsData = postsData.slice(0, 3);
+    // }
 
     setRecentPosts(postsData);
     setEditorPick(postsData);

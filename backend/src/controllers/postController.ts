@@ -28,6 +28,13 @@ export async function allPosts(req, res: Response, next: NextFunction) {
       },
 
       with: {
+        author: {
+          columns: {
+            fullName: true,
+          },
+        },
+        likes: true,
+        comments: true,
         categories: {
           columns: {},
 
@@ -50,6 +57,10 @@ export async function allPosts(req, res: Response, next: NextFunction) {
       });
     }
 
+    modifiedPosts = modifiedPosts?.sort((a, b) => {
+      return b?.likes?.length + b?.comments?.length - (a?.likes?.length + a?.comments?.length);
+    });
+
     const totalRecords = modifiedPosts?.length;
     const filteredPosts = modifiedPosts?.slice((page_no - 1) * page_size, page_no * page_size > totalRecords ? totalRecords : page_size);
 
@@ -68,6 +79,7 @@ export async function userPosts(req, res: Response, next: NextFunction) {
 
     const _posts = await db.query.posts.findMany({
       where: (posts, { eq }) => eq(posts?.authorId, req.user.userId),
+      orderBy: (posts, { desc }) => desc(posts?.createdAt),
       // limit: page_size, // the number of rows to return
       // offset: (page_no - 1) * page_size, // the number of rows to skip
       columns: {
@@ -80,6 +92,11 @@ export async function userPosts(req, res: Response, next: NextFunction) {
         desc: true,
       },
       with: {
+        author: {
+          columns: {
+            fullName: true,
+          },
+        },
         categories: {
           columns: {},
 

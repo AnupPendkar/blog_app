@@ -211,7 +211,9 @@ export async function userDetails(req, res: Response, next: NextFunction) {
             follower: true,
           },
         },
-        posts: true,
+        posts: {
+          limit: 15,
+        },
         about: true,
       },
     });

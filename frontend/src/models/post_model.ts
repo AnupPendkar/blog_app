@@ -9,6 +9,9 @@ export interface IPostDetails {
   createdAt: string;
   thumbnailImg: string;
   categories: Array<ICategories>;
+  author: {
+    fullName: string;
+  };
   title: string;
   desc: string;
   content: string;

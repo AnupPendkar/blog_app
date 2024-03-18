@@ -67,7 +67,7 @@ const Post = ({ postDetails, postView }: IPostProp) => {
             </div>
             <span className="fsr-16 font-montm mt-2 mb-1">{postDetails?.title}</span>
             <div className="mb-6">
-              <span className="fsr-12 mr-3 font-rm">Joseph Oven</span>
+              <span className="fsr-12 mr-3 font-rm capitalize">{postDetails?.author?.fullName}</span>
               <span className="fsr-12 font-rm" style={{ color: '#494E59' }}>
                 {constructDateTime(postDetails?.createdAt)}
               </span>
