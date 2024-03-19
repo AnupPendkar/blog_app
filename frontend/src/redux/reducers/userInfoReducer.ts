@@ -1,6 +1,6 @@
 import { GlobalUserVariables } from '@models/redux';
 import { createReducer } from '@reduxjs/toolkit';
-import { changeThemePref, userActiveAction, userDetailsAction, userSocketConnection } from '@redux/actions/userInfoActions';
+import { changeThemePref, setUserInfo, userActiveAction, userDetailsAction, userSocketConnection } from '@redux/actions/userInfoActions';
 import { ThemePrefEnum } from '@models/common';
 
 /**
@@ -20,6 +20,10 @@ const userInfoReducer = createReducer(globalUserVariables, (actions) => {
   actions
     .addCase(userActiveAction, (state, action) => {
       state.userLoggedIn = action?.payload;
+    })
+
+    .addCase(setUserInfo, (state, action) => {
+      state.userInfo = action?.payload;
     })
 
     .addCase(userDetailsAction, (state, action) => {

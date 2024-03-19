@@ -204,6 +204,18 @@ export async function getUserCollections(req, res: Response, next: NextFunction)
   }
 }
 
+export async function userInfo(req, res: Response, next: NextFunction) {
+  try {
+    const userId = req.user.userId;
+
+    const _userInfo = await db.select().from(users).where(eq(users?.id, userId));
+
+    res.status(200).json(_userInfo);
+  } catch (err) {
+    next(err);
+  }
+}
+
 export async function userDetails(req, res: Response, next: NextFunction) {
   try {
     const { id } = req.query;

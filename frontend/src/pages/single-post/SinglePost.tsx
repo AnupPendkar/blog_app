@@ -164,7 +164,7 @@ const SinglePost = () => {
 
   return (
     <div className="w-full flex items-center justify-center">
-      <div className="mb-5 flex flex-col items-center justify-center lg:w-[40%] md:w-[70%] s:w-full">
+      <div className="mb-5 flex flex-col items-center justify-center lg:w-[40%] md:w-[70%] sm:w-[90%] w-[90%]">
         <div className="w-full flex flex-col mt-20">
           <span className="fsr-30 font-ib mb-1 outline-none" role="textbox" onInput={(e: any) => setTitle(e.target.outerText)} contentEditable={isContentEditable}>
             {defaultTitle.current}
@@ -181,7 +181,13 @@ const SinglePost = () => {
           </span>
 
           <div className="user flex items-center">
-            <img className="w-16 h-16 mr-6" style={{ borderRadius: '50%' }} src={!isPropEmpty(post?.author?.profileImg) ? post?.author?.profileImg : blankUser} alt="" />
+            <img
+              onClick={() => navigate(`${AppRoutesEnum.PROFILE}/${post?.authorId}`)}
+              className="w-16 h-16 mr-6 cursor-pointer"
+              style={{ borderRadius: '50%' }}
+              src={!isPropEmpty(post?.author?.profileImg) ? post?.author?.profileImg : blankUser}
+              alt=""
+            />
             <div className="flex flex-col">
               <div className="flex items-center">
                 <span className="fsr-16 inter mr-4" style={{ color: '#6B6B6B' }}>

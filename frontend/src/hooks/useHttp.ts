@@ -7,7 +7,7 @@ import { setLoaderVisibility } from '@redux/actions/httpActions';
 
 const useHttp = () => {
   const appDispatch = useAppDispatch();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { logout } = useAuthMethods();
   let abortController: AbortController;
 

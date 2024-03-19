@@ -1,5 +1,5 @@
 import { AccountCircle } from '@mui/icons-material';
-import { AppBar, IconButton, Toolbar, useTheme } from '@mui/material';
+import { AppBar, IconButton, Menu, MenuItem, Toolbar, useTheme } from '@mui/material';
 import React from 'react';
 import { useAppSelector } from '@redux/store';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
@@ -17,8 +17,10 @@ import LoginPopup from '@components/login/Login';
 import useSharedEssentials from '@hooks/useSharedEssentials';
 import { MessageBoxCloseTypeEnum } from '@models/common';
 import { isPropEmpty } from '@shared/utilfunctions';
+import blankUser from '@assets/blank_user.svg';
 
 const Header = () => {
+  const [userAnchor, setUserAnchor] = React.useState<null | HTMLElement>(null);
   const { toggleAppTheme } = useThemeSwitcher();
   const theme = useTheme();
   const navigate = useNavigate();
@@ -26,11 +28,17 @@ const Header = () => {
   const { loading } = useAppSelector((state) => state.http);
   const { closeType, messageDialogDetails } = useAppSelector((state) => state.notification);
   const [openLogin, setOpenLogin] = React.useState(false);
-  const { parsedUserInfo, userLoggedIn } = useAppSelector((state) => state?.user);
+  const { parsedUserInfo, userLoggedIn, userInfo } = useAppSelector((state) => state?.user);
   const { askConfirmation } = useSharedEssentials();
 
   function askLogoutConfirmation() {
     askConfirmation('Are you really want to logout', MessageBoxCloseTypeEnum.CONFIRM_LOGOUT);
+    setUserAnchor(null);
+  }
+
+  function handleProfileClk() {
+    navigate(`profile/${parsedUserInfo?.id}`);
+    setUserAnchor(null);
   }
 
   React.useEffect(() => {
@@ -88,13 +96,28 @@ const Header = () => {
 
               {userLoggedIn ? (
                 <>
-                  <span className="fsr-16 inter mr-5 cursor-pointer" onClick={() => navigate(`profile/${parsedUserInfo?.id}`)}>
+                  <img
+                    onClick={(event) => setUserAnchor(event.currentTarget)}
+                    className="w-7 h-7 cursor-pointer"
+                    style={{ borderRadius: '50%' }}
+                    src={!isPropEmpty(userInfo?.profileImg) ? userInfo?.profileImg : blankUser}
+                    alt="User"
+                  />
+                  <Menu id="menu-appbar" anchorEl={userAnchor} keepMounted open={Boolean(userAnchor)} onClose={() => setUserAnchor(null)}>
+                    <MenuItem onClick={handleProfileClk}>
+                      <span className="fsr-14 font-isb">Profile</span>
+                    </MenuItem>
+                    <MenuItem onClick={askLogoutConfirmation}>
+                      <span className="fsr-14 font-isb">Logout</span>
+                    </MenuItem>
+                  </Menu>
+                  {/* <span className="fsr-16 inter mr-5 cursor-pointer" onClick={() => navigate(`profile/${parsedUserInfo?.id}`)}>
                     Profile
                   </span>
 
                   <span onClick={askLogoutConfirmation} className="fsr-16 inter cursor-pointer">
                     Logout
-                  </span>
+                  </span> */}
                 </>
               ) : (
                 <span onClick={() => setOpenLogin(true)} className="fsr-16 inter cursor-pointer">

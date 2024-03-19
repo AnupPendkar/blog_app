@@ -6,6 +6,7 @@ import {
   onAuthorFollow,
   userRegister,
   userDetails,
+  userInfo,
   updateUsername,
   deleteUser,
   createCollection,
@@ -55,6 +56,7 @@ router.post('/register', userRegister);
 router.put('/update', updateUsername);
 router.delete('/delete', deleteUser);
 router.get('/user-details', userDetails);
+router.get('/user-info', userInfo),
 router.get('/get-collections', getUserCollections);
 router.post('/create-collection', createCollection);
 router.delete('/delete-collection', deleteCollection);

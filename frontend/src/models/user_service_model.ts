@@ -18,6 +18,16 @@ export interface ICollectionsAPI {
   post: IPostDetails[];
 }
 
+export interface IUserInfoAPI {
+  email: string;
+  id: number;
+  fullName: string;
+  profileImg: string;
+  username: string;
+  password: string;
+  phoneNo: string;
+}
+
 export interface IUserDetailsAPI {
   fullName: string;
   about: IUserAboutAPI;

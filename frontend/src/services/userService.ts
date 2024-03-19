@@ -1,6 +1,6 @@
 import useHttp from '@hooks/useHttp';
 import useSharedEssentials from '@hooks/useSharedEssentials';
-import { ILoginParams, ILoginRes, IUserDetailsAPI } from '@models/user_service_model';
+import { ILoginParams, ILoginRes, IUserDetailsAPI, IUserInfoAPI } from '@models/user_service_model';
 import React from 'react';
 
 const UserService = () => {
@@ -89,6 +89,18 @@ const UserService = () => {
     });
   }
 
+  function fetchUserInfo(): Promise<IUserInfoAPI> {
+    return new Promise(async (resolve) => {
+      const res = await http.request('get', '/user-info');
+
+      if (res?.status === 200) {
+        resolve(res?.data);
+      } else {
+        handleErr(res);
+      }
+    });
+  }
+
   function createCollection(collectionName: string): Promise<{ id: number }> {
     return new Promise(async (resolve) => {
       const res = await http.request('post', '/create-collection', '', { collectionName });
@@ -155,6 +167,7 @@ const UserService = () => {
     uploadImg,
     registerUser,
     fetchUserDetails,
+    fetchUserInfo,
     createCollection,
     deleteCollection,
     fetchUserCollections,
