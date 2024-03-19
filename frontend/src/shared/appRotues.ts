@@ -6,4 +6,5 @@ export enum AppRoutesEnum {
   DISCOVER = '/discover',
   WRITE = '/write',
   SINGLE_POST = '/single-post',
+  ALL_CATEGORIES = '/all-categories',
 }

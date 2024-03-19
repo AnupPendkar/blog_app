@@ -57,7 +57,7 @@ const Homepage = () => {
         </div>
 
         <div className="pt-6">
-          <Categories img_n_name={true} />
+          <Categories img_n_name={true} lableName={'Popular Categories'} />
         </div>
 
         <div className="flex gap-10">
@@ -66,7 +66,7 @@ const Homepage = () => {
           </div>
           <div className="section basis-1/4">
             <Posts data={popular} viewMethod={PostViewEnum.TITLE_ONLY} />
-            <Categories img_n_name={false} />
+            <Categories img_n_name={false} lableName={'Categories'} />
             <Posts data={editorPick} viewMethod={PostViewEnum.TITLE_WITH_IMG} />
           </div>
         </div>

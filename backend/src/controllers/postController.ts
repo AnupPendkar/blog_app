@@ -76,7 +76,7 @@ export async function fetchFeaturedPosts(req, res: Response, next: NextFunction)
   try {
     const _posts = await db.query.posts.findMany({
       orderBy: (posts, { desc }) => desc(posts?.createdAt),
-      where: (posts) => (editors_pick === 'true' ? inArray(posts?.id, [1, 2, 3]) : undefined),
+      where: (posts) => (editors_pick === 'true' ? inArray(posts?.id, [20, 17, 19]) : undefined),
       limit: 3,
       columns: {
         id: true,

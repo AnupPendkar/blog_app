@@ -22,7 +22,7 @@ const CustomQuill = ({ value, setValue, readonly }: ICustomQuillProp) => {
   const { uploadImg } = UserService();
 
   var Size = Quill.import('attributors/style/size');
-  const fontSizeArr = ['8px', '14px', '15px', '16px', '18px', '24px', '36px', '48px'];
+  const fontSizeArr = ['8px', '14px', '15px', '16px', '18px', '20px', '24px', '36px', '48px'];
   Size.whitelist = fontSizeArr;
   Quill.register(Size, true);
   Quill.register('modules/imageResize', ImageResize);

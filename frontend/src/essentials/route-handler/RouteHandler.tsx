@@ -11,6 +11,7 @@ import SinglePost from '@pages/single-post/SinglePost';
 import AllPosts from '@pages/all-posts/AllPosts';
 import Discover from '@pages/discover/Discover';
 import Profile from '@pages/profile/Profile';
+import AllCategories from '@pages/all-categories/AllCategories';
 
 const RouteHandler = () => {
   const theme = useTheme();
@@ -31,13 +32,23 @@ const RouteHandler = () => {
       <Routes>
         <Route path={AppRoutesEnum.CONFIG} element={<BaseUrlConfigurator />} />
         <Route element={<AuthGuard />}>
-          <Route path="/" element={<Navigate to={AppRoutesEnum.DISCOVER} />} />
-          <Route path={AppRoutesEnum.HOMEPAGE} element={<Homepage />} />
-          <Route path={AppRoutesEnum.POSTS + '/:id'} element={<AllPosts />} />
+          <Route path="/" element={<Navigate to={AppRoutesEnum.DISCOVER + '/all'} />} />
+          <Route path={AppRoutesEnum.DISCOVER} element={<Navigate to={AppRoutesEnum.DISCOVER + '/all'} />} />
           <Route path={AppRoutesEnum.DISCOVER + '/:id'} element={<Discover />} />
-          <Route path="/write" element={<Write />} />
-          <Route path="/single-post/:id" element={<SinglePost />} />
-          <Route path="/profile/:id" element={<Profile />} />
+
+          <Route path={AppRoutesEnum.HOMEPAGE} element={<Homepage />} />
+
+          <Route path={AppRoutesEnum.POSTS} element={<Navigate to={AppRoutesEnum.POSTS + '/all'} />} />
+          <Route path={AppRoutesEnum.POSTS + '/:id'} element={<AllPosts />} />
+
+          <Route path={AppRoutesEnum.WRITE} element={<Write />} />
+
+          <Route path={AppRoutesEnum.ALL_CATEGORIES} element={<AllCategories />} />
+
+          <Route path={AppRoutesEnum.SINGLE_POST} element={<Navigate to={AppRoutesEnum.SINGLE_POST + '/all'} />} />
+          <Route path={AppRoutesEnum.SINGLE_POST + '/:id'} element={<SinglePost />} />
+
+          <Route path={AppRoutesEnum.PROFILE + '/:id'} element={<Profile />} />
 
           <Route path="*" element={<Navigate to={AppRoutesEnum.DISCOVER} />} />
         </Route>
