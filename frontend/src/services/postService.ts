@@ -8,12 +8,13 @@ const postService = () => {
   const http = useHttp();
   const { handleErr } = useSharedEssentials();
 
-  function publishPost(title: string, content: string, desc: string, thumbnailImg: string): Promise<number> {
+  function publishPost(title: string, content: string, desc: string, thumbnailImg: string, categories: Array<number>): Promise<number> {
     const body = {
       title,
       content,
       desc,
       thumbnailImg,
+      categories,
     };
 
     return new Promise(async (resolve) => {
@@ -51,6 +52,18 @@ const postService = () => {
     }
     return new Promise(async (resolve) => {
       const res = await http.request('get', '/get-posts', params);
+
+      if (res?.status === 200) {
+        resolve(res?.data);
+      } else {
+        handleErr(res);
+      }
+    });
+  }
+
+  function fetchFeaturedPosts(editorsPick = false): Promise<IPostDetails[]> {
+    return new Promise(async (resolve) => {
+      const res = await http.request('get', '/featured-posts', { editors_pick: editorsPick });
 
       if (res?.status === 200) {
         resolve(res?.data);
@@ -197,6 +210,7 @@ const postService = () => {
     addPostToCollection,
     fetchPostComments,
     fetchCategories,
+    fetchFeaturedPosts,
   };
 };
 

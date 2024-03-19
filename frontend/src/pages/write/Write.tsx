@@ -36,10 +36,13 @@ const Write = () => {
         <CustomQuill value={value} setValue={setValue} readonly={false} />
       </div>
 
-      <button className="absolute top-20 right-10 px-3 py-1 rounded-md font-isb" onClick={() => onPublishClk()} style={{ background: '#1A8916', color: '#ffffff' }}>
+      <button
+        disabled={title === '' || value === ''}
+        onClick={() => onPublishClk()}
+        className="absolute top-20 right-10 px-3 py-1 fsr-16 rounded-md font-isb bg-[#1A8916] text-[#ffffff] disabled:bg-[#444444] disabled:text-[#f1f1f1] disabled:cursor-not-allowed"
+      >
         Publish
       </button>
-
       {<PublishDialog visibility={publishDialogVis} title={title} content={value} isVisible={setPublishDialogVis} />}
 
       <LoginPopup open={openLogin} setOpen={setOpenLogin} />

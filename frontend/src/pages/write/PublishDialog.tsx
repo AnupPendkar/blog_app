@@ -4,11 +4,14 @@ import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternate
 import UserService from '@services/userService';
 import postService from '@services/postService';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import CheckboxSelector from '@pages/shared-comp/CheckboxSelector';
+import useCategories from '@hooks/useCategories';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { isPropEmpty } from '@shared/utilfunctions';
 import { useNavigate } from 'react-router-dom';
 import { AppRoutesEnum } from '@shared/appRotues';
+import { ICategories } from '@models/post_model';
 
 interface IPublishDialogProp {
   visibility: boolean;
@@ -18,7 +21,13 @@ interface IPublishDialogProp {
 }
 
 const PublishDialog = ({ visibility, title, content, isVisible }: IPublishDialogProp) => {
-  // const [dialogVisibility, setDialogVisibility] = React.useState(true);
+  const fileInputRef = React.useRef(null);
+  const [thumbImg, setThumbImg] = React.useState(null);
+  const [selectedCat, setSelectedCat] = React.useState<number[]>([]);
+  const [categories, setCategories] = React.useState<ICategories[]>([]);
+  const { uploadImg } = UserService();
+  const { getCategories } = useCategories();
+
   const publishDialogForm = z.object({
     postDesc: z.string().min(2).max(20),
     thumbnailImg: z.string(),
@@ -29,7 +38,7 @@ const PublishDialog = ({ visibility, title, content, isVisible }: IPublishDialog
   const { publishPost } = postService();
   const navigate = useNavigate();
 
-  const { register, getValues, setValue, formState } = useForm<LoginFormSchema>({
+  const { getValues, setValue, formState } = useForm<LoginFormSchema>({
     resolver: zodResolver(publishDialogForm),
   });
 
@@ -37,16 +46,17 @@ const PublishDialog = ({ visibility, title, content, isVisible }: IPublishDialog
     isVisible(false);
   }
 
+  async function getAllCategories() {
+    const res = await getCategories();
+    setCategories(res);
+  }
+
   async function onConfirmClick() {
-    const res = await publishPost(title, content, getValues()?.postDesc, getValues()?.thumbnailImg);
+    const res = await publishPost(title, content, getValues()?.postDesc, getValues()?.thumbnailImg, selectedCat);
 
     isVisible(false);
     navigate(`${AppRoutesEnum.SINGLE_POST}/${res}`);
   }
-
-  const fileInputRef = React.useRef(null);
-  const [thumbImg, setThumbImg] = React.useState(null);
-  const { uploadImg } = UserService();
 
   async function handleFileInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event?.target?.files?.[0];
@@ -59,6 +69,17 @@ const PublishDialog = ({ visibility, title, content, isVisible }: IPublishDialog
   const handleImgClick = () => {
     fileInputRef.current.click();
   };
+
+  function handleChange(event) {
+    const {
+      target: { value },
+    } = event;
+    setSelectedCat(value);
+  }
+
+  React.useEffect(() => {
+    getAllCategories();
+  }, []);
 
   return (
     <Dialog open={visibility}>
@@ -82,6 +103,11 @@ const PublishDialog = ({ visibility, title, content, isVisible }: IPublishDialog
 
             <input className="w-full h-full" ref={fileInputRef} onChange={handleFileInputChange} type="file" hidden />
           </div>
+        </div>
+
+        <div className="flex items-center mb-6">
+          <span className="fsr-16 font-im mr-4">Tag categories: </span>
+          <CheckboxSelector selectedCat={selectedCat} categories={categories} handleChange={handleChange} />
         </div>
 
         <DialogActions>

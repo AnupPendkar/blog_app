@@ -82,12 +82,12 @@ const Profile = () => {
         </div>
         <div className="profession sm:my-2">
           <span className="fsr-18" style={{ color: '#6B6B6B' }}>
-            Sr. Mobile Developer
+            {userData?.email}
           </span>
         </div>
         <div className="flex items-center justify-between pr-7">
           {isUserAlreadyFollowing() ? (
-            <Button onClick={onFollowClk} color="success" variant="contained" style={{ borderRadius: 10 }}>
+            <Button onClick={onFollowClk} color="cancel" variant="contained" style={{ borderRadius: 10 }}>
               Following
             </Button>
           ) : (
@@ -96,10 +96,10 @@ const Profile = () => {
             </Button>
           )}
           <div className="logos flex items-center select-none">
-            <img className="w-5 mr-3 cursor-pointer" src={facebook} alt="" />
+            {/* <img className="w-5 mr-3 cursor-pointer" src={facebook} alt="" />
             <img className="w-5 mr-3 cursor-pointer" src={instagram} alt="" />
             <img className="w-5 mr-3 cursor-pointer" src={twitter} alt="" />
-            <img className="w-5 mr-3 cursor-pointer" src={linkedin} alt="" />
+            <img className="w-5 mr-3 cursor-pointer" src={linkedin} alt="" /> */}
           </div>
         </div>
 

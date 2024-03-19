@@ -26,7 +26,8 @@ import {
   onPostAction,
   addPostToCollection,
   postComments,
-  getCategories
+  getCategories,
+  fetchFeaturedPosts,
 } from '../controllers/postController';
 import { uploadFile } from '../controllers/fileController';
 import multer from 'multer';
@@ -65,6 +66,7 @@ router.put('/update-profile', updateProfileInfo);
 router.get('/get-all-posts', allPosts);
 router.get('/categories', getCategories);
 router.get('/get-posts', userPosts);
+router.get('/featured-posts', fetchFeaturedPosts);
 router.get('/get-post-comments', postComments);
 router.get('/get-post-by-id', getPostById);
 router.post('/create-post', createPost);

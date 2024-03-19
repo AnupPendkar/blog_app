@@ -10,24 +10,26 @@ const Homepage = () => {
   const [editorPick, setEditorPick] = React.useState<IPostDetails[]>([]);
   const [recentPosts, setRecentPosts] = React.useState<IPostDetails[]>([]);
   const [popular, setPopular] = React.useState<IPostDetails[]>([]);
-  const { getAllPosts } = postService();
+  const { getAllPosts, fetchFeaturedPosts } = postService();
 
   async function getAllUserPosts() {
     let postsData = [];
     const res = await getAllPosts(1, 3);
 
     postsData = res?.posts;
-    // if (postsData?.length > 3) {
-    //   postsData = postsData.slice(0, 3);
-    // }
-
-    setRecentPosts(postsData);
-    setEditorPick(postsData);
     setPopular(postsData);
+  }
+
+  async function getFeaturedPosts() {
+    const editorsPickRes = await fetchFeaturedPosts(true);
+    const recentPostsRes = await fetchFeaturedPosts(false);
+    setEditorPick(editorsPickRes);
+    setRecentPosts(recentPostsRes);
   }
 
   React.useEffect(() => {
     getAllUserPosts();
+    getFeaturedPosts();
   }, []);
 
   return (
