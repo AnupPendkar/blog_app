@@ -1,4 +1,4 @@
-import { IFollower, ISinglePost } from './post_model';
+import { IFollower, IPostDetails, ISinglePost } from './post_model';
 
 export interface ILoginParams {
   username: string;
@@ -11,9 +11,17 @@ export interface ILoginRes {
   refresh: string;
 }
 
+export interface ICollectionsAPI {
+  id: number;
+  name: string;
+  total: number;
+  post: IPostDetails[];
+}
+
 export interface IUserDetailsAPI {
   fullName: string;
   about: IUserAboutAPI;
+  collections: ICollectionsAPI[];
   profileImg: string;
   username: string;
   email: string;

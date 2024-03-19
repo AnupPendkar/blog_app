@@ -7,5 +7,6 @@ export enum PostViewEnum {
 
 export enum ProfileTypeEnum {
   POSTS = 1,
-  ABOUT = 2
+  ABOUT = 2,
+  COLLECTIONS = 3
 }

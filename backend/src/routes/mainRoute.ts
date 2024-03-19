@@ -9,6 +9,7 @@ import {
   updateUsername,
   deleteUser,
   createCollection,
+  deleteCollection,
   getUserCollections,
   updateProfileInfo,
   setAboutDetails,
@@ -56,6 +57,7 @@ router.delete('/delete', deleteUser);
 router.get('/user-details', userDetails);
 router.get('/get-collections', getUserCollections);
 router.post('/create-collection', createCollection);
+router.delete('/delete-collection', deleteCollection);
 
 router.put('/set-about-details', updateAboutDetails);
 router.post('/set-about-details', setAboutDetails);

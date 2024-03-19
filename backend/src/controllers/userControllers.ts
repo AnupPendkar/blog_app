@@ -175,6 +175,17 @@ export async function createCollection(req, res: Response, next: NextFunction) {
   }
 }
 
+export async function deleteCollection(req, res: Response, next: NextFunction) {
+  try {
+    const { id } = req.body;
+
+    await db.delete(collections).where(eq(collections?.id, id));
+    res.status(200).json('collection deleted!');
+  } catch (err) {
+    next(err);
+  }
+}
+
 export async function getUserCollections(req, res: Response, next: NextFunction) {
   try {
     const userId = req.user.userId;
@@ -214,8 +225,24 @@ export async function userDetails(req, res: Response, next: NextFunction) {
         posts: {
           limit: 15,
         },
+        collections: {
+          with: {
+            post: {
+              with: {
+                post: true,
+              },
+            },
+          },
+        },
         about: true,
       },
+    });
+
+    userData?.collections?.forEach((coll) => {
+      coll = Object.assign(coll, {
+        post: coll?.post?.reduce((prev, curr) => prev.concat(curr?.post), []),
+        total: coll?.post?.length,
+      });
     });
 
     res.status(200).json({ ...userData });

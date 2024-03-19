@@ -101,6 +101,18 @@ const UserService = () => {
     });
   }
 
+  function deleteCollection(id: number): Promise<void> {
+    return new Promise(async (resolve) => {
+      const res = await http.request('delete', '/delete-collection', '', { id });
+
+      if (res?.status === 200) {
+        resolve();
+      } else {
+        handleErr(res);
+      }
+    });
+  }
+
   function fetchUserCollections(): Promise<any> {
     return new Promise(async (resolve) => {
       const res = await http.noLoader().request('get', '/get-collections');
@@ -144,6 +156,7 @@ const UserService = () => {
     registerUser,
     fetchUserDetails,
     createCollection,
+    deleteCollection,
     fetchUserCollections,
     updateUserProfile,
     setAboutDetails,

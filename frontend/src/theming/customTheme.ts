@@ -111,23 +111,23 @@ export const darkTheme = createTheme({
         },
       },
     },
-    MuiTextField: {
-      styleOverrides: {
-        root: {
-          '.MuiInputBase-root': {
-            backgroundColor: '#ffffff',
-            color: '#191919',
-            caretColor: '#191919',
-          },
-          '.MuiOutlinedInput-notchedOutline': {
-            borderColor: '#ffffff',
-          },
-          '.Mui-focused .MuiOutlinedInput-notchedOutline': {
-            borderColor: '#f1f1f1',
-          },
-        },
-      },
-    },
+    // MuiTextField: {
+    //   styleOverrides: {
+    //     root: {
+    //       '.MuiInputBase-root': {
+    //         backgroundColor: '#ffffff',
+    //         color: '#191919',
+    //         caretColor: '#191919',
+    //       },
+    //       '.MuiOutlinedInput-notchedOutline': {
+    //         borderColor: '#ffffff',
+    //       },
+    //       '.Mui-focused .MuiOutlinedInput-notchedOutline': {
+    //         borderColor: '#f1f1f1',
+    //       },
+    //     },
+    //   },
+    // },
     MuiDialogTitle: {
       styleOverrides: {
         root: {

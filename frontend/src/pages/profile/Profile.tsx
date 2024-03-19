@@ -63,12 +63,12 @@ const Profile = () => {
   }, []);
 
   return (
-    <div className="flex justify-center mt-10">
-      <div className="flex flex-col lg:w-[50%] md:w-[70%] s:w-full px-5 py-5">
+    <div className="flex justify-center mt-10 w-full">
+      <div className="flex flex-col w-[95%] lg:w-[50%] md:w-[80%] sm:w-[90%] px-5 py-5">
         <div className="flex gap-7 items-center">
           <img src={!isPropEmpty(userData?.profileImg) ? userData?.profileImg : blankUser} style={{ borderRadius: '50%', width: '55px', height: '55px' }} alt="" />
           <div className="flex flex-col">
-            <span className="fsr-25 font-ib capitalize">{userData?.fullName}</span>
+            <span className="fsr-25 font-ib capitalize">{userData?.followers?.length}</span>
             <span className="fsr-16" style={{ color: '#6B6B6B' }}>
               {userData?.followers?.length} Followers
             </span>
@@ -118,9 +118,18 @@ const Profile = () => {
           >
             <span className="fsr-16 font-isb">About</span>
           </div>
+          <div
+            className="About mx-2 my-1 px-1 py-1 cursor-pointer"
+            onClick={() => setProfileType(ProfileTypeEnum.COLLECTIONS)}
+            style={{ borderBottom: profileType === ProfileTypeEnum.COLLECTIONS ? '1px solid #6B6B6B' : 'none' }}
+          >
+            <span className="fsr-16 font-isb">Collections</span>
+          </div>
         </div>
 
-        <ProfileTab tabType={profileType} postsData={userData?.posts} aboutData={userData?.about} isAuthorVis={isAuthorIsVistor()} />
+        <div className="w-full">
+          <ProfileTab tabType={profileType} postsData={userData?.posts} aboutData={userData?.about} collectionData={userData?.collections} isAuthorVis={isAuthorIsVistor()} />
+        </div>
       </div>
 
       <Login open={openLogin} setOpen={setOpenLogin} />
