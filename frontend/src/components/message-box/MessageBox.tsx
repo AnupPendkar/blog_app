@@ -53,7 +53,7 @@ const MessageBox = ({ dialogDetails, confirmBtnEmitter }: { dialogDetails: Messa
         <DialogContentText>{dialogDetails?.content}</DialogContentText>
         <DialogActions sx={{ mt: 2 }}>
           {dialogDetails?.closeMsg && (
-            <Button color="success" onClick={handleClose} variant="contained">
+            <Button color="cancel" onClick={handleClose} variant="contained">
               {dialogDetails?.closeMsg}
             </Button>
           )}

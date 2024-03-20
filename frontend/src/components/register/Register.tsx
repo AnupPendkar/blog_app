@@ -11,8 +11,15 @@ import CloseIcon from '@mui/icons-material/Close';
 import { isPropEmpty } from '@shared/utilfunctions';
 import userImg from '@assets/userImg.png';
 import { RegisterFormCloseType } from '@components/login/Login';
+import { AuthStateEnum } from '@models/user_service_model';
 
-const Register = ({ open, setOpen, onCloseRegisterForm }) => {
+interface IRegisterProp {
+  setOpen: (flag: boolean) => {};
+  setAuthState: (state: AuthStateEnum) => void;
+  setToastrMsg: (msg: string) => void;
+}
+
+const Register = ({ setOpen, setAuthState, setToastrMsg }: IRegisterProp) => {
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
   const { registerUser } = UserService();
 
@@ -45,7 +52,9 @@ const Register = ({ open, setOpen, onCloseRegisterForm }) => {
 
   async function onLoginClick(data) {
     await registerUser(data);
-    onCloseRegisterForm(RegisterFormCloseType.REGISTER_SUCCESS);
+    setToastrMsg('Registeration successfull! Login to continue.');
+    setAuthState(AuthStateEnum.LOGIN);
+    // onCloseRegisterForm(RegisterFormCloseType.REGISTER_SUCCESS);
   }
 
   const fileInputRef = React.useRef(null);
@@ -65,7 +74,7 @@ const Register = ({ open, setOpen, onCloseRegisterForm }) => {
   };
 
   return (
-    <Dialog open={open} color="primary">
+    <Dialog open={true} color="primary">
       <DialogContent color="secondary">
         <form className="login-form min-w-[390px]" onSubmit={handleSubmit(onLoginClick)}>
           <span className="fsr-18 font-im" style={{ alignSelf: 'center' }}>
@@ -282,7 +291,7 @@ const Register = ({ open, setOpen, onCloseRegisterForm }) => {
           <CloseIcon />
         </div>
 
-        <span onClick={() => onCloseRegisterForm(RegisterFormCloseType.BACK_TO_LOGIN)} className="fsr-14 inter float-end cursor-pointer" style={{ color: '#266FDC' }}>
+        <span onClick={() => setAuthState(AuthStateEnum.LOGIN)} className="fsr-14 inter float-end cursor-pointer" style={{ color: '#266FDC' }}>
           Back to login
         </span>
       </DialogContent>

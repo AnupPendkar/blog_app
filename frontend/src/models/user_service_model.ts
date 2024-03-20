@@ -1,9 +1,16 @@
 import { IFollower, IPostDetails, ISinglePost } from './post_model';
 
 export interface ILoginParams {
-  username: string;
+  email: string;
   password: string;
-  client_ip: string;
+  client_ip?: string;
+}
+
+export enum AuthStateEnum {
+  LOGIN = 1,
+  REGISTER = 2,
+  GENERATE_OTP = 3,
+  RESET_PASSWORD = 4,
 }
 
 export interface ILoginRes {

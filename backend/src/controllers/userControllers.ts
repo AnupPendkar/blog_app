@@ -2,18 +2,19 @@ import { eq } from 'drizzle-orm';
 import { db } from '../config';
 import { Request, Response, NextFunction } from 'express';
 import { isPropEmpty } from '../utils/utils';
-import { about, collections, followers, followersToAuthors, users } from '../schema/userSchema';
+import { about, collections, followers, followersToAuthors, otpDetails, users } from '../schema/userSchema';
 import jwt from 'jsonwebtoken';
+import emailSender from '../config/mailSender';
 import 'dotenv/config';
 
 export async function userLogin(req, res: Response, next: NextFunction) {
   try {
-    const { username, password, social } = req.body;
+    const { email, password, social } = req.body;
 
     if (social) {
     }
 
-    const [foundUsr, ...rest] = await db.select().from(users).where(eq(users.username, username));
+    const [foundUsr, ...rest] = await db.select().from(users).where(eq(users.email, email));
 
     if (!foundUsr) {
       res.status(403).json({ message: 'Invalid users credentials' });
@@ -37,6 +38,32 @@ export async function userLogin(req, res: Response, next: NextFunction) {
     }
   } catch (error) {
     next(error);
+  }
+}
+
+export async function generateOtp(req, res: Response, next: NextFunction) {
+  try {
+    const { email } = req.body;
+
+    const [user, ...rest] = await checkEmailExits(email);
+    if (!user) {
+      res.status(422).send('User not registered.');
+      return;
+    }
+
+    const otp = Math.floor(1000 + Math.random() * 9000) + '';
+    await db.insert(otpDetails).values({ email, otp });
+
+    const _emailSender = await emailSender(
+      email,
+      'Verification Email',
+      `<h1>Please confirm your OTP</h1>
+    <p>Here is your OTP code: ${otp}</p>`
+    );
+
+    res.status(200).send('OTP successfully generated!');
+  } catch (err) {
+    next(err);
   }
 }
 

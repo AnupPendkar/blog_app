@@ -28,7 +28,7 @@ const Write = () => {
           onChange={(e) => setTitle(e.target.value)}
           value={title}
           type="text"
-          className="fsr-25 border-none focus:outline-none pl-4 w-full"
+          className="fsr-25 border-none focus:outline-none pl-4 w-full mb-4"
           placeholder="Title"
           style={{ background: 'transparent' }}
         />

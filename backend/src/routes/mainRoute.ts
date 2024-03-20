@@ -5,6 +5,7 @@ import {
   userLogin,
   onAuthorFollow,
   userRegister,
+  generateOtp,
   userDetails,
   userInfo,
   updateUsername,
@@ -53,6 +54,8 @@ router.post('/upload_file', upload.single('image'), uploadFile);
 router.post('/login', userLogin);
 router.post('/logout', userLogout);
 router.post('/register', userRegister);
+router.post('/generate-otp', generateOtp)
+
 router.put('/update', updateUsername);
 router.delete('/delete', deleteUser);
 router.get('/user-details', userDetails);

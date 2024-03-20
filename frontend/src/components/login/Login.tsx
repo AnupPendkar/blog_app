@@ -15,6 +15,9 @@ import facebook from '@assets/facebook.png';
 import instagram from '@assets/instagram.png';
 import twitter from '@assets/twitter.png';
 import linkedin from '@assets/linkedin.png';
+import GenerateOtp from '@components/generate-otp/GenerateOtp';
+import ResetPassword from '@components/reset-password/ResetPassword';
+import { AuthStateEnum } from '@models/user_service_model';
 
 export enum RegisterFormCloseType {
   REGISTER_SUCCESS = 1,
@@ -23,13 +26,13 @@ export enum RegisterFormCloseType {
 
 const Login = ({ open, setOpen }) => {
   const { setUserLoginData } = useAuthMethods();
-  const [isLoginForm, setIsLoginForm] = useState<boolean>(false);
-  const [openToast, setOpenToast] = useState(false);
+  const [authState, setAuthState] = useState<AuthStateEnum>();
+  const [toastrMsg, setToastrMsg] = useState<string>('');
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
   const userService = UserService();
 
   const schema = z.object({
-    username: z.string().min(2).max(20),
+    email: z.string().min(2).max(20),
     password: z.string().min(1).max(20),
   });
   type LoginFormSchema = z.infer<typeof schema>;
@@ -44,126 +47,124 @@ const Login = ({ open, setOpen }) => {
 
   async function onLoginClick(credentials: LoginFormSchema) {
     const res = await userService.submitLoginDetails({
-      username: credentials.username,
+      email: credentials.email,
       password: credentials.password,
-      client_ip: 'http://172.16.120.20:3200',
     });
 
     setUserLoginData(res?.access, res?.refresh);
     setOpen(false);
   }
 
-  function onCloseRegisterForm(type: RegisterFormCloseType) {
-    if (type === RegisterFormCloseType.REGISTER_SUCCESS) {
-      setOpenToast(true);
-    }
-    setIsLoginForm(true);
-  }
-
-  function onNewAccCreate() {
-    setIsLoginForm(false);
+  function handleForgotPassClk() {
+    setAuthState(AuthStateEnum.GENERATE_OTP);
   }
 
   async function onGoogleClk() {
     // const res = await userService.logout();
-    window.open("http://localhost:8005/api/auth/google", "_self")
+    window.open('http://localhost:8005/api/auth/google', '_self');
 
     // console.log(res);
   }
 
   React.useEffect(() => {
-    setIsLoginForm(true);
+    setAuthState(AuthStateEnum.LOGIN);
   }, []);
 
   return (
     <>
       {open && (
         <>
-          <Dialog open={isLoginForm} color="primary">
-            <DialogContent color="secondary">
-              <form className="login-form min-w-[350px]" onSubmit={handleSubmit(onLoginClick)}>
-                <span className="fsr-18 font-im" style={{ alignSelf: 'center' }}>
-                  Please enter your credentials
-                </span>
+          {authState === AuthStateEnum.LOGIN && (
+            <Dialog open={true} color="primary">
+              <DialogContent color="secondary">
+                <form className="login-form min-w-[350px]" onSubmit={handleSubmit(onLoginClick)}>
+                  <span className="fsr-18 font-im" style={{ alignSelf: 'center' }}>
+                    Please enter your credentials
+                  </span>
 
-                <div className="field mt-5 mb-4 flex justify-between items-center">
-                  <label className="field-label" htmlFor="username">
-                    Username:
-                  </label>
+                  <div className="field mt-5 mb-4 flex justify-between items-center">
+                    <label className="field-label" htmlFor="username">
+                      Username:
+                    </label>
 
-                  <TextField
-                    {...register('username')}
-                    id="username"
-                    type="text"
-                    size="small"
-                    color="success"
-                    InputProps={{
-                      sx: {
-                        borderRadius: '5px !important',
-                        backgroundColor: 'white',
-                        color: '#191919',
-                      },
-                    }}
-                  ></TextField>
-                </div>
-
-                <div className="field mb-1 relative flex justify-between items-center">
-                  <label className="field-label" htmlFor="password">
-                    Password:
-                  </label>
-                  <TextField
-                    {...register('password')}
-                    id="password"
-                    type={isPasswordVisible ? 'text' : 'password'}
-                    size="small"
-                    InputProps={{
-                      sx: {
-                        borderRadius: '5px !important',
-                        backgroundColor: 'white',
-                        color: '#191919',
-                      },
-                    }}
-                  ></TextField>
-                  <IconButton onClick={() => setPasswordVisibility((state) => !state)} className="right-1" sx={{ position: 'absolute', color: '#191919' }}>
-                    {isPasswordVisible ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                  </IconButton>
-                </div>
-
-                <DialogActions>
-                  <div className="flex flex-col justify-end gap-3 mb-5">
-                    <span className="fsr-14 inter float-end">
-                      <a href="" className="ml-2" style={{ color: '#266FDC' }}>
-                        Forgot password
-                      </a>
-                    </span>
-                    <Button disabled={!(isDirty && isValid)} color="success" type="submit" variant="contained">
-                      Submit
-                    </Button>
+                    <TextField
+                      {...register('email')}
+                      id="email"
+                      type="email"
+                      size="small"
+                      color="success"
+                      InputProps={{
+                        sx: {
+                          borderRadius: '5px !important',
+                          backgroundColor: 'white',
+                          color: '#191919',
+                        },
+                      }}
+                    ></TextField>
                   </div>
-                </DialogActions>
-              </form>
-              <div onClick={() => setOpen(false)} className="w-4 h-4 absolute top-5 right-8 cursor-pointer">
-                <CloseIcon />
-              </div>
 
-              <span onClick={() => onNewAccCreate()} className="fsr-14 inter float-end cursor-pointer">
-                New to blog?
-                <a className="ml-2" style={{ color: '#266FDC' }}>
-                  Create an account
-                </a>
-              </span>
-              <div className="logos flex items-center select-none">
-                <img className="w-5 mr-3 cursor-pointer" onClick={onGoogleClk} src={facebook} alt="" />
-                <img className="w-5 mr-3 cursor-pointer" src={instagram} alt="" />
-                <img className="w-5 mr-3 cursor-pointer" src={twitter} alt="" />
-                <img className="w-5 mr-3 cursor-pointer" src={linkedin} alt="" />
-              </div>
-            </DialogContent>
-          </Dialog>
+                  <div className="field mb-1 relative flex justify-between items-center">
+                    <label className="field-label" htmlFor="password">
+                      Password:
+                    </label>
+                    <TextField
+                      {...register('password')}
+                      id="password"
+                      type={isPasswordVisible ? 'text' : 'password'}
+                      size="small"
+                      InputProps={{
+                        sx: {
+                          borderRadius: '5px !important',
+                          backgroundColor: 'white',
+                          color: '#191919',
+                        },
+                      }}
+                    ></TextField>
+                    <IconButton onClick={() => setPasswordVisibility((state) => !state)} className="right-1" sx={{ position: 'absolute', color: '#191919' }}>
+                      {isPasswordVisible ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                    </IconButton>
+                  </div>
 
-          <Register open={!isLoginForm} setOpen={setOpen} onCloseRegisterForm={onCloseRegisterForm} />
+                  <DialogActions>
+                    <div className="flex flex-col justify-end gap-3 mb-5 mt-1">
+                      <span onClick={handleForgotPassClk} className="fsr-14 inter float-end">
+                        <a className="ml-2" style={{ color: '#266FDC' }}>
+                          Forgot password
+                        </a>
+                      </span>
+                      <Button disabled={!(isDirty && isValid)} color="success" type="submit" variant="contained">
+                        Submit
+                      </Button>
+                    </div>
+                  </DialogActions>
+                </form>
+                <div onClick={() => setOpen(false)} className="w-4 h-4 absolute top-5 right-8 cursor-pointer">
+                  <CloseIcon />
+                </div>
 
-          <Toastr msg={'Registeration successfull! Login to continue.'} type={MessageIconTypeEnum.SUCCESS} visibility={openToast} visibilitySetter={setOpenToast} />
+                <span onClick={() => setAuthState(AuthStateEnum.REGISTER)} className="fsr-14 inter float-end cursor-pointer">
+                  New to blog?
+                  <a className="ml-2" style={{ color: '#266FDC' }}>
+                    Create an account
+                  </a>
+                </span>
+                <div className="logos flex items-center select-none">
+                  {/* <img className="w-5 mr-3 cursor-pointer" onClick={onGoogleClk} src={facebook} alt="" />
+                  <img className="w-5 mr-3 cursor-pointer" src={instagram} alt="" />
+                  <img className="w-5 mr-3 cursor-pointer" src={twitter} alt="" />
+                  <img className="w-5 mr-3 cursor-pointer" src={linkedin} alt="" /> */}
+                </div>
+              </DialogContent>
+            </Dialog>
+          )}
+
+          {authState === AuthStateEnum.REGISTER && <Register setOpen={setOpen} setToastrMsg={setToastrMsg} setAuthState={setAuthState} />}
+
+          {authState === AuthStateEnum.GENERATE_OTP && <GenerateOtp setOpen={setOpen} setToastrMsg={setToastrMsg} setAuthState={setAuthState} />}
+
+          {authState === AuthStateEnum.RESET_PASSWORD && <ResetPassword setOpen={setOpen} setToastrMsg={setToastrMsg} setAuthState={setAuthState} />}
+
+          <Toastr msg={toastrMsg} type={MessageIconTypeEnum.SUCCESS} visibility={toastrMsg !== ''} visibilitySetter={() => setToastrMsg('')} />
         </>
       )}
     </>

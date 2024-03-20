@@ -1,11 +1,12 @@
 import useHttp from '@hooks/useHttp';
 import useSharedEssentials from '@hooks/useSharedEssentials';
+import { MessageBoxTypeEnum, MessageIconTypeEnum } from '@models/common';
 import { ILoginParams, ILoginRes, IUserDetailsAPI, IUserInfoAPI } from '@models/user_service_model';
 import React from 'react';
 
 const UserService = () => {
   const http = useHttp();
-  const { handleErr } = useSharedEssentials();
+  const { handleErr, showMessageBox } = useSharedEssentials();
 
   /**
    * Posts the user login details.
@@ -33,6 +34,17 @@ const UserService = () => {
       } else {
         handleErr(res);
       }
+    });
+  }
+
+  function generateOtp(email: string) {
+    return new Promise(async (resolve) => {
+      // const res = await http.request('post', '/generate-otp', '',{ email });
+      const res = await new Promise(() => setTimeout(() => resolve('sdfdf'), 1000));
+      // if (res?.status === 200) {
+      // } else {
+      //   handleErr(res);
+      // }
     });
   }
 
@@ -171,6 +183,7 @@ const UserService = () => {
     createCollection,
     deleteCollection,
     fetchUserCollections,
+    generateOtp,
     updateUserProfile,
     setAboutDetails,
     loginUsingSocialMedia,

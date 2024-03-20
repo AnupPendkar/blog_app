@@ -1,4 +1,4 @@
-import { integer, pgTable, primaryKey, serial, text, varchar } from 'drizzle-orm/pg-core';
+import { integer, pgTable, primaryKey, serial, text, timestamp, varchar } from 'drizzle-orm/pg-core';
 import { commentLikes, comments, likes, posts, replies, replyLikes } from './postSchema';
 import { relations } from 'drizzle-orm';
 
@@ -25,6 +25,14 @@ export const userRelations = relations(users, ({ one, many }) => ({
   collections: many(collections),
 }));
 // <--------------------------------------------------------------------------------------->
+
+export const otpDetails = pgTable('otp_details', {
+  id: serial('id').primaryKey(),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  email: varchar('email', { length: 100 }),
+  otp: varchar('otp', {length: 10}),
+
+});
 
 export const about = pgTable('about', {
   id: serial('id').primaryKey(),
