@@ -48,6 +48,20 @@ const UserService = () => {
     });
   }
 
+  function isEnteredOtpAuthentic(otp: string): Promise<void> {
+    return new Promise(async (resolve) => {
+      // const res = await http.request('get', '/check-otp', { otp });
+
+      const res = await new Promise(() => setTimeout(() => resolve(), 1000));
+
+      // if (res?.status === 200) {
+      //   resolve();
+      // } else {
+      //   handleErr(res);
+      // }
+    });
+  }
+
   function loginUsingSocialMedia(): Promise<any> {
     return new Promise(async (resolve) => {
       // const res = await http.request('post', '/login', '', {social: true});
@@ -184,6 +198,7 @@ const UserService = () => {
     deleteCollection,
     fetchUserCollections,
     generateOtp,
+    isEnteredOtpAuthentic,
     updateUserProfile,
     setAboutDetails,
     loginUsingSocialMedia,

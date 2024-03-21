@@ -40,7 +40,13 @@ export function handleTableCellData(val: any): any {
   }
 }
 
-export function convertIntoMonthYrFormat(date: string) {}
+export function convertMsIntoMinSec(ms: number) {
+  const totalSecMS = 1000;
+
+  let sec = Math.floor(ms / totalSecMS);
+
+  return `${sec}s`;
+}
 
 export function convertMsIntoDayHrMinFormat(ms: number) {
   if (isPropEmpty(ms)) {

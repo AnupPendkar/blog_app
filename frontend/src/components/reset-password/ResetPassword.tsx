@@ -37,18 +37,27 @@ const ResetPassword = ({ setOpen, setAuthState, setToastrMsg }: IResetPasswordPr
     resolver: zodResolver(schema),
   });
 
+  function handleCloseClk() {
+    setAuthState(AuthStateEnum.LOGIN);
+    setOpen(false);
+  }
+
   function handleConfirmClk() {}
 
   return (
     <Dialog open={true} color="primary">
       <DialogContent color="secondary">
-        <form className="login-form min-w-[390px]" onSubmit={handleSubmit(handleConfirmClk)}>
-          <div className="field mb-1 relative flex justify-between items-center">
-            <label className="field-label" htmlFor="password">
+        <form className="login-form min-w-[250px]" onSubmit={handleSubmit(handleConfirmClk)}>
+          <span className="fsr-18 font-im" style={{ alignSelf: 'center' }}>
+            Set Password
+          </span>
+
+          <div className="field mt-5 mb-4 flex justify-between items-center relative">
+            <label className="field-label basis-1/3" htmlFor="password">
               Password:
             </label>
 
-            <div className="flex flex-col relative">
+            <div className="flex flex-col relative basis-2/3">
               <TextField
                 {...register('password')}
                 id="password"
@@ -75,11 +84,11 @@ const ResetPassword = ({ setOpen, setAuthState, setToastrMsg }: IResetPasswordPr
           </div>
 
           <div className="field mt-5 mb-4 relative flex justify-between items-center">
-            <label className="field-label" htmlFor="password">
+            <label className="field-label basis-1/3" htmlFor="password">
               Confirm password:
             </label>
 
-            <div className="flex flex-col relative">
+            <div className="flex flex-col relative basis-2/3">
               <TextField
                 {...register('confirmPassword')}
                 id="confirmPassword"
@@ -113,6 +122,9 @@ const ResetPassword = ({ setOpen, setAuthState, setToastrMsg }: IResetPasswordPr
             </div>
           </DialogActions>
         </form>
+        <div onClick={handleCloseClk} className="w-4 h-4 absolute top-5 right-8 cursor-pointer">
+          <CloseIcon />
+        </div>
       </DialogContent>
     </Dialog>
   );

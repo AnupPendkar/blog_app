@@ -25,13 +25,13 @@ const Register = ({ setOpen, setAuthState, setToastrMsg }: IRegisterProp) => {
 
   const schema = z
     .object({
-      username: z.string().min(2, { message: 'Username is too short' }).max(20, { message: 'Username is too long' }),
+      // username: z.string().min(2, { message: 'Username is too short' }).max(20, { message: 'Username is too long' }),
+      email: z.string().email('Enter valid email'),
       name: z.string().min(2, { message: 'name is too short' }).max(20, { message: 'Username is too long' }),
       password: z.string().min(1, { message: 'password is too short' }).max(20, { message: 'Username is too long' }),
       confirmPassword: z.string().min(1, { message: 'password is too short' }).max(20, { message: 'Username is too long' }),
       // profileImg: z.string().url('Invalid Url'),
-      mobileNo: z.string().min(10, { message: 'Enter valid mobile no' }).max(10, { message: 'Enter valid mobile no' }),
-      email: z.string().email('Enter valid email'),
+      // mobileNo: z.string().min(10, { message: 'Enter valid mobile no' }).max(10, { message: 'Enter valid mobile no' }),
     })
     .refine((data) => data.password === data.confirmPassword, {
       message: "Passwords don't match",
@@ -73,10 +73,15 @@ const Register = ({ setOpen, setAuthState, setToastrMsg }: IRegisterProp) => {
     fileInputRef.current.click();
   };
 
+  function handleCloseClk() {
+    setAuthState(AuthStateEnum.LOGIN);
+    setOpen(false);
+  }
+
   return (
     <Dialog open={true} color="primary">
       <DialogContent color="secondary">
-        <form className="login-form min-w-[390px]" onSubmit={handleSubmit(onLoginClick)}>
+        <form className="login-form min-w-[250px]" onSubmit={handleSubmit(onLoginClick)}>
           <span className="fsr-18 font-im" style={{ alignSelf: 'center' }}>
             Please register
           </span>
@@ -94,19 +99,14 @@ const Register = ({ setOpen, setAuthState, setToastrMsg }: IRegisterProp) => {
               <input className="w-full h-full" ref={fileInputRef} onChange={handleFileInputChange} type="file" hidden />
             </div>
             <span className="fsr-16 inter">Profile Img</span>
-            {/* {errors.profileImg && (
-              <span className="fsr-12 -bottom-4" style={{ color: 'tomato' }}>
-                *{errors.profileImg.message}
-              </span>
-            )} */}
           </div>
 
           <div className="field mt-5 mb-4 flex justify-between items-center">
-            <label className="field-label" htmlFor="name">
+            <label className="field-label basis-1/3" htmlFor="name">
               Name:
             </label>
 
-            <div className="flex flex-col relative">
+            <div className="flex flex-col relative basis-2/3">
               <TextField
                 {...register('name')}
                 id="name"
@@ -131,40 +131,11 @@ const Register = ({ setOpen, setAuthState, setToastrMsg }: IRegisterProp) => {
           </div>
 
           <div className="field mt-5 mb-4 flex justify-between items-center">
-            <label className="field-label" htmlFor="mobileNo">
-              Mobile No:
-            </label>
-
-            <div className="flex flex-col relative">
-              <TextField
-                {...register('mobileNo')}
-                id="mobileNo"
-                name="mobileNo"
-                type="text"
-                size="small"
-                color="success"
-                InputProps={{
-                  sx: {
-                    borderRadius: '5px !important',
-                    backgroundColor: 'white',
-                    color: '#191919',
-                  },
-                }}
-              ></TextField>
-              {errors.mobileNo && (
-                <span className="absolute fsr-12 -bottom-4" style={{ color: 'tomato' }}>
-                  *{errors.mobileNo.message}
-                </span>
-              )}
-            </div>
-          </div>
-
-          <div className="field mt-5 mb-4 flex justify-between items-center">
-            <label className="field-label" htmlFor="email">
+            <label className="field-label basis-1/3" htmlFor="email">
               Email:
             </label>
 
-            <div className="flex flex-col relative">
+            <div className="flex flex-col relative basis-2/3">
               <TextField
                 {...register('email')}
                 id="email"
@@ -188,7 +159,7 @@ const Register = ({ setOpen, setAuthState, setToastrMsg }: IRegisterProp) => {
             </div>
           </div>
 
-          <div className="field mt-5 mb-4 flex justify-between items-center">
+          {/* <div className="field mt-5 mb-4 flex justify-between items-center">
             <label className="field-label" htmlFor="username">
               Username:
             </label>
@@ -215,14 +186,14 @@ const Register = ({ setOpen, setAuthState, setToastrMsg }: IRegisterProp) => {
                 </span>
               )}
             </div>
-          </div>
+          </div> */}
 
           <div className="field mb-1 relative flex justify-between items-center">
-            <label className="field-label" htmlFor="password">
+            <label className="field-label basis-1/3" htmlFor="password">
               Password:
             </label>
 
-            <div className="flex flex-col relative">
+            <div className="flex flex-col relative basis-2/3">
               <TextField
                 {...register('password')}
                 id="password"
@@ -249,11 +220,11 @@ const Register = ({ setOpen, setAuthState, setToastrMsg }: IRegisterProp) => {
           </div>
 
           <div className="field mt-5 mb-4 relative flex justify-between items-center">
-            <label className="field-label" htmlFor="password">
+            <label className="field-label basis-1/3" htmlFor="password">
               Confirm password:
             </label>
 
-            <div className="flex flex-col relative">
+            <div className="flex flex-col relative basis-2/3">
               <TextField
                 {...register('confirmPassword')}
                 id="confirmPassword"
@@ -287,7 +258,7 @@ const Register = ({ setOpen, setAuthState, setToastrMsg }: IRegisterProp) => {
             </div>
           </DialogActions>
         </form>
-        <div onClick={() => setOpen(false)} className="w-4 h-4 absolute top-5 right-8 cursor-pointer">
+        <div onClick={handleCloseClk} className="w-4 h-4 absolute top-5 right-8 cursor-pointer">
           <CloseIcon />
         </div>
 
