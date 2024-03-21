@@ -1,5 +1,5 @@
 import { AccountCircle } from '@mui/icons-material';
-import { AppBar, IconButton, Menu, MenuItem, Toolbar, useTheme } from '@mui/material';
+import { AppBar, Box, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem, Toolbar, useTheme } from '@mui/material';
 import React from 'react';
 import { useAppSelector } from '@redux/store';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
@@ -21,6 +21,7 @@ import blankUser from '@assets/blank_user.svg';
 
 const Header = () => {
   const [userAnchor, setUserAnchor] = React.useState<null | HTMLElement>(null);
+  const [hamDrawer, setHamDrawer] = React.useState(false);
   const { toggleAppTheme } = useThemeSwitcher();
   const theme = useTheme();
   const navigate = useNavigate();
@@ -57,7 +58,7 @@ const Header = () => {
     <div className="app-header">
       <AppBar position="static" color="primary">
         <div className="flex justify-center">
-          <Toolbar className="flex items-center justify-between w-4/5" style={{ paddingLeft: '0', paddingRight: '0' }}>
+          <Toolbar className="flex items-center justify-between w-[90%] sm:w-4/5" style={{ paddingLeft: '0', paddingRight: '0' }}>
             <div className="logos flex items-center select-none">
               {/* <img className="w-5 mr-3 cursor-pointer" src={facebook} alt="" />
               <img className="w-5 mr-3 cursor-pointer" src={instagram} alt="" />
@@ -66,7 +67,7 @@ const Header = () => {
               <img className="w-[80px] mr-3 cursor-pointer" src={logo} alt="" />
             </div>
 
-            <span className="fsr-18 font-im ml-7 cursor-pointer" onClick={() => navigate(AppRoutesEnum.HOMEPAGE)}>
+            <span className="fsr-18 font-im cursor-pointer" onClick={() => navigate(AppRoutesEnum.HOMEPAGE)}>
               StoryHaven
             </span>
 
@@ -75,55 +76,102 @@ const Header = () => {
                 {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
               </IconButton>
 
-              {/* <span className="fsr-16 inter ml-10 mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.HOMEPAGE)}>
-                Homepage
-              </span> */}
-              <span className="fsr-16 inter ml-10 mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.DISCOVER + '/all')}>
-                Discover
-              </span>
+              <div className="mobile__ver sm:hidden">
+                <label className="hamburger" htmlFor="check">
+                  <input onClick={() => setHamDrawer((state) => !state)} className={hamDrawer ? 'active' : ''} type="checkbox" id="check" />
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </label>
 
-              {userLoggedIn && (
-                <>
-                  <span className="fsr-16 inter mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.POSTS + '/all')}>
-                    Posts
-                  </span>
-                </>
-              )}
+                <Drawer
+                  variant="persistent"
+                  PaperProps={{ sx: { background: (theme) => theme?.palette?.primary?.main, marginTop: '56px' } }}
+                  anchor={'right'}
+                  open={hamDrawer}
+                  ModalProps={{
+                    keepMounted: true,
+                  }}
+                >
+                  <Box sx={{ width: 150 }} role="presentation" onClick={() => setHamDrawer(false)}>
+                    <List>
+                      <ListItem key={'discover'} disablePadding>
+                        <ListItemButton onClick={() => navigate(AppRoutesEnum.DISCOVER + '/all')}>
+                          <ListItemText primary={'Discover'} />
+                        </ListItemButton>
+                      </ListItem>
+                      <ListItem key={'Write'} disablePadding>
+                        <ListItemButton onClick={() => navigate(AppRoutesEnum.WRITE)}>
+                          <ListItemText primary={'Write'} />
+                        </ListItemButton>
+                      </ListItem>
 
-              <span className="fsr-16 inter mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.WRITE)}>
-                Write
-              </span>
+                      {userLoggedIn ? (
+                        <>
+                          <ListItem key={'Posts'} disablePadding>
+                            <ListItemButton onClick={() => navigate(AppRoutesEnum.POSTS + '/all')}>
+                              <ListItemText primary={'Posts'} />
+                            </ListItemButton>
+                          </ListItem>
+                          <ListItem key={'Profile'} disablePadding>
+                            <ListItemButton onClick={() => navigate(`profile/${parsedUserInfo?.id}`)}>
+                              <ListItemText primary={'Profile'} />
+                            </ListItemButton>
+                          </ListItem>
+                          <ListItem key={'Logout'} disablePadding>
+                            <ListItemButton onClick={askLogoutConfirmation}>
+                              <ListItemText primary={'Logout'} />
+                            </ListItemButton>
+                          </ListItem>
+                        </>
+                      ) : (
+                        <ListItem key={'Login'} disablePadding>
+                          <ListItemButton onClick={() => setOpenLogin(true)}>
+                            <ListItemText primary={'Login'} />
+                          </ListItemButton>
+                        </ListItem>
+                      )}
+                    </List>
+                  </Box>
+                </Drawer>
+              </div>
 
-              {userLoggedIn ? (
-                <>
-                  <img
-                    onClick={(event) => setUserAnchor(event.currentTarget)}
-                    className="w-7 h-7 cursor-pointer"
-                    style={{ borderRadius: '50%' }}
-                    src={!isPropEmpty(userInfo?.profileImg) ? userInfo?.profileImg : blankUser}
-                    alt="User"
-                  />
-                  <Menu id="menu-appbar" anchorEl={userAnchor} keepMounted open={Boolean(userAnchor)} onClose={() => setUserAnchor(null)}>
-                    <MenuItem onClick={handleProfileClk}>
-                      <span className="fsr-14 font-isb">Profile</span>
-                    </MenuItem>
-                    <MenuItem onClick={askLogoutConfirmation}>
-                      <span className="fsr-14 font-isb">Logout</span>
-                    </MenuItem>
-                  </Menu>
-                  {/* <span className="fsr-16 inter mr-5 cursor-pointer" onClick={() => navigate(`profile/${parsedUserInfo?.id}`)}>
-                    Profile
-                  </span>
-
-                  <span onClick={askLogoutConfirmation} className="fsr-16 inter cursor-pointer">
-                    Logout
-                  </span> */}
-                </>
-              ) : (
-                <span onClick={() => setOpenLogin(true)} className="fsr-16 inter cursor-pointer">
-                  Login
+              <div className="desktop__ver hidden sm:block">
+                <span className="fsr-16 inter ml-10 mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.DISCOVER + '/all')}>
+                  Discover
                 </span>
-              )}
+
+                <span className="fsr-16 inter mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.WRITE)}>
+                  Write
+                </span>
+
+                {userLoggedIn ? (
+                  <>
+                    <span className="fsr-16 inter mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.POSTS + '/all')}>
+                      Posts
+                    </span>
+                    <img
+                      onClick={(event) => setUserAnchor(event.currentTarget)}
+                      className="w-7 h-7 cursor-pointer"
+                      style={{ borderRadius: '50%' }}
+                      src={!isPropEmpty(userInfo?.profileImg) ? userInfo?.profileImg : blankUser}
+                      alt="User"
+                    />
+                    <Menu id="menu-appbar" anchorEl={userAnchor} keepMounted open={Boolean(userAnchor)} onClose={() => setUserAnchor(null)}>
+                      <MenuItem onClick={handleProfileClk}>
+                        <span className="fsr-14 font-isb">Profile</span>
+                      </MenuItem>
+                      <MenuItem onClick={askLogoutConfirmation}>
+                        <span className="fsr-14 font-isb">Logout</span>
+                      </MenuItem>
+                    </Menu>
+                  </>
+                ) : (
+                  <span onClick={() => setOpenLogin(true)} className="fsr-16 inter cursor-pointer">
+                    Login
+                  </span>
+                )}
+              </div>
             </div>
           </Toolbar>
         </div>

@@ -70,11 +70,8 @@ const PublishDialog = ({ visibility, title, content, isVisible }: IPublishDialog
     fileInputRef.current.click();
   };
 
-  function handleChange(event) {
-    const {
-      target: { value },
-    } = event;
-    setSelectedCat(value);
+  function handleChange(event, value: ICategories[]) {
+    setSelectedCat(value?.reduce((total, curr) => total.concat(curr?.id), []));
   }
 
   React.useEffect(() => {

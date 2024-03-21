@@ -34,14 +34,14 @@ const Post = ({ postDetails, postView }: IPostProp) => {
               </span>
 
               {postDetails?.categories?.map((cat, idx) => (
-                <span key={idx} className="fsr-14  font-rm" style={{ color: '#652034', textTransform: 'uppercase' }}>
+                <span key={idx} className="fsr-14 font-rm" style={{ color: '#652034', textTransform: 'uppercase' }}>
                   {cat?.name}&nbsp;&nbsp;
                 </span>
               ))}
             </div>
 
-            <span className="fsr-25 font-ib mb-4">{postDetails?.title}</span>
-            <span className="fsr-16 inter mb-7" style={{ color: '#9E9D9E' }}>
+            <span className="post__title fsr-25 font-ib mb-4">{postDetails?.title}</span>
+            <span className="post__subtitle fsr-16 inter mb-7" style={{ color: '#9E9D9E' }}>
               {postDetails?.desc}
             </span>
 
@@ -65,7 +65,7 @@ const Post = ({ postDetails, postView }: IPostProp) => {
                 </div>
               ))}
             </div>
-            <span className="fsr-16 font-montm mt-2 mb-1">{postDetails?.title}</span>
+            <span className="post__subtitle fsr-16 font-montm mt-2 mb-1">{postDetails?.title}</span>
             <div className="mb-6">
               <span className="fsr-12 mr-3 font-rm capitalize">{postDetails?.author?.fullName}</span>
               <span className="fsr-12 font-rm" style={{ color: '#494E59' }}>

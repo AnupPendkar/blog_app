@@ -53,11 +53,8 @@ const Discover = () => {
     setSelectedCategories();
   }
 
-  function handleChange(event) {
-    const {
-      target: { value },
-    } = event;
-    setSelectedCat(value);
+  function handleChange(event, value: ICategories[]) {
+    setSelectedCat(value?.reduce((total, curr) => total.concat(curr?.id), []));
   }
 
   React.useEffect(() => {
@@ -72,9 +69,12 @@ const Discover = () => {
 
   return (
     <div className="w-full flex items-center justify-center">
-      <div className="mb-5 lg:w-[60%] md:w-[80%] s:w-full">
-        <div className="flex justify-between items-center sticky top-0 left-0" style={{ background: theme?.palette?.primary?.main }}>
-          <span className="fsr-25 font-isb">All posts</span>
+      <div className="mb-5 w-[90%] lg:w-[60%] md:w-[80%] sm:w-[90%]">
+        <div
+          className="flex flex-col gap-y-3 justify-between sm:flex-row sm:items-center sticky top-0 left-0 pt-2"
+          style={{ borderBottom: '1px solid rgba(158, 157, 158, 0.2)', background: theme?.palette?.primary?.main }}
+        >
+          <span className="fsr-25 post__title font-isb">All posts</span>
           <div className="flex items-center">
             <CheckboxSelector selectedCat={selectedCat} categories={categories} handleChange={handleChange} />
           </div>

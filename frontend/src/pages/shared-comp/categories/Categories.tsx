@@ -29,7 +29,7 @@ const Categories = ({ img_n_name, lableName, showAll = false }: ICategoriesProp)
 
   return (
     <div className="categories mb-14">
-      <span className="fsr-25 font-ib">{lableName}</span>
+      <span className="post__title fsr-25 font-ib">{lableName}</span>
 
       <div className="flex flex-wrap mt-4" style={{ gap: img_n_name ? 40 : 12 }}>
         {categories?.slice(0, showAll ? -1 : 6)?.map((cat) => (

@@ -34,21 +34,21 @@ const Homepage = () => {
 
   return (
     <div className="homepage flex items-center justify-center">
-      <div className="mt-[40px] w-4/5">
+      <div className="mt-[40px] w-[90%] sm:w-4/5">
         <div className="landing-txt">
-          <span className="fsr-55 font-ib mr-5">
+          <span className="homepage__text fsr-55 font-ib mr-5">
             Hey, Blog aficionados! <br />
           </span>
-          <span className="fsr-55 mont">Embark on a blog-fueled journey of self-expression and creativity.</span>
+          <span className="homepage__text fsr-55 mont">Embark on a blog-fueled journey of self-expression and creativity.</span>
         </div>
 
-        <div className="featured-blog mt-14 mb-14 flex gap-1 items-center justify-between">
+        <div className="featured-blog mt-14 mb-14 flex flex-col sm:flex-row gap-1 items-center justify-between">
           <div className="basis-1/2 flex items-center justify-center">
             <img className="w-[700px]" src={logo} alt="" />
           </div>
           <div className="blog_card basis-1/2">
             <span className="blog_title">StoryHaven</span>
-            <span className="blog-para" style={{ color: '#9E9D9E' }}>
+            <span className="blog_para" style={{ color: '#9E9D9E' }}>
               StoryHaven is more than just a blogging platform; it's a hub for connection and collaboration. Engage with fellow writers through comments, likes, and shares, and
               discover new voices that resonate with your own.Whether you're a seasoned wordsmith or just starting your journey as a blogger, StoryHaven offers a user-friendly
               interface and a supportive community to help you thrive.
@@ -60,11 +60,11 @@ const Homepage = () => {
           <Categories img_n_name={true} lableName={'Popular Categories'} />
         </div>
 
-        <div className="flex gap-10">
-          <div className="section basis-3/4">
+        <div className="flex flex-col md:flex-row gap-10">
+          <div className="section md:basis-3/4">
             <Posts data={recentPosts} viewMethod={PostViewEnum.PARTIAL} />
           </div>
-          <div className="section basis-1/4">
+          <div className="section md:basis-1/4">
             <Posts data={popular} viewMethod={PostViewEnum.TITLE_ONLY} />
             <Categories img_n_name={false} lableName={'Categories'} />
             <Posts data={editorPick} viewMethod={PostViewEnum.TITLE_WITH_IMG} />

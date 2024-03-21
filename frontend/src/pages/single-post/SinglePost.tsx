@@ -165,7 +165,7 @@ const SinglePost = () => {
   return (
     <div className="w-full flex items-center justify-center">
       <div className="mb-5 flex flex-col items-center justify-center lg:w-[40%] md:w-[70%] sm:w-[90%] w-[90%]">
-        <div className="w-full flex flex-col mt-20">
+        <div className="w-full flex flex-col mt-3 sm:mt-20">
           <span className="fsr-30 font-ib mb-1 outline-none" role="textbox" onInput={(e: any) => setTitle(e.target.outerText)} contentEditable={isContentEditable}>
             {defaultTitle.current}
           </span>

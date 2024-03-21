@@ -23,12 +23,12 @@ const Write = () => {
 
   return (
     <div className="flex flex-col items-center justify-center w-full mt-10 mb-10">
-      <div className="w-[80vw]">
+      <div className="w-[88vw] sm:w-[80vw]">
         <input
           onChange={(e) => setTitle(e.target.value)}
           value={title}
           type="text"
-          className="fsr-25 border-none focus:outline-none pl-4 w-full mb-4"
+          className="post__title fsr-25 border-none focus:outline-none pl-4 w-full mb-4"
           placeholder="Title"
           style={{ background: 'transparent' }}
         />

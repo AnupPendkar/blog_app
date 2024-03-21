@@ -56,7 +56,7 @@ input:-webkit-autofill {
   border-radius: 250px;
 }
 
-// -----------------------------------------COMMON------------------------------------------------- \\
+// ------------------------------------------Loader--------------------------------------------- \\
 
 .loader_anim {
   width: 15px;
@@ -69,6 +69,55 @@ input:-webkit-autofill {
   animation: rotation 1s linear infinite;
 }
 
+// ------------------------------------------Hamburger--------------------------------------------- \\
+
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  width: 30px;
+  cursor: pointer;
+
+  span {
+    background: #fff;
+    border-radius: 10px;
+    height: 2px;
+    margin: 2px 0;
+    transition: 0.4s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+
+    &:nth-of-type(1) {
+      width: 50%;
+    }
+
+    &:nth-of-type(2) {
+      width: 100%;
+    }
+
+    &:nth-of-type(3) {
+      width: 75%;
+    }
+  }
+
+  input[type='checkbox'] {
+    display: none;
+  }
+
+  input[type='checkbox'].active ~ span:nth-of-type(1) {
+    transform-origin: bottom;
+    transform: rotatez(45deg) translate(3px, -1px);
+  }
+
+  input[type='checkbox'].active ~ span:nth-of-type(2) {
+    transform-origin: top;
+    transform: rotatez(-45deg);
+  }
+
+  input[type='checkbox'].active ~ span:nth-of-type(3) {
+    transform-origin: bottom;
+    width: 50%;
+    transform: translate(13px, -1px) rotatez(45deg);
+  }
+}
+
 @keyframes rotation {
   0% {
     transform: rotate(0deg);
@@ -78,15 +127,18 @@ input:-webkit-autofill {
   }
 }
 
+// -----------------------------------------COMMON------------------------------------------------- \\
+
 .blog_card {
   display: flex;
   flex-direction: column;
 
   .blog_title {
-    font-size: fsr(25);
+    font-size: fsr(20);
     font-family: 'Inter Bold';
     margin-bottom: 4px;
   }
+
   .blog_para {
     font-size: fsr(20);
     font-family: 'Inter Regular';
@@ -99,6 +151,16 @@ input:-webkit-autofill {
     border-radius: 5px;
     font-size: fsr(14);
     font-family: 'Inter SemiBold';
+  }
+
+  @media screen and (max-width: 640px) {
+    .blog_title {
+      font-size: fsr(20);
+      margin-bottom: 4px;
+    }
+    .blog_para {
+      font-size: fsr(18);
+    }
   }
 }
 
@@ -122,6 +184,13 @@ input:-webkit-autofill {
     text-shadow: #bdb0c9 0 0 10px;
   }
 
+  @media screen and (max-width: 640px) {
+    &.popular {
+      width: 140px;
+      padding: 19px 25px;
+    }
+  }
+
   .category_img {
     width: 25px;
     height: 25px;
@@ -135,7 +204,33 @@ input:-webkit-autofill {
   }
 }
 
-//
+// Homepage
+@media screen and (max-width: 640px) {
+  .homepage__text {
+    font-size: 30px;
+  }
+
+  .post__title {
+    font-size: fsr(22);
+  }
+
+  .post__subtitle {
+    font-size: fsr(15);
+  }
+}
+
+// Custom Autocomplete
+.custom__autocomplete {
+  width: 300px;
+}
+
+@media screen and (max-width: 640px) {
+  .custom__autocomplete {
+    width: 230px;
+  }
+}
+
+// Quill
 .ql-tooltip {
   width: fit-content !important;
 }

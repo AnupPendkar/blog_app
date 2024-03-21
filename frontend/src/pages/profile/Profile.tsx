@@ -68,8 +68,8 @@ const Profile = () => {
         <div className="flex gap-7 items-center">
           <img src={!isPropEmpty(userData?.profileImg) ? userData?.profileImg : blankUser} style={{ borderRadius: '50%', width: '55px', height: '55px' }} alt="" />
           <div className="flex flex-col">
-            <span className="fsr-25 font-ib capitalize">{userData?.fullName}</span>
-            <span className="fsr-16" style={{ color: '#6B6B6B' }}>
+            <span className="fsr-25 post__title font-ib capitalize">{userData?.fullName}</span>
+            <span className="fsr-16 post__subtitle" style={{ color: '#6B6B6B' }}>
               {userData?.followers?.length} Followers
             </span>
           </div>

@@ -135,7 +135,7 @@ const CustomQuill = ({ value, setValue, readonly }: ICustomQuillProp) => {
 
       {!readonly && btnVisiblity && (
         <div
-          className="w-9 h-9 flex items-center justify-center cursor-pointer absolute px-3 py-1 -left-8"
+          className="w-5 h-5 sm:w-9 sm:h-9 flex items-center justify-center cursor-pointer absolute p-1 sm:px-3 sm:py-1 -left-4 sm:-left-8"
           style={{ borderRadius: '50%', border: '2px solid #68B26C', top: top }}
           onClick={onButtonClick}
         >
@@ -145,7 +145,7 @@ const CustomQuill = ({ value, setValue, readonly }: ICustomQuillProp) => {
 
       {isBtnClicked && (
         <div
-          className="flex items-center absolute gap-4 px-3 py-2 left-5 rounded-md"
+          className="flex items-center absolute gap-4 px-3 py-2 left-5 rounded-md top-[${top}-5]"
           style={{
             background: '#444444',
             top: top - 5,
