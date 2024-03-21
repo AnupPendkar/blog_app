@@ -128,7 +128,7 @@ const Comment = ({ data, onCommentSubmit, onCommentLike, parentId }: ICommentPro
               }}
               aria-label="More"
             >
-              <FavoriteBorderOutlinedIcon style={{ width: 20, height: 20 }} />
+              <FavoriteBorderOutlinedIcon style={{ color:'#767882', width: 20, height: 20 }} />
             </IconButton>
           )}
 

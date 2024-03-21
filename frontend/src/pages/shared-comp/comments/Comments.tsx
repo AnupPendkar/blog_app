@@ -84,7 +84,7 @@ const Comments = ({ data, open, closeComments, shouldFetchAPI }: ICommentsProp) 
         sx={{
           flexShrink: 0,
           background: '#191919',
-          opacity: '0.9',
+          opacity: '0.95',
           '& .MuiDrawer-paper': {
             minWidth: '250px',
             width: '60%',
@@ -99,11 +99,13 @@ const Comments = ({ data, open, closeComments, shouldFetchAPI }: ICommentsProp) 
         }}
         open={open}
       >
-        <div className="px-8 py-2 flex flex-col" style={{ height: 'calc(100% - 64px)' }}>
+        <div className="px-4 sm:px-8 py-2 flex flex-col" style={{ height: 'calc(100% - 64px)' }}>
           <div className="flex justify-between">
-            <span className="fsr-22 font-isb">Comments</span>
+            <span className="fsr-22 font-isb" style={{ color: '#ffffff' }}>
+              Comments
+            </span>
             <div className="w-3 cursor-pointer" onClick={() => closeComments(false)}>
-              <CloseIcon className="w-full" />
+              <CloseIcon className="w-full" style={{ color: '#767882' }} />
             </div>
           </div>
           <div className="mt-3 overflow-auto h-full">
@@ -118,6 +120,7 @@ const Comments = ({ data, open, closeComments, shouldFetchAPI }: ICommentsProp) 
             <textarea
               value={comment}
               onChange={(e) => setComment(e.target.value)}
+              style={{ background: '#373739' }}
               className="w-full outline-none border-none px-3 py-1 rounded-md min-h-20 max-h-25 resize-none"
               placeholder="What are your thoughts?"
             ></textarea>
