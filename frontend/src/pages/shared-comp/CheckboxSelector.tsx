@@ -23,6 +23,7 @@ export default function CheckboxSelector({ selectedCat, categories, handleChange
         id="checkboxes-tags-demo"
         options={categories}
         disableCloseOnSelect
+        value={categories?.filter((cat) => selectedCat?.includes(cat?.id))}
         getOptionLabel={(option) => option.name}
         onChange={handleChange}
         renderOption={(props, option) => (
@@ -31,7 +32,7 @@ export default function CheckboxSelector({ selectedCat, categories, handleChange
             <ListItemText primary={option?.name} />
           </MenuItem>
         )}
-        className='custom__autocomplete'
+        className="custom__autocomplete"
         renderInput={(params) => <TextField {...params} variant="standard" label="Categories" placeholder="Add" />}
       />
       {/* <FormControl sx={{ m: 1, width: 300 }}>

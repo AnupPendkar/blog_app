@@ -42,7 +42,7 @@ const MessageBox = ({ dialogDetails, confirmBtnEmitter }: { dialogDetails: Messa
   };
 
   return (
-    <Dialog onClose={handleClose} open={open} PaperProps={{ sx: { minWidth: 400, maxWidth: 450 } }}>
+    <Dialog onClose={handleClose} open={open} PaperProps={{ sx: { minWidth: 330, maxWidth: 450 } }}>
       <DialogTitle className="flex items-center">
         <IconButton sx={{ pl: 0 }} color="error">
           <MessageIcon />

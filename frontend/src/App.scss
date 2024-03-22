@@ -78,7 +78,6 @@ input:-webkit-autofill {
   cursor: pointer;
 
   span {
-    background: #fff;
     border-radius: 10px;
     height: 2px;
     margin: 2px 0;
@@ -186,7 +185,7 @@ input:-webkit-autofill {
 
   @media screen and (max-width: 640px) {
     &.popular {
-      width: 140px;
+      width: 135px;
       padding: 19px 25px;
     }
   }
@@ -217,11 +216,16 @@ input:-webkit-autofill {
   .post__subtitle {
     font-size: fsr(15);
   }
+
+  .comment__title {
+    font-size: fsr(20);
+  }
 }
 
 // Custom Autocomplete
 .custom__autocomplete {
   width: 300px;
+  color: '#191919';
 }
 
 @media screen and (max-width: 640px) {

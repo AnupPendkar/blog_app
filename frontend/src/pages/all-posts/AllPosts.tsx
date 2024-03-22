@@ -71,7 +71,7 @@ const AllPosts = () => {
     <div className="w-full flex items-center justify-center">
       <div className="mb-5 w-[90%] lg:w-[60%] md:w-[80%] sm:w-[90%]">
         <div
-          className="flex flex-col gap-y-3 justify-between sm:flex-row sm:items-center sticky top-0 left-0 pt-2"
+          className="flex flex-col gap-y-3 justify-between sm:flex-row sm:items-center sticky top-0 left-0 pt-2 mx-3 w-full -translate-y-[2px]"
           style={{ borderBottom: '1px solid rgba(158, 157, 158, 0.2)', background: theme?.palette?.primary?.main }}
         >
           <span className="fsr-25 post__title font-isb">All posts</span>

@@ -69,12 +69,12 @@ const ProfileTab = ({ tabType, postsData, aboutData, collectionData, isAuthorVis
       {tabType === ProfileTypeEnum.POSTS && <Posts data={postsData} viewMethod={PostViewEnum.COMPLETE} />}
 
       {tabType === ProfileTypeEnum.COLLECTIONS && (
-        <div className="mt-3">
+        <div className="mt-3 px-2">
           {_collectionData?.map((coll) => (
             <div key={coll?.id} className="rounded-md mb-5" style={{ border: '1px solid #6B6B6B' }}>
-              <div className="flex flex-col px-3 py-3 relative">
+              <div className="flex flex-col px-3 py-1 sm:py-3 relative">
                 <div className="flex items-center">
-                  <span className="fsr-22 font-isb select-none">{coll?.name}</span>
+                  <span className="comment__title fsr-22 font-isb select-none">{coll?.name}</span>
                   <span className="fsr-15 font-isb text-[#6B6B6B] select-none ml-auto">{coll?.total} posts</span>
                   <IconButton onClick={(event) => setMoreAnchorEl(event.currentTarget)} className="ml-2">
                     <MoreVertIcon style={{ color: '#767882', width: 22, height: 22 }} />
@@ -98,12 +98,12 @@ const ProfileTab = ({ tabType, postsData, aboutData, collectionData, isAuthorVis
       )}
 
       {tabType === ProfileTypeEnum.ABOUT && (
-        <div>
+        <div className="px-2">
           {showEditor ? (
             <>
               <CustomQuill value={aboutVal} setValue={setAboutVal} readonly={readonly} />
               {isAuthorVis && (
-                <>
+                <div className="px-3">
                   {readonly ? (
                     <Button onClick={() => setReadonly(false)} color="success" variant="contained">
                       Edit
@@ -118,7 +118,7 @@ const ProfileTab = ({ tabType, postsData, aboutData, collectionData, isAuthorVis
                       </Button>
                     </>
                   )}
-                </>
+                </div>
               )}
             </>
           ) : (

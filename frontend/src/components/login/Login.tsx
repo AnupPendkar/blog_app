@@ -32,7 +32,7 @@ const Login = ({ open, setOpen }) => {
   const userService = UserService();
 
   const schema = z.object({
-    email: z.string().min(2).max(20),
+    email: z.string().min(2).max(40),
     password: z.string().min(1).max(20),
   });
   type LoginFormSchema = z.infer<typeof schema>;
@@ -99,6 +99,7 @@ const Login = ({ open, setOpen }) => {
                             borderRadius: '5px !important',
                             backgroundColor: 'white',
                             color: '#191919',
+                            caretColor: '#191919 !important',
                           },
                         }}
                       ></TextField>
@@ -121,6 +122,7 @@ const Login = ({ open, setOpen }) => {
                             borderRadius: '5px !important',
                             backgroundColor: 'white',
                             color: '#191919',
+                            caretColor: '#191919 !important',
                           },
                         }}
                       ></TextField>

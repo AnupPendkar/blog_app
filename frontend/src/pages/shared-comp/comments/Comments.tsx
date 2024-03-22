@@ -84,12 +84,13 @@ const Comments = ({ data, open, closeComments, shouldFetchAPI }: ICommentsProp) 
         sx={{
           flexShrink: 0,
           background: '#191919',
-          opacity: '0.95',
+          opacity: '0.98',
           '& .MuiDrawer-paper': {
             minWidth: '250px',
             width: '60%',
             maxWidth: '500px',
-            mt: '64px',
+            mt: '50px',
+            borderRadius: '5px',
             boxSizing: 'border-box',
           },
         }}
@@ -101,14 +102,14 @@ const Comments = ({ data, open, closeComments, shouldFetchAPI }: ICommentsProp) 
       >
         <div className="px-4 sm:px-8 py-2 flex flex-col" style={{ height: 'calc(100% - 64px)' }}>
           <div className="flex justify-between">
-            <span className="fsr-22 font-isb" style={{ color: '#ffffff' }}>
+            <span className="comment__title fsr-22 font-isb" style={{ color: '#ffffff' }}>
               Comments
             </span>
             <div className="w-3 cursor-pointer" onClick={() => closeComments(false)}>
               <CloseIcon className="w-full" style={{ color: '#767882' }} />
             </div>
           </div>
-          <div className="mt-3 overflow-auto h-full">
+          <div className="mt-2 sm:mt-3 overflow-auto h-full">
             {data?.comments?.map((rec, idx) => (
               <div key={idx + ' comment'}>
                 <Comment data={rec} onCommentSubmit={onCommentSubmit} onCommentLike={onCommentLike} />
@@ -120,8 +121,8 @@ const Comments = ({ data, open, closeComments, shouldFetchAPI }: ICommentsProp) 
             <textarea
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              style={{ background: '#373739' }}
-              className="w-full outline-none border-none px-3 py-1 rounded-md min-h-20 max-h-25 resize-none"
+              style={{ background: '#373739', color: '#94A3B0' }}
+              className="w-full outline-none border-none px-3 py-1 rounded-md fsr-16 min-h-[70px] sm:min-h-20 max-h-25 resize-none"
               placeholder="What are your thoughts?"
             ></textarea>
             <div className="flex gap-3 mt-3">

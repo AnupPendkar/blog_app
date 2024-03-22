@@ -94,10 +94,10 @@ const Comment = ({ data, onCommentSubmit, onCommentLike, parentId }: ICommentPro
           <img className="w-12 h-12 rounded-full mr-3" src={!isPropEmpty(data.profileImg) ? data.profileImg : blankUser} alt="" />
 
           <div className="flex flex-col">
-            <span className="fsr-14 inter mb-1" style={{ color: '#767882' }}>
+            <span className="fsr-15 inter mb-1" style={{ color: '#94A3B0' }}>
               {data.username}
             </span>
-            <span className="fsr-12 inter" style={{ color: '#767882' }}>
+            <span className="fsr-12 inter" style={{ color: '#94A3B0' }}>
               Published &nbsp;{constructDateTime(data.createdAt)}
             </span>
           </div>
@@ -109,7 +109,9 @@ const Comment = ({ data, onCommentSubmit, onCommentLike, parentId }: ICommentPro
             </IconButton>
           )}
         </div>
-        <span className="fsr-16 inter">{data.comment}</span>
+        <span className="fsr-15 inter" style={{ color: '#ffffff' }}>
+          {data.comment}
+        </span>
 
         <div className="flex items-center">
           {isUserAlreadyLiked(data) ? (
@@ -128,7 +130,7 @@ const Comment = ({ data, onCommentSubmit, onCommentLike, parentId }: ICommentPro
               }}
               aria-label="More"
             >
-              <FavoriteBorderOutlinedIcon style={{ color:'#767882', width: 20, height: 20 }} />
+              <FavoriteBorderOutlinedIcon style={{ color: '#767882', width: 20, height: 20 }} />
             </IconButton>
           )}
 
@@ -147,7 +149,7 @@ const Comment = ({ data, onCommentSubmit, onCommentLike, parentId }: ICommentPro
               }}
             >
               <KeyboardArrowDownIcon
-                style={{ color: '#767882', width: 20, height: 20, transition: 'transform 0.2s linear', transform: `rotate(${showReply ? '180deg' : '0deg'})` }}
+                style={{ color: '#94A3B0', width: 20, height: 20, transition: 'transform 0.2s linear', transform: `rotate(${showReply ? '180deg' : '0deg'})` }}
               />
             </IconButton>
           )}
@@ -165,13 +167,14 @@ const Comment = ({ data, onCommentSubmit, onCommentLike, parentId }: ICommentPro
             value={reply}
             onChange={(e) => setReply(e.target.value)}
             className="w-full outline-none border-none px-3 py-1 rounded-md min-h-20 max-h-25 resize-none"
+            style={{ background: '#373739', color: '#94A3B0' }}
             placeholder="What are your thoughts?"
           ></textarea>
           <div className="flex gap-3 mt-3">
-            <Button onClick={() => setReply('')} color="cancel" variant="contained" style={{ padding: '2px 5px' }}>
+            <Button onClick={() => setReply('')} color="cancel" variant="contained">
               Clear
             </Button>
-            <Button disabled={reply === ''} onClick={onSubmitCommentClk} color="success" variant="contained" style={{ padding: '2px 5px' }}>
+            <Button disabled={reply === ''} onClick={onSubmitCommentClk} color="success" variant="contained">
               Submit
             </Button>
           </div>

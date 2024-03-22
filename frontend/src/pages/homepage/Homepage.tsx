@@ -34,7 +34,7 @@ const Homepage = () => {
 
   return (
     <div className="homepage flex items-center justify-center">
-      <div className="mt-[40px] w-[90%] sm:w-4/5">
+      <div className="mt-4 sm:mt-[40px] w-[85%] sm:w-4/5">
         <div className="landing-txt">
           <span className="homepage__text fsr-55 font-ib mr-5">
             Hey, Blog aficionados! <br />
@@ -42,7 +42,7 @@ const Homepage = () => {
           <span className="homepage__text fsr-55 mont">Embark on a blog-fueled journey of self-expression and creativity.</span>
         </div>
 
-        <div className="featured-blog mt-14 mb-14 flex flex-col sm:flex-row gap-1 items-center justify-between">
+        <div className="featured-blog mt-5 sm:mt-14 mb-14 flex flex-col sm:flex-row gap-1 items-center justify-between">
           <div className="basis-1/2 flex items-center justify-center">
             <img className="w-[700px]" src={logo} alt="" />
           </div>

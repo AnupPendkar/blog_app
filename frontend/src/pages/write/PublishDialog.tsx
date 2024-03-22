@@ -79,15 +79,29 @@ const PublishDialog = ({ visibility, title, content, isVisible }: IPublishDialog
   }, []);
 
   return (
-    <Dialog open={visibility}>
+    <Dialog
+      open={visibility}
+      PaperProps={{
+        sx: {
+          minWidth: '320px',
+          width: '40%',
+          maxWidth: '360px',
+        },
+      }}
+    >
       <DialogTitle className="flex items-center">Publish</DialogTitle>
       <DialogContent color="secondary">
-        <div className="flex items-center mb-6">
+        <div className="flex flex-col items-start gap-3 mb-6">
           <span className="fsr-16 font-im mr-4">Blog Desc: </span>
-          <textarea className="py-1 px-3" onChange={(e) => setValue('postDesc', e.target.value)} name="" id="" cols={30} rows={3}></textarea>
+          <textarea
+            className="outline-none border-none px-3 py-1 rounded-md w-[250px] min-h-[70px] max-h-[100px]"
+            style={{ background: '#373739', color: '#ffffff' }}
+            placeholder="desc"
+            onChange={(e) => setValue('postDesc', e.target.value)}
+          ></textarea>
         </div>
 
-        <div className="flex items-center mb-6">
+        <div className="flex flex-col items-start gap-2 mb-6">
           <span className="fsr-16 font-im mr-4">Thumbnail Image: </span>
           <div className="w-11 h-11">
             {isPropEmpty(thumbImg) ? (
@@ -102,8 +116,8 @@ const PublishDialog = ({ visibility, title, content, isVisible }: IPublishDialog
           </div>
         </div>
 
-        <div className="flex items-center mb-6">
-          <span className="fsr-16 font-im mr-4">Tag categories: </span>
+        <div className="flex flex-col items-start gap-1 mb-6">
+          {/* <span className="fsr-16 font-im mr-4">Tag categories: </span> */}
           <CheckboxSelector selectedCat={selectedCat} categories={categories} handleChange={handleChange} />
         </div>
 

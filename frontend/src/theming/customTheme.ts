@@ -228,8 +228,8 @@ export const lightTheme = createTheme({
     }),
     cancel: palette.augmentColor({
       color: {
-        main: '#fafafa',
-        contrastText: '#444',
+        main: '#444444',
+        contrastText: '#f1f1f1',
       },
     }),
     hover: palette.augmentColor({
@@ -343,6 +343,24 @@ export const lightTheme = createTheme({
       styleOverrides: {
         root: {
           color: '#191919 !important',
+        },
+      },
+    },
+
+    MuiAutocomplete: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#F9F9F9',
+          color: '#191919',
+          filter: 'drop-shadow(0px 4px 4px rgba(87, 87, 87, 0.25))',
+
+          '& .MuiInputLabel-root': {
+            color: '#191919 !important',
+          },
+          '& .MuiInputBase-root': {
+            color: '#191919 !important',
+            backgroundColor: 'unset !important',
+          },
         },
       },
     },

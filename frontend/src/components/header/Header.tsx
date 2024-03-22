@@ -56,7 +56,7 @@ const Header = () => {
 
   return (
     <div className="app-header">
-      <AppBar position="static" color="primary">
+      <AppBar position="static" color="primary" style={{ height: '56px' }}>
         <div className="flex justify-center">
           <Toolbar className="flex items-center justify-between w-[90%] sm:w-4/5" style={{ paddingLeft: '0', paddingRight: '0' }}>
             <div className="logos flex items-center select-none">
@@ -79,14 +79,14 @@ const Header = () => {
               <div className="mobile__ver sm:hidden">
                 <label className="hamburger" htmlFor="check">
                   <input onClick={() => setHamDrawer((state) => !state)} className={hamDrawer ? 'active' : ''} type="checkbox" id="check" />
-                  <span></span>
-                  <span></span>
-                  <span></span>
+                  <span style={{ background: theme.palette.mode === 'dark' ? '#ffffff' : '#191919' }}></span>
+                  <span style={{ background: theme.palette.mode === 'dark' ? '#ffffff' : '#191919' }}></span>
+                  <span style={{ background: theme.palette.mode === 'dark' ? '#ffffff' : '#191919' }}></span>
                 </label>
 
                 <Drawer
                   variant="persistent"
-                  PaperProps={{ sx: { background: (theme) => theme?.palette?.primary?.main, marginTop: '56px' } }}
+                  PaperProps={{ sx: { background: (theme) => theme?.palette?.primary?.main, marginTop: '50px' } }}
                   anchor={'right'}
                   open={hamDrawer}
                   ModalProps={{
@@ -136,7 +136,7 @@ const Header = () => {
                 </Drawer>
               </div>
 
-              <div className="desktop__ver hidden sm:block">
+              <div className="desktop__ver hidden sm:flex sm:items-center">
                 <span className="fsr-16 inter ml-10 mr-5 cursor-pointer" onClick={() => navigate(AppRoutesEnum.DISCOVER + '/all')}>
                   Discover
                 </span>
