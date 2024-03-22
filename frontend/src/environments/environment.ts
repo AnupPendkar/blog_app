@@ -1,6 +1,6 @@
 import { AppWebSocketNSPEnum, Environment } from '@models/common';
 
-const hostAddress = '172.16.120.69';
+const hostAddress = '172.16.120.20';
 const hostPort = '8005';
 const hostProto = 'http://';
 const apiEPSuffix = '/api/';

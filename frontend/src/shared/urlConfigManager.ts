@@ -47,12 +47,12 @@ export default class UrlConfigManager extends StorageHandler {
     }
   }
 
-  initBaseURLConfigurator(apiUrl?: string) {
+  initBaseURLConfigurator(apiUrl: string, env: string) {
     this.baseUrl = apiUrl ?? environment?.baseUrl;
     this.setOriginalBaseUrl = this.baseUrl as string;
     this.setActiveBaseIfNotPresent();
 
-    if (this.canOverrideAPI()) {
+    if (this.canOverrideAPI() && env === 'dev') {
       this.baseUrl = this.activeBaseUrl as string;
     }
 

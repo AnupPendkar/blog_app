@@ -78,7 +78,7 @@ const Profile = () => {
               </span>
             </div>
             {isAuthorIsVistor() && (
-              <div className="ml-auto md:ml-10 ">
+              <div className="ml-auto md:ml-10">
                 <Button onClick={() => setEditProfilePopVis(true)} color="success" variant="outlined">
                   Edit Profile
                 </Button>

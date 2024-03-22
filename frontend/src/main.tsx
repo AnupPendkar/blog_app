@@ -19,7 +19,7 @@ const urlConfigManager = new UrlConfigManager();
 function resolveConfigJsonFile(): Promise<void> {
   return new Promise((resolve) => {
     axios.get('config.json').then((res) => {
-      urlConfigManager.initBaseURLConfigurator(res?.data?.baseUrl);
+      urlConfigManager.initBaseURLConfigurator(res?.data?.baseUrl, res?.data?.env);
       createAxiosInsFromBaseUrl(urlConfigManager.baseUrl as string);
       resolve();
     });

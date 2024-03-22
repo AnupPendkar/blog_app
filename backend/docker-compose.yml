@@ -5,11 +5,24 @@ services:
     environment:
       - DATABASE_PASSWORD=postgres_password
 
-  api:
+  web:
     build: .
-    volumes:
-      - /app/node_modules
+    image: nodejs
+    container_name: nodejs
+    restart: unless-stopped
+    ports:
+      - '8005:8005'
+    env_file: .env
     environment:
-      - DATABASE_USER=postgres
-      - DATABASE_HOST=postgres
-      - DATABASE_PASSWORD=postgres_password
+      - DATABASE_NAME=$DATABASE_NAME
+      - DATABASE_HOST=$DATABASE_HOST
+      - DATABASE_USER=$DATABASE_USER
+      - DATABASE_PASSWORD=$DATABASE_PASSWORD
+      - MAIL_USER=$MAIL_USER
+      - MAIL_PASS=$MAIL_PASS
+      - SECRET_KEY=$SECRET_KEY
+    volumes:
+      - .:/home/node/app
+      - node_modules:/home/node/app/node_modules
+    networks:
+      - app-network
