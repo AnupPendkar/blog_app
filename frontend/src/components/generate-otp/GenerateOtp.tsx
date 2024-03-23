@@ -49,14 +49,14 @@ const GenerateOtp = ({ setOpen, setAuthState, _setEmail, setToastrMsg }: IGenera
   }
 
   function initiateTimer() {
-    timeoutRef.current = setInterval(() => {
-      setTimer((prevSeconds) => prevSeconds - 1000);
-    }, 1000);
+    // timeoutRef.current = setInterval(() => {
+    //   setTimer((prevSeconds) => prevSeconds - 1000);
+    // }, 1000);
   }
 
   React.useEffect(() => {
     if (timer === 0) {
-      clearInterval(timeoutRef.current);
+      // clearInterval(timeoutRef.current);
     }
   }, [timer]);
 
