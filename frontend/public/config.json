@@ -1,4 +1,4 @@
 {
-    "baseUrl": "http://10.0.2.15:8005/api/",
-    "env": "dev"
+    "baseUrl": "https://blog-app-2q58.onrender.com/api/",
+    "env": "prod"
 }
