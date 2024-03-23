@@ -14,7 +14,7 @@ export default function WishlistPosts({ data }: IWishlistPostsProp) {
       options={data}
       getOptionLabel={(option) => option.title}
       renderOption={(props, option) => <Post postDetails={option} postView={PostViewEnum.TITLE_WITH_IMG} />}
-      renderInput={(params) => <TextField {...params} color="primary" variant="outlined" label="Posts" placeholder="Enter post title" />}
+      renderInput={(params) => <TextField {...params} color="primary" variant="outlined" label="Posts" placeholder="Search post title" />}
     />
   );
 }

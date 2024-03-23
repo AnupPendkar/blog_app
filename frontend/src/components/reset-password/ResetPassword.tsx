@@ -7,15 +7,18 @@ import CloseIcon from '@mui/icons-material/Close';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { Dialog, Button, DialogContent, TextField, IconButton, DialogActions } from '@mui/material';
+import UserService from '@services/userService';
 
 interface IResetPasswordProp {
   setOpen: (flag: boolean) => {};
+  email: string;
   setAuthState: (state: AuthStateEnum) => void;
   setToastrMsg: (msg: string) => void;
 }
 
-const ResetPassword = ({ setOpen, setAuthState, setToastrMsg }: IResetPasswordProp) => {
+const ResetPassword = ({ setOpen, setAuthState, email, setToastrMsg }: IResetPasswordProp) => {
   const [isPasswordVisible, setPasswordVisibility] = React.useState(false);
+  const { resetPassword } = UserService();
 
   const schema = z
     .object({
@@ -42,7 +45,11 @@ const ResetPassword = ({ setOpen, setAuthState, setToastrMsg }: IResetPasswordPr
     setOpen(false);
   }
 
-  function handleConfirmClk() {}
+  async function handleConfirmClk(data: RegisterFormSchema) {
+    await resetPassword(email, data?.password);
+    setToastrMsg('Password has been reset!');
+    setAuthState(AuthStateEnum.LOGIN);
+  }
 
   return (
     <Dialog open={true} color="primary">

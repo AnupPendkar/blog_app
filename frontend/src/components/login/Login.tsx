@@ -29,6 +29,7 @@ const Login = ({ open, setOpen }) => {
   const [authState, setAuthState] = useState<AuthStateEnum>();
   const [toastrMsg, setToastrMsg] = useState<string>('');
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
+  const [email, setEmail] = useState('');
   const userService = UserService();
 
   const schema = z.object({
@@ -169,8 +170,8 @@ const Login = ({ open, setOpen }) => {
           {authState === AuthStateEnum.REGISTER && <Register setOpen={setOpen} setToastrMsg={setToastrMsg} setAuthState={setAuthState} />}
 
           {/* Reset Password */}
-          {authState === AuthStateEnum.GENERATE_OTP && <GenerateOtp setOpen={setOpen} setToastrMsg={setToastrMsg} setAuthState={setAuthState} />}
-          {authState === AuthStateEnum.RESET_PASSWORD && <ResetPassword setOpen={setOpen} setToastrMsg={setToastrMsg} setAuthState={setAuthState} />}
+          {authState === AuthStateEnum.GENERATE_OTP && <GenerateOtp setOpen={setOpen} _setEmail={setEmail} setToastrMsg={setToastrMsg} setAuthState={setAuthState} />}
+          {authState === AuthStateEnum.RESET_PASSWORD && <ResetPassword email={email} setOpen={setOpen} setToastrMsg={setToastrMsg} setAuthState={setAuthState} />}
 
           <Toastr msg={toastrMsg} type={MessageIconTypeEnum.SUCCESS} visibility={toastrMsg !== ''} visibilitySetter={() => setToastrMsg('')} />
         </>

@@ -5,13 +5,20 @@ export default async (email, title, body) => {
   try {
     // Create a Transporter to send emails
     let transporter = nodemailer.createTransport({
+      service: "gmail",
       host: process.env.HOST,
       port: 465,
       secure: true,
+      logger: true,
+      debug: true,
+      secureConnection: false,
       auth: {
         user: process.env.MAIL_USER,
         pass: process.env.MAIL_PASS,
       },
+      tls: {
+        rejectUnAuthorized: true
+      }
     });
     // Send emails to users
     let info = await transporter.sendMail({

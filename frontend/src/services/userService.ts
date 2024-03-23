@@ -37,28 +37,37 @@ const UserService = () => {
     });
   }
 
-  function generateOtp(email: string) {
+  function generateOtp(email: string): Promise<void> {
     return new Promise(async (resolve) => {
-      // const res = await http.request('post', '/generate-otp', '',{ email });
-      const res = await new Promise(() => setTimeout(() => resolve('sdfdf'), 1000));
-      // if (res?.status === 200) {
-      // } else {
-      //   handleErr(res);
-      // }
+      const res = await http.request('post', '/generate-otp', '', { email });
+      if (res?.status === 200) {
+        resolve();
+      } else {
+        handleErr(res);
+      }
     });
   }
 
-  function isEnteredOtpAuthentic(otp: string): Promise<void> {
+  function isEnteredOtpAuthentic(otp: string, email: string): Promise<void> {
     return new Promise(async (resolve) => {
-      // const res = await http.request('get', '/check-otp', { otp });
+      const res = await http.request('get', '/check-otp', { otp, email });
+      if (res?.status === 200) {
+        resolve();
+      } else {
+        handleErr(res);
+      }
+    });
+  }
 
-      const res = await new Promise(() => setTimeout(() => resolve(), 1000));
+  function resetPassword(email: string, password: string): Promise<void> {
+    return new Promise(async (resolve) => {
+      const res = await http.request('put', '/reset-password', '', { email, password });
 
-      // if (res?.status === 200) {
-      //   resolve();
-      // } else {
-      //   handleErr(res);
-      // }
+      if (res?.status === 200) {
+        resolve();
+      } else {
+        handleErr(res);
+      }
     });
   }
 
@@ -202,6 +211,7 @@ const UserService = () => {
     updateUserProfile,
     setAboutDetails,
     loginUsingSocialMedia,
+    resetPassword,
   };
 };
 

@@ -67,6 +67,35 @@ export async function generateOtp(req, res: Response, next: NextFunction) {
   }
 }
 
+export async function checkOtp(req, res: Response, next: NextFunction) {
+  try {
+    const { otp, email } = req.query;
+    const [otpPresent, ...rest] = await db
+      .select()
+      .from(otpDetails)
+      .where(eq(otpDetails?.otp, otp) && eq(otpDetails?.email, email));
+
+    if (isPropEmpty(otpPresent)) {
+      res.status(403).json('Invalid Otp');
+    }
+
+    res.status(200).json('Otp is authentic');
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function resetPassword(req, res: Response, next: NextFunction) {
+  try {
+    const { email, password } = req.body;
+    const [user, ...rest] = await db.update(users).set({ password }).where(eq(users?.email, email));
+
+    res.status(200).json('user password updated');
+  } catch (err) {
+    next(err);
+  }
+}
+
 export async function userLogout(req, res: Response, next: NextFunction) {
   try {
     req.logout();

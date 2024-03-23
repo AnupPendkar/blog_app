@@ -8,11 +8,12 @@ import { convertMsIntoMinSec } from '@shared/utilfunctions';
 
 interface IGenerateOtpProp {
   setOpen: (flag: boolean) => {};
+  _setEmail: (email: string) => void;
   setAuthState: (state: AuthStateEnum) => void;
   setToastrMsg: (msg: string) => void;
 }
 
-const GenerateOtp = ({ setOpen, setAuthState, setToastrMsg }: IGenerateOtpProp) => {
+const GenerateOtp = ({ setOpen, setAuthState, _setEmail, setToastrMsg }: IGenerateOtpProp) => {
   const [otp, setOtp] = React.useState('');
   const [timer, setTimer] = React.useState(30000);
   const [isOtpGenerated, setOtpGenerated] = React.useState(false);
@@ -33,7 +34,8 @@ const GenerateOtp = ({ setOpen, setAuthState, setToastrMsg }: IGenerateOtpProp) 
   }
 
   async function handleSubmitOTPClk() {
-    await isEnteredOtpAuthentic(otp);
+    await isEnteredOtpAuthentic(otp, email);
+    _setEmail(email);
     setAuthState(AuthStateEnum.RESET_PASSWORD);
   }
 
