@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "prod": "chmod +x serve.sh && bash serve.sh",
     "start": "nodemon src/server.ts",
     "migrations": "drizzle-kit generate:pg --config app.config.ts",
     "migrate": "node --import tsx ./src/config/migrate.ts",
