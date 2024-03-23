@@ -13,7 +13,6 @@ passport.use(
       Proxy: true
     },
     (request, accessToken, refreshToken, profile, done) => {
-      console.log(profile);
       done(null, profile);
     }
   )

@@ -16,6 +16,7 @@ import fs from 'fs';
 
 const app = express();
 const host = process.env.HOST;
+const API_URL = process.env.API_URL;
 const port = process.env.PORT;
 
 app.use(express.static(path.resolve(__dirname, '../../frontend/dist')));
@@ -50,5 +51,5 @@ app.use('/api', router);
 app.use(ErrorHandler);
 
 app.listen(port, () => {
-  console.log(`Server is running on: http://${host}:${port}/api/`);
+  console.log(`Server is running on: ${API_URL}`);
 });

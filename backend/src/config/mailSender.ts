@@ -1,6 +1,5 @@
 import nodemailer from 'nodemailer';
 
-console.log(process.env.MAIL_USER, process.env.MAIL_PASS);
 export default async (email, title, body) => {
   try {
     // Create a Transporter to send emails
@@ -27,7 +26,6 @@ export default async (email, title, body) => {
       subject: title,
       html: body,
     });
-    console.log('Email info: ', info);
     return info;
   } catch (error) {
     console.log(error.message);

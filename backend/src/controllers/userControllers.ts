@@ -347,7 +347,6 @@ export async function updateAboutDetails(req, res: Response, next: NextFunction)
   try {
     const { desc } = req.body;
     const userId = req.user.userId;
-    console.log(desc);
 
     await db.update(about).set({ desc }).where(eq(about?.userId, userId));
     res.status(200).json('Update successfull!');
