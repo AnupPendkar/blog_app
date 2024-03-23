@@ -36,6 +36,9 @@
     "web-vitals": "^2.1.4",
     "zod": "^3.22.4"
   },
+  "engines": {
+    "node": "18.x"
+  },
   "scripts": {
     "start": "vite --host --port",
     "preview": "vite preview",
