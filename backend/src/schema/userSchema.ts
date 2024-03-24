@@ -1,6 +1,6 @@
 import { integer, pgTable, primaryKey, serial, text, timestamp, varchar } from 'drizzle-orm/pg-core';
 import { commentLikes, comments, likes, posts, replies, replyLikes } from './postSchema';
-import { relations } from 'drizzle-orm';
+import { relations, sql } from 'drizzle-orm';
 
 // <-----------------------------------User Model--------------------------------------->
 export const users = pgTable('users', {
@@ -29,9 +29,9 @@ export const userRelations = relations(users, ({ one, many }) => ({
 export const otpDetails = pgTable('otp_details', {
   id: serial('id').primaryKey(),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  expiresAt: timestamp('expires_at', { withTimezone: true }).default(sql`CURRENT_TIMESTAMP + INTERVAL '10 minutes'`),
   email: varchar('email', { length: 100 }),
-  otp: varchar('otp', {length: 10}),
-
+  otp: varchar('otp', { length: 10 }),
 });
 
 export const about = pgTable('about', {

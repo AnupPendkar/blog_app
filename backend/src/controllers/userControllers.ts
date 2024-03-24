@@ -6,6 +6,7 @@ import { about, collections, followers, followersToAuthors, otpDetails, users } 
 import jwt from 'jsonwebtoken';
 import emailSender from '../config/mailSender';
 import 'dotenv/config';
+import { initCronJob } from '../config/cron';
 
 export async function userLogin(req, res: Response, next: NextFunction) {
   try {
@@ -57,8 +58,41 @@ export async function generateOtp(req, res: Response, next: NextFunction) {
     const _emailSender = await emailSender(
       email,
       'Verification Email',
-      `<h1>Please confirm your OTP</h1>
-    <p>Here is your OTP code: ${otp}</p>`
+      `
+        <!DOCTYPE html>
+          <html lang="en">
+            <head>
+              <title>Verification Email</title>
+              <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+            </head>
+            <body>
+              <table border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td>
+                    </td>
+                </tr>
+              </table>
+
+              <table border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td>
+                    <h2>StoryHaven</h2>
+                    <h3>Please confirm your OTP</h3>
+                    <p>Here is your OTP code: ${otp}</p>
+                  </td>
+                </tr>
+              </table>
+
+              <table border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td>
+                    <p>Copyright &copy; 2024 StoryHaven. All Rights Reserved.</p>
+                  </td>
+                </tr>
+              </table>
+            </body>
+          </html>
+          `
     );
 
     res.status(200).send('OTP successfully generated!');

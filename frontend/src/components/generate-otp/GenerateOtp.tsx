@@ -20,7 +20,7 @@ const GenerateOtp = ({ setOpen, setAuthState, _setEmail, setToastrMsg }: IGenera
   const [email, setEmail] = React.useState('');
   const { generateOtp, isEnteredOtpAuthentic } = UserService();
 
-  const timeoutRef = React.useRef<number>();
+  const timeoutRef = React.useRef<any>();
 
   const handleChange = (newValue) => {
     setOtp(newValue);
@@ -49,14 +49,14 @@ const GenerateOtp = ({ setOpen, setAuthState, _setEmail, setToastrMsg }: IGenera
   }
 
   function initiateTimer() {
-    // timeoutRef.current = setInterval(() => {
-    //   setTimer((prevSeconds) => prevSeconds - 1000);
-    // }, 1000);
+    timeoutRef.current = setInterval(() => {
+      setTimer((prevSeconds) => prevSeconds - 1000);
+    }, 1000);
   }
 
   React.useEffect(() => {
     if (timer === 0) {
-      // clearInterval(timeoutRef.current);
+      clearInterval(timeoutRef.current);
     }
   }, [timer]);
 

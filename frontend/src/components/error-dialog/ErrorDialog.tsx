@@ -27,7 +27,7 @@ const ErrorDialog = () => {
     setDialogDetails({
       type: MessageBoxTypeEnum.MESSAGE_BOX,
       title: 'Oops!',
-      content: `Failed with server error code (${httpErrDetails?.statusCode}), see console for error details`,
+      content: `Something went wrong!`,
     });
   }
 
