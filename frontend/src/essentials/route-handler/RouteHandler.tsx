@@ -32,11 +32,11 @@ const RouteHandler = () => {
       <Routes>
         <Route path={AppRoutesEnum.CONFIG} element={<BaseUrlConfigurator />} />
         <Route element={<AuthGuard />}>
-          <Route path="/" element={<Navigate to={AppRoutesEnum.DISCOVER + '/all'} />} />
+          <Route path="/" element={<Navigate to={AppRoutesEnum.HOMEPAGE} />} />
+          <Route path={AppRoutesEnum.HOMEPAGE} element={<Homepage />} />
+
           <Route path={AppRoutesEnum.DISCOVER} element={<Navigate to={AppRoutesEnum.DISCOVER + '/all'} />} />
           <Route path={AppRoutesEnum.DISCOVER + '/:id'} element={<Discover />} />
-
-          <Route path={AppRoutesEnum.HOMEPAGE} element={<Homepage />} />
 
           <Route path={AppRoutesEnum.POSTS} element={<Navigate to={AppRoutesEnum.POSTS + '/all'} />} />
           <Route path={AppRoutesEnum.POSTS + '/:id'} element={<AllPosts />} />

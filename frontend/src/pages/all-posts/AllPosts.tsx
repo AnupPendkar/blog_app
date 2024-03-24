@@ -3,12 +3,14 @@ import useCategories from '@hooks/useCategories';
 import CheckboxSelector from '@pages/shared-comp/CheckboxSelector';
 import Posts from '@pages/shared-comp/posts/Posts';
 import postService from '@services/postService';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { PostViewEnum } from '@models/homepage';
 import { ICategories, IPostDetails } from '@models/post_model';
 import { isPropEmpty } from '@shared/utilfunctions';
 import CustomPagination from '@components/pagination/Pagination';
 import { useTheme } from '@mui/material';
+import { useAppSelector } from '@redux/store';
+import { AppRoutesEnum } from '@shared/appRotues';
 
 const AllPosts = () => {
   const [posts, setPosts] = React.useState<IPostDetails[]>([]);
@@ -21,6 +23,8 @@ const AllPosts = () => {
   const recordsCount = React.useRef(10);
   const { id } = useParams();
   const theme = useTheme();
+  const navigate = useNavigate();
+  const { userLoggedIn } = useAppSelector((state) => state.user);
 
   async function getAllUserPosts() {
     const res = await getUserPosts(pageNo.current, recordsCount.current, selectedCat);
@@ -58,12 +62,16 @@ const AllPosts = () => {
   }
 
   React.useEffect(() => {
-    getAllUserPosts();
-    if (!isPropEmpty(selectedCat)) {
+    if (userLoggedIn) {
+      getAllUserPosts();
     }
   }, [selectedCat]);
 
   React.useEffect(() => {
+    if (!userLoggedIn) {
+      navigate(AppRoutesEnum.DISCOVER);
+      return;
+    }
     getAllCategories();
   }, []);
 

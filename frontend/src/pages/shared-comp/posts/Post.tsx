@@ -20,11 +20,15 @@ const Post = ({ postDetails, postView }: IPostProp) => {
     navigate(`${AppRoutesEnum.SINGLE_POST}/${id}`);
   }
 
+  function onCategoryClk(id: number) {
+    // navigate(AppRoutesEnum.DISCOVER + '/' + id);
+  }
+
   return (
     <>
       {[PostViewEnum.PARTIAL, PostViewEnum.COMPLETE]?.indexOf(postView) >= 0 ? (
-        <div className="post flex items-center gap-7 mb-12 cursor-pointer" onClick={() => showFullPost(postDetails?.id)}>
-          <div className="basis-1/2 max-w-[270px]">
+        <div className="post flex items-center gap-7 mb-12 cursor-pointer">
+          <div className="basis-1/2 max-w-[270px]" onClick={() => showFullPost(postDetails?.id)}>
             <img className="w-ful" src={postDetails?.thumbnailImg ?? blogAvatar} alt="" />
           </div>
           <div className="flex flex-col basis-1/2">
@@ -34,21 +38,23 @@ const Post = ({ postDetails, postView }: IPostProp) => {
               </span>
 
               {postDetails?.categories?.map((cat, idx) => (
-                <span key={idx} className="fsr-14 font-rm" style={{ color: '#652034', textTransform: 'uppercase' }}>
+                <span onClick={() => onCategoryClk(cat?.id)} key={idx} className="fsr-14 font-rm" style={{ color: '#652034', textTransform: 'uppercase' }}>
                   {cat?.name}&nbsp;&nbsp;
                 </span>
               ))}
             </div>
 
-            <span className="post__title fsr-25 font-ib mb-4">{postDetails?.title}</span>
-            <span className="post__subtitle fsr-16 inter mb-7" style={{ color: '#9E9D9E' }}>
-              {postDetails?.desc}
-            </span>
-
-            <div>
-              <span className="fsr-14 inter underline decoration-2 underline-offset-4 cursor-pointer" style={{ textDecorationColor: '#652034' }}>
-                Read More
+            <div className="flex flex-col" onClick={() => showFullPost(postDetails?.id)}>
+              <span className="post__title fsr-25 font-ib mb-4">{postDetails?.title}</span>
+              <span className="post__subtitle fsr-16 inter mb-7" style={{ color: '#9E9D9E' }}>
+                {postDetails?.desc}
               </span>
+
+              <div>
+                <span className="fsr-14 inter underline decoration-2 underline-offset-4 cursor-pointer" style={{ textDecorationColor: '#652034' }}>
+                  Read More
+                </span>
+              </div>
             </div>
           </div>
         </div>
