@@ -18,7 +18,7 @@ const MessageBox = ({ dialogDetails, confirmBtnEmitter }: { dialogDetails: Messa
   }
 
   function handleSubmitBtn() {
-    dispatch(setMessageDialogClose(dialogDetails?.confirmFor))
+    dispatch(setMessageDialogClose(dialogDetails?.confirmFor));
     confirmBtnEmitter({ action: PopupActionEnum.SUBMIT });
   }
 
@@ -50,7 +50,7 @@ const MessageBox = ({ dialogDetails, confirmBtnEmitter }: { dialogDetails: Messa
         <span className="fsr-22 font-isb">{dialogDetails?.title}</span>
       </DialogTitle>
       <DialogContent>
-        <DialogContentText>{dialogDetails?.content}</DialogContentText>
+        <DialogContentText style={{ color: '#fff' }}>{dialogDetails?.content}</DialogContentText>
         <DialogActions sx={{ mt: 2 }}>
           {dialogDetails?.closeMsg && (
             <Button color="cancel" onClick={handleClose} variant="contained">

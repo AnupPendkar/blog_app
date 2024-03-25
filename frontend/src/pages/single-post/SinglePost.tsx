@@ -146,6 +146,14 @@ const SinglePost = () => {
     await getCurrentPostById();
   }
 
+  function handleWishlistClk() {
+    if (!userLoggedIn) {
+      setOpenLogin(true);
+      return;
+    }
+    setWishlistVis(true);
+  }
+
   React.useEffect(() => {
     if (isPropEmpty(messageDialogDetails)) {
       return;
@@ -229,7 +237,7 @@ const SinglePost = () => {
             </div>
 
             <div className="cursor-pointer ml-auto">
-              <IconButton className="mr-6" onClick={() => setWishlistVis(true)}>
+              <IconButton className="mr-6" onClick={handleWishlistClk}>
                 {isUserAlreadyWishlisted() ? <BookmarkIcon style={{ width: 25 }} /> : <BookmarkBorderOutlinedIcon style={{ width: 25 }} />}
               </IconButton>
 

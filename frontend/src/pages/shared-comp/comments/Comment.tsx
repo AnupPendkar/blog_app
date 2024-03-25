@@ -104,7 +104,7 @@ const Comment = ({ data, onCommentSubmit, onCommentLike, parentId }: ICommentPro
         </div>
         <div className="absolute -top-1 right-1 cursor-pointer">
           {isCommentAuthor(data) && (
-            <IconButton onClick={handleMoreClick} className="mr-2" aria-label="More">
+            <IconButton style={{ color: '#767882' }} onClick={handleMoreClick} className="mr-2" aria-label="More">
               <MoreVertIcon className="w-full h-full" />
             </IconButton>
           )}
@@ -156,7 +156,7 @@ const Comment = ({ data, onCommentSubmit, onCommentLike, parentId }: ICommentPro
         </div>
       </div>
 
-      <div className="lg:pl-8 md:pl-6 sm:pl-4" style={{ borderLeft: '2px solid grey' }}>
+      <div className="lg:pl-8 md:pl-6 sm:pl-4 pl-4" style={{ borderLeft: '2px solid grey' }}>
         {showReply &&
           data?.replies?.map((rec) => <Comment key={rec?.id} data={rec} parentId={rec?.parentCommentId} onCommentSubmit={onCommentSubmit} onCommentLike={onCommentLike} />)}
       </div>

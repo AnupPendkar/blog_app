@@ -86,7 +86,7 @@ const Comments = ({ data, open, closeComments, shouldFetchAPI }: ICommentsProp) 
           background: '#191919',
           opacity: '0.98',
           '& .MuiDrawer-paper': {
-            minWidth: '250px',
+            minWidth: '270px',
             width: '60%',
             maxWidth: '500px',
             mt: '50px',
