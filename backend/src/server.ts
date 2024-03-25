@@ -42,16 +42,7 @@ app.use(
   })
 );
 
-// app.use(
-//   "/api/upload_file",
-//   createRouteHandler({
-//     router: uploadRouter,
-//     // config: { ... },
-//   }),
-// );
-
 app.use(appMiddleware);
-
 app.use(passport.initialize());
 app.use(passport.session());
 

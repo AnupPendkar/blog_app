@@ -4,7 +4,7 @@ export default async (email, title, body) => {
   try {
     // Create a Transporter to send emails
     let transporter = nodemailer.createTransport({
-      service: "gmail",
+      service: 'gmail',
       host: process.env.HOST,
       port: 465,
       secure: true,
@@ -16,12 +16,12 @@ export default async (email, title, body) => {
         pass: process.env.MAIL_PASS,
       },
       tls: {
-        rejectUnAuthorized: true
-      }
+        rejectUnAuthorized: true,
+      },
     });
     // Send emails to users
     let info = await transporter.sendMail({
-      from: 'www.StoryHaven.me - Anup Pendkar',
+      from: 'https://storyhavenblog.onrender.com - Anup Pendkar',
       to: email,
       subject: title,
       html: body,
