@@ -10,7 +10,7 @@
     "prod": "chmod +x serve.sh && bash serve.sh",
     "start": "nodemon src/server.ts",
     "migrations": "drizzle-kit generate:pg --config app.config.ts",
-    "migrate": "node --import tsx ./src/config/migrate.ts",
+    "migrate": "tsx -r ./src/config/migrate.ts",
     "studio": "drizzle-kit studio --port 9005 --config app.config.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,6 +18,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@google-cloud/local-auth": "^2.1.0",
     "cookie-session": "^2.1.0",
     "cors": "^2.8.5",
     "cron": "^3.1.6",
@@ -25,7 +26,7 @@
     "drizzle-orm": "^0.29.3",
     "express": "^4.18.2",
     "express-session": "^1.18.0",
-    "googleapis": "^134.0.0",
+    "googleapis": "^105.0.0",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "morgan": "^1.10.0",

@@ -11,8 +11,7 @@ import path from 'path';
 import './config/auth';
 import passport from 'passport';
 import session from 'express-session';
-import {initCronJob} from './config/cron'
-import { createRouteHandler } from "uploadthing/express";
+import { initCronJob } from './config/cron';
 
 const app = express();
 const API_URL = process.env.API_URL;

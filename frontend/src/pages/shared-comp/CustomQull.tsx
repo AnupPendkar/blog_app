@@ -41,6 +41,7 @@ const CustomQuill = ({ value, setValue, readonly }: ICustomQuillProp) => {
   function getUploadedImg(file) {
     return new Promise(async (resolve) => {
       const res = await uploadImg(file);
+      console.log(res);
       resolve(res?.path);
     });
   }
