@@ -1,0 +1,41 @@
+// class generator eg: ml-5, ml-10
+@mixin attr-x(
+  $attr,
+  $classname,
+  $attr-count: 10,
+  $attr-steps: 10,
+  $unit: "%",
+  $attr-start: 1
+) {
+  $attr-list: null;
+  @for $i from $attr-start through $attr-count {
+    $attr-value: $attr-steps * $i;
+
+    .#{$classname}#{$attr-value} {
+      #{$attr}: #{$attr-value}#{$unit};
+    }
+    $attr-list: append($attr-list, unquote(".#{$attr}-#{$attr-value}"), comma);
+  }
+  #{$attr-list} {
+    //append style to all classes
+  }
+}
+
+@mixin resp-font($attr, $classname, $start: 10, $end: 60, $step: 2) {
+  $size-list: null;
+  @for $i from $start through $end {
+    $size: $i;
+    .#{$classname}#{$size} {
+      #{$attr}: clamp(
+        #{$size - $step}px,
+        #{$size * calc(100 / 1300)}vw,
+        #{$size}px
+      );
+    }
+    $size-list: append($size-list, unquote(".#{$classname}#{$size}"), comma);
+  }
+
+  #{$size-list} {
+    //append some common styles here
+  }
+}

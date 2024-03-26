@@ -1,0 +1,7 @@
+@function fsr($size) {
+  $minSize: $size - 2;
+  $sizeInVW: $size * (100 / 1300);
+  $maxSize: $size;
+
+  @return clamp(#{$minSize}px, #{$sizeInVW}vw, #{$maxSize}px);
+}
