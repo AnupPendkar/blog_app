@@ -15,7 +15,7 @@ import { initCronJob } from './config/cron';
 
 const app = express();
 const API_URL = process.env.API_URL;
-const port = process.env.PORT;
+const port = process.env.PORT || 8005;
 
 app.use(express.static(path.resolve(__dirname, '../../frontend/dist')));
 
@@ -50,5 +50,5 @@ app.use('/api', router);
 app.use(ErrorHandler);
 
 app.listen(port, () => {
-  console.log(`Server is running on: ${API_URL}`);
+  console.log(`Server is running on port: ${port}`);
 });
