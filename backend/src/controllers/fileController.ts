@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import * as fs from 'fs';
 import 'dotenv/config';
-// import { jwtClient } from '../config/upload';
+import { jwtClient } from '../config/upload';
 import { google } from 'googleapis';
 
 export function uploadFile(req, res: Response, next: NextFunction) {
