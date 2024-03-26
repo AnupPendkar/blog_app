@@ -18,7 +18,7 @@ const port = +process.env.PORT || 8005;
 
 app.use(express.static(path.resolve(__dirname, '../../frontend/dist')));
 
-// initCronJob();
+initCronJob();
 
 app.use(
   session({
