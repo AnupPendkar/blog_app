@@ -8,7 +8,7 @@ import { corsOptions } from '../app.config';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import path from 'path';
-import './config/auth';
+// import './config/auth';
 import passport from 'passport';
 import session from 'express-session';
 import { initCronJob } from './config/cron';
@@ -20,14 +20,14 @@ app.use(express.static(path.resolve(__dirname, '../../frontend/dist')));
 
 initCronJob();
 
-app.use(
-  session({
-    secret: process.env.GOOGLE_SECRET,
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false },
-  })
-);
+// app.use(
+//   session({
+//     secret: process.env.GOOGLE_SECRET,
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: { secure: false },
+//   })
+// );
 app.use(cors(corsOptions));
 
 app.use('', express.static(path.join(__dirname, '../uploads')));
