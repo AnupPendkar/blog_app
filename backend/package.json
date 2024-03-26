@@ -7,7 +7,7 @@
     "node": "18.x"
   },
   "scripts": {
-    "prod": "chmod +x serve.sh && bash serve.sh",
+    "prod": "chmod +x serve.sh && sh serve.sh",
     "start": "nodemon src/server.ts",
     "migrations": "drizzle-kit generate:pg --config app.config.ts",
     "migrate": "tsx -r ./src/config/migrate.ts",
