@@ -50,7 +50,7 @@ const router = express.Router();
 // });
 
 const upload = multer({ dest: 'uploads', limits: { fileSize: 10 * 1024 * 1024 } });
-router.post('/upload_file', upload.single('image'), uploadFile);
+// router.post('/upload_file', upload.single('image'), uploadFile);
 
 // User routes
 router.post('/login', userLogin);
