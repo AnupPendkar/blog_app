@@ -1,6 +1,4 @@
-#!/bin/bash
-
-# ~/.nvm/nvm.sh && nvm use 18
+# !/bin/bash
 
 cd ../frontend
 
