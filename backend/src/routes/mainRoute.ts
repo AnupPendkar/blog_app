@@ -49,8 +49,8 @@ const router = express.Router();
 //   },
 // });
 
-// const upload = multer({ dest: 'uploads' });
-// router.post('/upload_file', upload.single('image'), uploadFile);
+const upload = multer({ dest: 'uploads' });
+router.post('/upload_file', upload.single('image'), uploadFile);
 
 // User routes
 router.post('/login', userLogin);
