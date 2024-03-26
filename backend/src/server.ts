@@ -11,6 +11,7 @@ import path from 'path';
 import './config/auth';
 import passport from 'passport';
 import { initCronJob } from './config/cron';
+import session from 'express-session';
 
 const app = express();
 const port = +process.env.PORT || 8005;
@@ -19,14 +20,14 @@ app.use(express.static(path.resolve(__dirname, '../../frontend/dist')));
 
 initCronJob();
 
-// app.use(
-//   session({
-//     secret: process.env.GOOGLE_SECRET,
-//     resave: false,
-//     saveUninitialized: true,
-//     cookie: { secure: false },
-//   })
-// );
+app.use(
+  session({
+    secret: process.env.GOOGLE_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false },
+  })
+);
 app.use(cors(corsOptions));
 
 app.use('', express.static(path.join(__dirname, '../uploads')));
