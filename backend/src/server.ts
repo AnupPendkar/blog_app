@@ -11,14 +11,14 @@ import path from 'path';
 import './config/auth';
 import passport from 'passport';
 import session from 'express-session';
-import { initCronJob } from './config/cron';
+// import { initCronJob } from './config/cron';
 
 const app = express();
 const port = +process.env.PORT || 8005;
 
 app.use(express.static(path.resolve(__dirname, '../../frontend/dist')));
 
-initCronJob();
+// initCronJob();
 
 app.use(
   session({
