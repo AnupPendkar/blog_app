@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import * as fs from 'fs';
 import 'dotenv/config';
 import { jwtClient } from '../config/upload';
-const { google } = require('googleapis');
+import { google } from 'googleapis';
 
 export function uploadFile(req, res: Response, next: NextFunction) {
   const drive = google.drive({ version: 'v3', auth: jwtClient });
@@ -20,7 +20,7 @@ export function uploadFile(req, res: Response, next: NextFunction) {
 
   drive.files.create(
     {
-      resource: fileMetadata,
+      requestBody: fileMetadata,
       media: media,
       fields: 'id, webViewLink',
     },
