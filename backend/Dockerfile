@@ -8,6 +8,9 @@ RUN npm install
 
 COPY . .
 
+RUN ["npm", "run", "prod"]
+
 EXPOSE 8005
+
 
 CMD [ "npm", "run", "start" ]
