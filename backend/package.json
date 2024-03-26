@@ -8,7 +8,7 @@
   },
   "scripts": {
     "prod": "chmod +x serve.sh && sh serve.sh",
-    "start": "nodemon src/server.ts",
+    "start": "nodemon --max-old-space-size=4096 src/server.ts",
     "migrations": "drizzle-kit generate:pg --config app.config.ts",
     "migrate": "tsx -r ./src/config/migrate.ts",
     "studio": "drizzle-kit studio --port 9005 --config app.config.ts",
