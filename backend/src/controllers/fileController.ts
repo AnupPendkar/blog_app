@@ -4,7 +4,7 @@ import 'dotenv/config';
 // import { jwtClient } from '../config/upload';
 // import { google } from 'googleapis';
 
-// export function uploadFile(req, res: Response, next: NextFunction) {
+export function uploadFile(req, res: Response, next: NextFunction) {
 //   const drive = google.drive({ version: 'v3', auth: jwtClient });
 
 //   const fileMetadata = {
@@ -35,7 +35,7 @@ import 'dotenv/config';
 //       res.status(200).json({ imageUrl: imageUrl, imgId: file.data?.id });
 //     }
 //   );
-// }
+}
 
 // export function uploadFile(req, res: Response, next: NextFunction) {
 //   try {
