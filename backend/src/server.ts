@@ -14,12 +14,11 @@ import session from 'express-session';
 import { initCronJob } from './config/cron';
 
 const app = express();
-const API_URL = process.env.API_URL;
 const port = +process.env.PORT || 8005;
 
 app.use(express.static(path.resolve(__dirname, '../../frontend/dist')));
 
-initCronJob();
+// initCronJob();
 
 app.use(
   session({

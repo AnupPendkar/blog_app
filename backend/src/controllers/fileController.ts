@@ -1,40 +1,40 @@
 import { NextFunction, Request, Response } from 'express';
 import * as fs from 'fs';
 import 'dotenv/config';
-import { jwtClient } from '../config/upload';
-const { google } = require('googleapis');
+// import { jwtClient } from '../config/upload';
+// const { google } = require('googleapis');
 
 export function uploadFile(req, res: Response, next: NextFunction) {
-  const drive = google.drive({ version: 'v3', auth: jwtClient });
+  // const drive = google.drive({ version: 'v3', auth: jwtClient });
 
-  const fileMetadata = {
-    name: req.file.originalname,
-    parents: ['1En7zppXxhRUbj2d3JP0MaxGe8UOsCh6E'],
-    mimeType: req.file.mimetype,
-  };
+  // const fileMetadata = {
+  //   name: req.file.originalname,
+  //   parents: ['1En7zppXxhRUbj2d3JP0MaxGe8UOsCh6E'],
+  //   mimeType: req.file.mimetype,
+  // };
 
-  const media = {
-    mimeType: req.file.mimetype,
-    body: fs.createReadStream(req.file.path),
-  };
+  // const media = {
+  //   mimeType: req.file.mimetype,
+  //   body: fs.createReadStream(req.file.path),
+  // };
 
-  drive.files.create(
-    {
-      resource: fileMetadata,
-      media: media,
-      fields: 'id, webViewLink',
-    },
-    (err, file) => {
-      if (err) {
-        console.error('Error uploading image:', err);
-        res.status(500).send('Error uploading image to Google Drive');
-        return;
-      }
+  // drive.files.create(
+  //   {
+  //     resource: fileMetadata,
+  //     media: media,
+  //     fields: 'id, webViewLink',
+  //   },
+  //   (err, file) => {
+  //     if (err) {
+  //       console.error('Error uploading image:', err);
+  //       res.status(500).send('Error uploading image to Google Drive');
+  //       return;
+  //     }
 
-      const imageUrl = file.data.webViewLink;
-      res.status(200).json({ imageUrl: imageUrl, imgId: file.data?.id });
-    }
-  );
+  //     const imageUrl = file.data.webViewLink;
+  //     res.status(200).json({ imageUrl: imageUrl, imgId: file.data?.id });
+  //   }
+  // );
 }
 
 // export function uploadFile(req, res: Response, next: NextFunction) {
