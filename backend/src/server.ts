@@ -5,12 +5,11 @@ import ErrorHandler from './middlewares/errHandler';
 import 'dotenv/config';
 import cors from 'cors';
 import { corsOptions } from '../app.config';
-import morgan from 'morgan';
+// import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import path from 'path';
 // import './config/auth';
 import passport from 'passport';
-import session from 'express-session';
 import { initCronJob } from './config/cron';
 
 const app = express();
@@ -32,7 +31,7 @@ app.use(cors(corsOptions));
 
 app.use('', express.static(path.join(__dirname, '../uploads')));
 app.use(express.json({ limit: '50mb' }));
-app.use(morgan('dev'));
+// app.use(morgan('dev'));
 
 app.use(bodyParser.json());
 app.use(
