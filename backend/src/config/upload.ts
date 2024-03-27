@@ -2,7 +2,7 @@ import { google } from 'googleapis';
 import 'dotenv/config';
 
 
-export const jwtClient = new google.auth.JWT(process.env.DRIVE_EMAIL, null, process.env.DRIVE_KEY, ['https://www.googleapis.com/auth/drive']);
+export const jwtClient = new google.auth.JWT(process.env.DRIVE_EMAIL, null, process.env.DRIVE_KEY, ['https://www.googleapis.com/auth/drive'], null, process.env.KEY_ID);
 
 jwtClient.authorize((err) => {
   if (err) {
