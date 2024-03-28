@@ -5,7 +5,6 @@ import { jwtClient } from '../config/upload';
 import { google } from 'googleapis';
 
 export function uploadFile(req, res: Response, next: NextFunction) {
-  res.status(500).send('Error uploading image');
   const drive = google.drive({ version: 'v3', auth: jwtClient });
 
   const fileMetadata = {
