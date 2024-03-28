@@ -8,7 +8,7 @@ export const jwtClient = new google.auth.GoogleAuth({
     client_email: process.env.DRIVE_EMAIL,
     private_key: process.env.DRIVE_KEY,
   },
-  scopes: ['https://www.googleapis.com/auth/drive'],
+  scopes: ['https://www.googleapis.com/auth/drive.file'],
 });
 
 // jwtClient.authorize((err) => {
