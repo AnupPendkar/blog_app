@@ -120,10 +120,12 @@ const CustomQuill = ({ value, setValue, readonly }: ICustomQuillProp) => {
         className="quill_input"
         modules={{
           toolbar: modules?.toolbar,
-          imageResize: {
-            parchment: Quill.import('parchment'),
-            modules: ['Resize', 'DisplaySize'],
-          },
+          imageResize: !readonly
+            ? {
+                parchment: Quill.import('parchment'),
+                modules: ['Resize', 'DisplaySize'],
+              }
+            : undefined,
         }}
         theme="bubble"
         value={value}

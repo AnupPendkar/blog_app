@@ -4,15 +4,31 @@ import * as path from 'path';
 import 'dotenv/config';
 // import { jwtClient } from '../config/upload';
 // const { google } = require('googleapis');
-const cloudinary = require('cloudinary').v2;
+import { v2 as cloudinary } from 'cloudinary';
+import sharp from 'sharp';
 
 export function uploadFile(req, res: Response, next: NextFunction) {
-  cloudinary.uploader
-    .upload(req.file.path, {
-      resource_type: 'image',
+  sharp(req.file.buffer)
+    .webp()
+    .toBuffer()
+    .then((webpData) => {
+      console.log(webpData);
+      // Upload converted image to Cloudinary
+      cloudinary.uploader.upload_stream(
+        { resource_type: 'image', format: 'webp' },
+        (error, result) => {
+          if (error) {
+            console.error('Error uploading image to Cloudinary:', error);
+            return res.status(500).send('Error uploading image.');
+          }
+          // Send the URL of the converted image
+          res.status(200).send(result.secure_url);
+        }
+      ).end(webpData);
     })
-    .then((result) => {
-      res.status(200).send(result?.url);
+    .catch((error) => {
+      console.error('Error converting image to WebP:', error);
+      res.status(500).send('Error converting image to WebP.');
     });
 }
 
