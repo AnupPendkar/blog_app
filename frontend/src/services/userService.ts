@@ -108,8 +108,8 @@ const UserService = () => {
 
       console.log(res);
       if (res?.status === 200) {
-        resolve(res?.data)
-        // resolve({ path: `https://drive.google.com/thumbnail?sz=w1000&id=${res?.data?.imgId}` });
+        // resolve(res?.data)
+        resolve({ path: `https://drive.google.com/thumbnail?sz=w1000&id=${res?.data?.imgId}` });
       }
     });
   }
