@@ -40,16 +40,17 @@ import passport from 'passport';
 
 const router = express.Router();
 
-// const storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, path.join(__dirname, '../../uploads'));
-//   },
-//   filename: function (req, file, cb) {
-//     cb(null, file.originalname);
-//   },
-// });
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, '../../uploads'));
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
 
-const upload = multer({ dest: 'uploads' });
+// const upload = multer({ dest: 'uploads' });
+const upload = multer({ storage, limits: { fileSize: 10 * 1024 * 1024 } });
 router.post('/upload_file', upload.single('image'), uploadFile);
 
 // User routes
@@ -95,6 +96,10 @@ router.delete('/on-post-action', onPostAction);
 router.get('/auth/protected', (req: any, res) => {
   res.status(200).json({ user: req.user });
 });
+
+router.get('/auth/success', (req, res) => {
+  res.send('success');
+});
 router.get('/auth/failure', (req, res) => {
   res.send('error happened!!!');
 });
@@ -103,7 +108,7 @@ router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 
 router.get(
   '/auth/google/callback',
   passport.authenticate('google', {
-    successRedirect: 'http://localhost:3200/#/',
+    successRedirect: 'http://localhost:3200/',
     failureRedirect: '/api/auth/failure',
   })
 );
