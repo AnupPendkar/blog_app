@@ -2,8 +2,8 @@ import { NextFunction, Request, Response } from 'express';
 import * as fs from 'fs';
 import * as path from 'path';
 import 'dotenv/config';
-import { jwtClient } from '../config/upload';
-import { google } from 'googleapis';
+// import { jwtClient } from '../config/upload';
+// import { google } from 'googleapis';
 
 // export function uploadFile(req, res: Response, next: NextFunction) {
 //   const drive = google.drive({ version: 'v3', auth: jwtClient });
