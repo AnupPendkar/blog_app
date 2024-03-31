@@ -12,6 +12,7 @@ import './config/auth';
 import passport from 'passport';
 import { initCronJob } from './config/cron';
 import session from 'express-session';
+import cookieSession from 'cookie-session';
 
 const app = express();
 const port = +process.env.PORT || 8005;
@@ -20,14 +21,19 @@ app.use(express.static(path.resolve(__dirname, '../../frontend/dist')));
 
 initCronJob();
 
-app.use(
-  session({
-    secret: process.env.GOOGLE_SECRET,
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false },
-  })
-);
+// app.use(cookieSession({
+//   name: 'session',
+//   keys: ['anup'],
+//   maxAge: 24 * 60 * 60 * 100
+// }))
+// app.use(
+//   session({
+//     secret: process.env.GOOGLE_SECRET,
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: { secure: false },
+//   })
+// );
 app.use(cors(corsOptions));
 
 app.use('', express.static(path.join(__dirname, '../uploads')));
@@ -42,12 +48,12 @@ app.use(
 );
 
 app.use(appMiddleware);
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 app.use('/api', router);
 app.use(ErrorHandler);
 
-app.listen(port, '0.0.0.0', () => {
+app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);
 });
