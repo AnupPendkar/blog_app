@@ -8,24 +8,19 @@ import StorageHandler from '@shared/storageHandler';
 import UserService from '@services/userService';
 import { setUserInfo } from '@redux/actions/userInfoActions';
 
+// User Logged In
+//
+
 const useAppEffects = () => {
   const { setUserLoginData } = useAuthMethods();
   const { userLoggedIn } = useAppSelector((state) => state.user);
   // const socket: UseSocket = useSocket();
-  const { fetchUserInfo } = UserService();
-  const dispatch = useAppDispatch();
-
-  async function getUserInfo() {
-    const res = await fetchUserInfo();
-    dispatch(setUserInfo(res));
-  }
   const storageHandler = new StorageHandler();
 
   // On user logged in, connect to all socket namespace events.
   useEffect(() => {
     if (userLoggedIn) {
       // socket.connect();
-      getUserInfo();
     }
   }, [userLoggedIn]);
 
@@ -34,8 +29,9 @@ const useAppEffects = () => {
     const accessToken = storageHandler.jwtAccesToken;
     const refreshToken = storageHandler.jwtRefreshToken;
 
+    // Token present;
     if (!isPropEmpty(accessToken) && !isPropEmpty(refreshToken)) {
-      setUserLoginData(accessToken as string, refreshToken as string);
+      // setUserLoginData(accessToken as string, refreshToken as string);
     }
   }, []);
 };

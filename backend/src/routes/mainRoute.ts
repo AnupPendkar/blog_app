@@ -18,6 +18,7 @@ import {
   updateAboutDetails,
   userLogout,
   checkOtp,
+  userLoggedIn,
   resetPassword,
 } from '../controllers/userControllers';
 import {
@@ -56,6 +57,7 @@ router.post('/upload_file', upload.single('image'), uploadFile);
 // User routes
 router.post('/login', userLogin);
 router.post('/logout', userLogout);
+router.get('/is_logged_in', userLoggedIn);
 router.post('/register', userRegister);
 router.post('/generate-otp', generateOtp);
 router.get('/check-otp', checkOtp);
@@ -64,7 +66,8 @@ router.put('/reset-password', resetPassword);
 router.put('/update', updateUsername);
 router.delete('/delete', deleteUser);
 router.get('/user-details', userDetails);
-router.get('/user-info', userInfo), router.get('/get-collections', getUserCollections);
+router.get('/user-info', userInfo);
+router.get('/get-collections', getUserCollections);
 router.post('/create-collection', createCollection);
 router.delete('/delete-collection', deleteCollection);
 

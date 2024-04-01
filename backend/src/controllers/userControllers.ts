@@ -42,6 +42,20 @@ export async function userLogin(req, res: Response, next: NextFunction) {
   }
 }
 
+export async function userLoggedIn(req, res: Response, next: NextFunction) {
+  try {
+    const { userId } = req.query;
+    console.log(req.userId, userId);
+    if (!isPropEmpty(userId) && req.userId === userId) {
+      res.status(200).send('User logged in');
+    }
+
+    res.status(403).send('User not-logged in');
+  } catch (err) {
+    next(err);
+  }
+}
+
 export async function generateOtp(req, res: Response, next: NextFunction) {
   try {
     const { email } = req.body;
@@ -139,6 +153,9 @@ export async function userLogout(req, res: Response, next: NextFunction) {
     next(err);
   }
 }
+
+// export async function
+// const res = await http.request('get', '/is_logged_in', { userId });
 
 export async function checkUserExists(userId) {
   return await db.select({ username: users.username, id: users.id }).from(users).where(eq(userId, users.id));
@@ -298,7 +315,7 @@ export async function userInfo(req, res: Response, next: NextFunction) {
   try {
     const userId = req.user.userId;
 
-    const _userInfo = await db.select().from(users).where(eq(users?.id, userId));
+    const [_userInfo, ...rest] = await db.select().from(users).where(eq(users?.id, userId));
 
     res.status(200).json(_userInfo);
   } catch (err) {

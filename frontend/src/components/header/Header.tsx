@@ -1,7 +1,7 @@
 import { AccountCircle } from '@mui/icons-material';
 import { AppBar, Box, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem, Toolbar, useTheme } from '@mui/material';
 import React from 'react';
-import { useAppSelector } from '@redux/store';
+import { useAppDispatch, useAppSelector } from '@redux/store';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import useThemeSwitcher from '@hooks/useThemeSwitcher';
@@ -18,6 +18,9 @@ import useSharedEssentials from '@hooks/useSharedEssentials';
 import { MessageBoxCloseTypeEnum } from '@models/common';
 import { isPropEmpty } from '@shared/utilfunctions';
 import blankUser from '@assets/blank_user.svg';
+import UserService from '@services/userService';
+import { setUserInfo } from '@redux/actions/userInfoActions';
+import StorageHandler from '@shared/storageHandler';
 
 const Header = () => {
   const [userAnchor, setUserAnchor] = React.useState<null | HTMLElement>(null);
@@ -25,12 +28,20 @@ const Header = () => {
   const { toggleAppTheme } = useThemeSwitcher();
   const theme = useTheme();
   const navigate = useNavigate();
-  const { logout } = useAuthMethods();
+  const { logout, setUserLoginData } = useAuthMethods();
   const { loading } = useAppSelector((state) => state.http);
   const { closeType, messageDialogDetails } = useAppSelector((state) => state.notification);
   const [openLogin, setOpenLogin] = React.useState(false);
   const { parsedUserInfo, userLoggedIn, userInfo } = useAppSelector((state) => state?.user);
   const { askConfirmation } = useSharedEssentials();
+  const { fetchUserInfo } = UserService();
+  const dispatch = useAppDispatch();
+  const storageHandler = new StorageHandler();
+
+  async function getUserInfo() {
+    const res = await fetchUserInfo();
+    dispatch(setUserInfo(res));
+  }
 
   function askLogoutConfirmation() {
     askConfirmation('Are you really want to logout', MessageBoxCloseTypeEnum.CONFIRM_LOGOUT);
@@ -43,6 +54,22 @@ const Header = () => {
   }
 
   React.useEffect(() => {
+    const accessToken = storageHandler.jwtAccesToken;
+    const refreshToken = storageHandler.jwtRefreshToken;
+
+    // Token present;
+    if (!isPropEmpty(accessToken) && !isPropEmpty(refreshToken)) {
+      setUserLoginData(accessToken as string, refreshToken as string);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    if (userLoggedIn) {
+      getUserInfo();
+    }
+  }, [userLoggedIn]);
+
+  React.useEffect(() => {
     if (isPropEmpty(messageDialogDetails)) {
       // return;
     }
@@ -53,6 +80,8 @@ const Header = () => {
         break;
     }
   }, [closeType]);
+
+  console.log(userInfo?.profileImg, userInfo);
 
   return (
     <div className="app-header">
